@@ -10,10 +10,10 @@ jobs:
       - name: Build web assets
         # if: startsWith(github.event.ref, 'refs/tags')
         # uses: ./build/
+        # BUILD=DEBUG
+        # export $BUILD
         run: |
-          BUILD=DEBUG
-          export $BUILD
-          docker compose up --build
+          docker-compose up --build
 
       - name: Deploy to GitHub pages branch
         # if: startsWith(github.event.ref, 'refs/tags')
