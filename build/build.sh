@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Called directly by GitHub actions -
 # when building with docker-compose, call through NPM build/dev
 
@@ -7,3 +9,5 @@
 # - Compile all HTML into a single file with templates
 # - Compile all CSS into single stylesheet
 # - Produce 3 files: index.html, bundle.js, style.css
+
+echo 'Hello World' $1

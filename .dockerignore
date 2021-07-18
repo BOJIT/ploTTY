@@ -1,5 +1,6 @@
 .git
 .vscode
+.github
 LICENSE
 README.md
 node_modules

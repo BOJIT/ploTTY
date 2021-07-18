@@ -1,1 +1,13 @@
-# Metadata for Github Actions
+# action.yml - for GitHub actions
+name: 'Build Web Assets'
+description: 'Compile Typescript, Package JS dependencies, Combine HTML'
+inputs:
+  dev:  # id of input
+    description: 'Set to true for development, false for production'
+    required: true
+    default: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.dev }}
