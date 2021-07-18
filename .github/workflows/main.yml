@@ -8,9 +8,9 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Build web assets
-        if: startsWith(github.event.ref, 'refs/tags')
+        # if: startsWith(github.event.ref, 'refs/tags')
         uses: ./build/
 
       - name: Deploy to GitHub pages branch
-        if: startsWith(github.event.ref, 'refs/tags')
+        # if: startsWith(github.event.ref, 'refs/tags')
         run: echo "The time was ${{ steps.hello.outputs.time }}"
