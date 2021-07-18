@@ -10,4 +10,13 @@
 # - Compile all CSS into single stylesheet
 # - Produce 3 files: index.html, bundle.js, style.css
 
-echo 'Hello World' $1
+# Boolean flag for dev/production build
+# DEV=$1
+
+printenv
+
+# if $DEV; then
+#     ls -l src_live
+# else
+#     ls -l
+# fi
