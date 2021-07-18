@@ -12,4 +12,4 @@ services:
       PORT: 3000
       BUILD: PROD
     volumes:
-      - ./src:/home/app/src_live
+      - ./src:/home/app/src

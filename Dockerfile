@@ -10,5 +10,5 @@ RUN npm install
 COPY . ./
 
 # Run build script (in either Development or Production mode)
-RUN ["chmod", "+x", "./build/build.sh"]
-ENTRYPOINT ["bash", "./build/build.sh"]
+RUN ["chmod", "+x", "./build.sh"]
+ENTRYPOINT ["bash", "./build.sh"]

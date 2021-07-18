@@ -13,8 +13,7 @@ jobs:
         # BUILD=DEBUG
         # export $BUILD
         run: |
-          export BUILD="DEV"
-          docker-compose up --build
+          BUILD=DEV docker-compose up --build
 
       - name: Deploy to GitHub pages branch
         # if: startsWith(github.event.ref, 'refs/tags')
