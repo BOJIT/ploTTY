@@ -10,6 +10,6 @@ services:
       - '3000:3000'
     environment:
       PORT: 3000
-      BUILD: PRODUCTION
+      BUILD: PROD
     volumes:
       - ./src:/home/app/src_live
