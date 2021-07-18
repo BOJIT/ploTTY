@@ -12,6 +12,9 @@
 
 # Boolean flag for dev/production build
 # DEV=$1
+BUILD_VERSION="${BUILD:-PROD}"
+
+echo "Build Version: $BUILD_VERSION"
 
 printenv
 

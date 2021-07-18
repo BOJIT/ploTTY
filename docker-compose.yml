@@ -9,7 +9,9 @@ services:
     ports:
       - '3000:3000'
     environment:
-      PORT: 3000
-      BUILD: PROD
+      - PORT=3000
+    env_file:
+      - .env
     volumes:
       - ./src:/home/app/src
+      - ./dist:/home/app/dist
