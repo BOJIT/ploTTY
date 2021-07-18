@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  app:
+    build: ./
+    image: typescript-docker
+    restart: always
+    ports:
+      - '3000:3000'
+
+#   app_watcher:
+#     build: ./
+#     image: typescript-docker
+#     depends_on:
+#       - app
+#     restart: always
