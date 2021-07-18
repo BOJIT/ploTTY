@@ -1,3 +1,9 @@
 FROM node:14 as base
 
-RUN npm install typescript
+WORKDIR /home/app/
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . ./

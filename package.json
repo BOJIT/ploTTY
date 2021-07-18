@@ -1,0 +1,16 @@
+{
+    "name": "ploTTY",
+    "version": "0.1.0",
+    "description": "Browser Based Serial Monitor/Plotter that doesn't suck!",
+    "private": true,
+    "dependencies": {
+        "typescript": "*",
+        "browserify": "*"
+    },
+    "scripts": {
+        "dev": "",
+        "build": ""
+    },
+
+    "license": "MIT"
+}
