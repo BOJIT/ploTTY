@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  build and deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     name: Build web assets and deploy to GitHub pages
     steps:
