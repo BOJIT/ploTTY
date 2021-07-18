@@ -7,12 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      # - name: Create empty env file
-      #   run: touch
-
       - name: Build web assets
         # if: startsWith(github.event.ref, 'refs/tags')
-        run: docker-compose up --build
+        run: BUILD=PROD docker-compose up --build
 
       - name: Deploy to GitHub pages branch
         # if: startsWith(github.event.ref, 'refs/tags')
