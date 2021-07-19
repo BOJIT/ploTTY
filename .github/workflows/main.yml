@@ -11,10 +11,7 @@ jobs:
         # if: startsWith(github.event.ref, 'refs/tags')
         run: |
           >.env
-          printenv
           docker-compose up --build
-        env:
-          BUILD: PROD
 
       - name: Deploy to GitHub pages branch
         # if: startsWith(github.event.ref, 'refs/tags')
