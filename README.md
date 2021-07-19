@@ -5,4 +5,5 @@ Browser Based Serial Monitor/Plotter that doesn't suck!
 `docker compose up --build`
 
 # Build as production
+`>.env`
 `docker compose up --build`

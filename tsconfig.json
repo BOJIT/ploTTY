@@ -1,5 +1,12 @@
-// OUTFILE? Single script file option + minify
-
-// modules vs multiple files in html
-
-// ES2015 support + classes?
+{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "es2015",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "outFile": "dist/temp.js"
+    },
+    "include": ["src/ts/**/*"]
+}
