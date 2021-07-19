@@ -10,6 +10,7 @@ jobs:
       - name: Build web assets
         # if: startsWith(github.event.ref, 'refs/tags')
         run: |
+          >.env
           printenv
           docker-compose up --build
         env:
