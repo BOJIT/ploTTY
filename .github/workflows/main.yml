@@ -12,10 +12,10 @@ jobs:
           path: main
 
       - name: Checkout gh-pages branch
-      uses: actions/checkout@v2
-      with:
-        ref: gh-pages
-        path: gh-pages
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages
 
       - name: Build web assets
         if: startsWith(github.event.ref, 'refs/tags')
