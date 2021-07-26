@@ -1,5 +1,7 @@
+import template from './window.html';
+
 export class Point {
-    x = 10;
+    x = template;
     y = 10;
     scale(n: number): void {
         this.x *= n;

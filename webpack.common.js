@@ -1,14 +1,5 @@
-const path = require('path');
-var HtmlWebpackPlugin = require("html-webpack-plugin");
-
 module.exports = {
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        host: '0.0.0.0',
-        port: 3000,
-    },
-    entry: './src/ts/index.ts',
+    entry: './src/index.ts',
     module: {
         rules: [
             {
@@ -18,16 +9,17 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: ["html-loader"]
+                use: ["html-loader"],
+                exclude: /node_modules/
             },
             {
                 test: /\.(svg|png|jpg|gif)$/,
                 use: {
-                loader: "file-loader",
-                options: {
-                    name: "[name].[hash].[ext]",
-                    outputPath: "imgs"
-                }
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[hash].[ext]",
+                        outputPath: "imgs"
+                    }
                 }
             }
         ],

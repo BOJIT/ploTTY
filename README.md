@@ -5,9 +5,6 @@ Browser Based Serial Monitor/Plotter that doesn't suck!
 `docker compose up --build`
 
 # Build as Development/live server
-`docker compose run app npm run start`
-
-# Build as Production
-`docker compose run app npm run build`
+`docker compose -f docker-compose.debug.yml up --build`
 
 if this throws the error: `Error response from daemon: invalid mount config for type "bind": bind source path does not exist:`, run `mkdir dist` once.

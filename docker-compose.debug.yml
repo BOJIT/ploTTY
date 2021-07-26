@@ -11,3 +11,4 @@ services:
     volumes:
       - ./src:/home/app/src
       - ./dist:/home/app/dist
+    entrypoint: ["npm", "start"]
