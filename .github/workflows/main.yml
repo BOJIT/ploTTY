@@ -5,12 +5,36 @@ jobs:
     runs-on: ubuntu-latest
     name: Build web assets and deploy to GitHub pages
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout gh-pages branch
+      uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+        path: gh-pages
 
       - name: Build web assets
-        # if: startsWith(github.event.ref, 'refs/tags')
-        run: docker-compose up --build
+        if: startsWith(github.event.ref, 'refs/tags')
+        run: |
+          cd main
+          docker-compose up --build
+
+      - name: Copy dist files across
+        if: startsWith(github.event.ref, 'refs/tags')
+        run: cp -r main/dist/. gh-pages/
 
       - name: Deploy to GitHub pages branch
-        # if: startsWith(github.event.ref, 'refs/tags')
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        if: startsWith(github.event.ref, 'refs/tags')
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          HASH=$(git -C main rev-parse --short HEAD)
+          if [[ $(git -C gh-pages diff --stat) != '' ]]; then
+            git -C gh-pages add -A
+            git -C gh-pages commit -m "Deploy PWA: ${HASH}"
+            git -C gh-pages push
+          fi
