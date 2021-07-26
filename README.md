@@ -1,5 +1,6 @@
 # ploTTY
-Browser Based Serial Monitor/Plotter that doesn't suck!
+## Browser Based Serial Monitor/Plotter that doesn't suck!
+## [https://plotty.bojit.dev/]
 
 # Build Docker Image and Production
 `docker compose up --build`
