@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           HASH=$(git -C main rev-parse --short HEAD)
           echo "source commit hash: ${HASH}"
-          if [[ $(git -C gh-pages diff --stat) != '' ]]; then
+          if [[ `git status --porcelain` ]]; then
             git -C gh-pages add -A
             git -C gh-pages commit -m "Deploy PWA: ${HASH}"
             git -C gh-pages push
