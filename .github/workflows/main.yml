@@ -26,7 +26,9 @@ jobs:
 
       - name: Copy dist files across
         if: startsWith(github.event.ref, 'refs/tags')
-        run: cp -r main/dist/. gh-pages/
+        run: |
+          cp -r main/dist/. gh-pages/
+          ls -al gh-pages
 
       - name: Deploy to GitHub pages branch
         if: startsWith(github.event.ref, 'refs/tags')
