@@ -4,5 +4,10 @@ services:
   app:
     build: ./
     image: typescript-docker
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
     volumes:
+      - ./src:/home/app/src
       - ./dist:/home/app/dist

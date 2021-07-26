@@ -1,4 +1,4 @@
-FROM node:14 as base
+FROM node:14-alpine as base
 
 WORKDIR /home/app/
 
@@ -9,6 +9,4 @@ RUN npm install
 # Copy across all other files
 COPY . ./
 
-# Run build script (in either Development or Production mode)
-RUN ["chmod", "+x", "./build.sh"]
-ENTRYPOINT ["bash", "./build.sh"]
+ENTRYPOINT ["npm", "run", "build"]

@@ -9,9 +9,7 @@ jobs:
 
       - name: Build web assets
         # if: startsWith(github.event.ref, 'refs/tags')
-        run: |
-          >.env
-          docker-compose up --build
+        run: docker-compose up --build
 
       - name: Deploy to GitHub pages branch
         # if: startsWith(github.event.ref, 'refs/tags')
