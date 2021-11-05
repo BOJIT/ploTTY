@@ -1,5 +1,5 @@
 {
-  "name": "noflo-svelte",
+  "name": "plotty",
   "version": "1.0.0",
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",

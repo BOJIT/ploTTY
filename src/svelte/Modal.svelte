@@ -1,5 +1,6 @@
 <script lang="ts">
 	import modal from './store/modal';
+import Tabs from './Tabs.svelte';
 
 	/* Handler to close modal */
 	function closeModal() {
@@ -19,7 +20,7 @@
 	 */
 	function renderContent(content: object) {
 		console.log(content);
-		return "Hello World";
+		return <Tabs>;
 	}
 
 </script>
