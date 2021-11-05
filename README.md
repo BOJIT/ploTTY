@@ -1,11 +1,11 @@
 # ploTTY
 ## Browser Based Serial Monitor/Plotter that doesn't suck!
-## [https://plotty.bojit.dev/]
+## [https://plotty.bojit.org/]
 
-# Build Docker Image and Production
-`docker compose up --build`
+# Build using `Node V16.13.0`
 
-# Build as Development/live server
-`docker compose -f docker-compose.debug.yml up --build`
+# Run in Development Mode
+`npm run dev`
 
-if this throws the error: `Error response from daemon: invalid mount config for type "bind": bind source path does not exist:`, run `mkdir dist` once.
+# Build Production Bundle
+`npm run build`

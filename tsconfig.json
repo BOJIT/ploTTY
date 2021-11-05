@@ -1,12 +1,9 @@
 {
-    "compilerOptions": {
-        "module": "es6",
-        "target": "es5",
-        "esModuleInterop": true,
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "sourceMap": false
-    },
-    "include": ["src/ts/**/*", "src/index.ts", "src/components"]
+	"extends": "@tsconfig/svelte/tsconfig.json",
+	"include": ["src/**/*", "src/node_modules/**/*"],
+	"exclude": ["node_modules/*", "__sapper__/*", "static/*"],
+	"compilerOptions": {
+		"allowJs": true,
+		"esModuleInterop": true
+	}
 }

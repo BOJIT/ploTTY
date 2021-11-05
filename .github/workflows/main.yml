@@ -5,6 +5,25 @@ jobs:
     runs-on: ubuntu-latest
     name: Build web assets and deploy to GitHub pages
     steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.13.0'
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Checkout main branch
         uses: actions/checkout@v2
         with:
@@ -17,11 +36,11 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Build web assets
+      - name: Build PWA
         if: startsWith(github.event.ref, 'refs/tags')
         run: |
           cd main
-          docker-compose up --build
+          npm run build
           cd ../
 
       - name: Copy dist files across
