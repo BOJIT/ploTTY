@@ -21,9 +21,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Install dependencies
-        run: npm install
-
       - name: Checkout main branch
         uses: actions/checkout@v2
         with:
@@ -35,6 +32,12 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
+
+      - name: Install dependencies
+        run: |
+          cd main
+          npm install
+          cd ../
 
       - name: Build PWA
         if: startsWith(github.event.ref, 'refs/tags')
