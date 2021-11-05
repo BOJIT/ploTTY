@@ -1,46 +1,36 @@
 <script lang="ts">
-	import modal from './store/modal';
-import Tabs from './Tabs.svelte';
+	// import modal from './store/modal';
+	export let title: string = "Example Modal";
+
+	import { modal } from './store/overlays';
+
+	let active = true; // bodge
+	let confirm = true;
 
 	/* Handler to close modal */
 	function closeModal() {
-		modal.hideModal();
+		active = false;
+		// $modal = null;
 	}
 
 	/* Handler to close modal with confirm callback */
 	function confirmModal() {
-		$modal.confirm();	// TODO: handle greying out confirm + invalid selection
-		modal.hideModal();
+		closeModal();
 	}
-
-	/**
-	 * @brief Render modal content in object format into readable HTML
-	 * @param content
-	 * @returns
-	 */
-	function renderContent(content: object) {
-		console.log(content);
-		return <Tabs>;
-	}
-
 </script>
 
-<div class="modal modal-animate {$modal.active ? 'is-active' : ''}">
+<div class="modal modal-animate {active ? 'is-active' : ''}">
 	<div class="modal-background"></div>
 	<div class="modal-card modal-content">
 		<header class="modal-card-head">
-			<p class="modal-card-title">{$modal.title}</p>
+			<p class="modal-card-title">{title}</p>
 			<button on:click={closeModal} class="delete"></button>
 		</header>
 		<section class="modal-card-body">
-			<h2>
-				{#if $modal.content != undefined}
-					{renderContent($modal.content)}
-				{/if}
-			</h2>
+			<slot></slot>
 		</section>
 		<footer class="modal-card-foot">
-			{#if $modal.confirm != false}
+			{#if confirm != false}
 			<button on:click={confirmModal} class="button is-success">Confirm</button>
 			<button on:click={closeModal} class="button">Cancel</button>
 			{/if}

@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
 
+// DEPRECATED!
+
 /*----------------------- Modal Store with Default Values --------------------*/
 
 const MODAL = {
 	active: false,
 	title: "Example Modal",
-	content: undefined,
 	confirm: undefined
 };
 
@@ -16,10 +17,9 @@ const { subscribe, set, update } = writable(MODAL);
 /**
  * @brief Show modal on screen
  */
-function showModal(title: string, content: object, confirm: boolean | (() => void)) {
+function showModal(title: string, confirm: boolean | (() => void)) {
 	update((state) => {
 		state.title = title;
-		state.content = content;
 		state.confirm = confirm;
 		state.active = true;
 		return state;

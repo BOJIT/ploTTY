@@ -2,7 +2,8 @@
 	import Navbar from "./Navbar.svelte";
 	import Tabs from "./Tabs.svelte";
 	import Panels from "./panels";
-	import Modal from "./Modal.svelte";
+
+	import { modal, popup } from "./store/overlays";
 
 	/* List of current windows (global state) */
 	let tabs = [
@@ -31,5 +32,9 @@
 <!-- Main Tabs + Panel content -->
 <Tabs tabs={tabs} />
 
-<!-- Any extra (floating) components -->
-<Modal/>
+<!-- Overlays -->
+{#if $modal}
+	<svelte:component this={$modal} />
+{/if}
+
+<!-- TODO add popups here -->

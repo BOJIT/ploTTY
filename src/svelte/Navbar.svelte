@@ -7,7 +7,10 @@
 	import imgBojitLogo from '../assets/img/bojit_logo_square.png';
 
 	/* Stores */
-	import modal from './store/modal';
+	// import modal from './store/modal';
+	import { modal } from './store/overlays';
+
+	import Modals from './modals';
 
 	/* Modal confirmation handlers (temp) */
 	function handleConfirm() {
@@ -15,7 +18,8 @@
 	}
 
 	function handleSettings() {
-		modal.showModal('Settings', {test: "hey"}, false);
+		$modal = Modals.Settings;
+		// modal.showModal('Settings', {test: "hey"}, false);
 	}
 </script>
 
@@ -65,7 +69,7 @@
 				</span>
 			</button>
 			<button on:click={() => {
-					modal.showModal('Copy File', {tech: "no"}, handleConfirm);
+					// modal.showModal('Copy File', {tech: "no"}, handleConfirm);
 				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faCopy} scale={1.6} />
@@ -74,7 +78,7 @@
 			<hr class="icon-divider">
 			<!-- Settings -->
 			<button on:click={() => {
-					modal.showModal('Settings', {test: "hey"}, false);
+					handleSettings();
 				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faCog} scale={1.6} />
