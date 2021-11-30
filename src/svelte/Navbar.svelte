@@ -6,21 +6,9 @@
 	/* Images */
 	import imgBojitLogo from '../assets/img/bojit_logo_square.png';
 
-	/* Stores */
-	// import modal from './store/modal';
+	/* Overlays */
 	import { modal } from './store/overlays';
-
 	import Modals from './modals';
-
-	/* Modal confirmation handlers (temp) */
-	function handleConfirm() {
-		console.log("Hey there!");
-	}
-
-	function handleSettings() {
-		$modal = Modals.Settings;
-		// modal.showModal('Settings', {test: "hey"}, false);
-	}
 </script>
 
 <div class="navbar is-primary" role="navigation" aria-label="main navigation">
@@ -53,23 +41,29 @@
 			</button>
 			<hr class="icon-divider">
 			<!-- File Controls -->
-			<button class="button is-medium is-clear">
+			<button on:click={() => {
+					$modal = Modals.NewFile;
+				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faFileAlt} scale={1.6} />
 				</span>
 			</button>
-			<button class="button is-medium is-clear">
+			<button on:click={() => {
+					$modal = Modals.OpenFile;
+				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faFolderOpen} scale={1.6} />
 				</span>
 			</button>
-			<button class="button is-medium is-clear">
+			<button on:click={() => {
+					$modal = Modals.SaveFile;
+				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faSave} scale={1.6} />
 				</span>
 			</button>
 			<button on:click={() => {
-					// modal.showModal('Copy File', {tech: "no"}, handleConfirm);
+					$modal = Modals.CopyFile;
 				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faCopy} scale={1.6} />
@@ -78,7 +72,7 @@
 			<hr class="icon-divider">
 			<!-- Settings -->
 			<button on:click={() => {
-					handleSettings();
+					$modal = Modals.Settings;
 				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faCog} scale={1.6} />

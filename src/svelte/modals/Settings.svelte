@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Modal from "../Modal.svelte";
+    import Modal from "./components/Modal.svelte";
 </script>
 
-<Modal title="TEST">
-    <p>Hello World!</p>
+<Modal title="Settings">
+    <p>Settings live here...</p>
 </Modal>

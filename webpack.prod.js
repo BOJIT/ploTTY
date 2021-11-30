@@ -54,12 +54,12 @@ module.exports = merge(common, {
 	plugins: [
 		new WebpackPwaManifest({
 			publicPath: './',
-			name: 'NPI Logger App',
+			name: 'ploTTY',
 			orientation: 'portrait',
 			display: 'standalone',
 			start_url: '.',
-			short_name: 'NPI Logger App',
-			description: 'PWA for offline logging of data in the field.',
+			short_name: 'ploTTY',
+			description: 'Browser Based Serial Monitor/Plotter that doesn\'t suck!',
 			background_color: '#2c2c2c',
 			theme_color: '#2c2c2c',
 			icons: [
