@@ -33,6 +33,4 @@
 {#if $modal}
 	<svelte:component this={$modal} />
 {/if}
-
-<!-- TODO add popups here -->
 <Popup />

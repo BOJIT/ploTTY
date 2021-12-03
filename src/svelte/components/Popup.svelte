@@ -1,51 +1,56 @@
 <script lang="ts">
-    import { popup } from "src/svelte/store/overlays"
-
+	import { fly } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
+	import { popup } from "src/svelte/store/overlays"
 </script>
 
 <div class="container">
-    {#each $popup as entry}
-        <div class="box"
-                class:popup-info="{entry.type === "info"}"
-                class:popup-warning="{entry.type === "warning"}"
-                class:popup-error="{entry.type === "error"}">
-            <h1>{entry.title}</h1>
-            <p>{entry.message}</p>
-        </div>
-    {/each}
+	{#each $popup as entry (entry.uid)}
+		<div transition:fly="{{ x:-500, delay: 300 }}" animate:flip
+				class="popup box"
+				class:popup-info="{entry.type === "info"}"
+				class:popup-warning="{entry.type === "warning"}"
+				class:popup-error="{entry.type === "error"}">
+			<h1>{entry.title}</h1>
+			<p>{entry.message}</p>
+		</div>
+	{/each}
 </div>
 
 <style lang="scss">
-    @charset "utf-8";
-    @import "src/constants.scss";
+	@charset "utf-8";
+	@import "src/constants.scss";
 
-    .container {
-        position: fixed;
-        display: grid;
-        place-items: center;
-        height: 20%;    /* TODO make dependent on message height + a bit */
-        width: 30em;
-        bottom: 0;
-        left: 0;
-        pointer-events: none;
-        background-color: blue;
-    }
+	.container {
+		position: fixed;
+		height: 8em;    /* TODO make dependent on message height + a bit */
+		width: 30em;
+		bottom: 0;
+		left: 0;
+		pointer-events: none;
+		padding: 0.5rem;
+		}
 
-    @media screen and (max-width: ($desktop - 1)) {
-        .container {
-            width: 100%;
-        }
-    }
+	@media screen and (max-width: ($desktop - 1)) {
+		.container {
+			width: 100%;
+		}
+	}
 
-    .popup-info {
-        background-color: hsl(204, 86%, 53%);
-    }
+	.popup {
+		width: 100%;
+		margin-bottom: 0.5rem !important;
+	}
 
-    .popup-warning {
-        background-color: hsl(48, 100%, 67%);
-    }
+	.popup-info {
+		background-color: hsl(204, 86%, 53%);
+	}
 
-    .popup-error {
-        background-color: hsl(348, 100%, 61%);
-    }
+	.popup-warning {
+		background-color: hsl(48, 100%, 67%);
+	}
+
+	.popup-error {
+		background-color: hsl(348, 100%, 61%);
+	}
 </style>

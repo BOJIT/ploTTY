@@ -10,13 +10,17 @@ type Popup = {
     message: string,
     type: "info" | "warning" | "error"
     timeout?: number
+    uid?: number
 }
 
 const popup_store = writable([]);   // Array of message popups
 
+let popup_uid = 1;
+
 function popupPush(entry: Popup) {
     popup_store.update((popups) => {
-        popups = [...popups, entry];
+        entry.uid = popup_uid++;
+        popups = [entry, ...popups];
         return popups;
     });
 }
