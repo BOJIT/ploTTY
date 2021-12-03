@@ -34,7 +34,7 @@
 						"title": "Going...",
 						"message": "Hey there...",
 						"type": "info",
-						"timeout": 10
+						"timeout": 5
 					});
 				}} class="button is-success is-medium">
 				<span class="icon">
@@ -55,7 +55,12 @@
 			<hr class="icon-divider">
 			<!-- File Controls -->
 			<button on:click={() => {
-					$modal = Modals.NewFile;
+					popup.push({
+						"title": "Test Warning",
+						"message": "message content to go here!!!!",
+						"type": "warning"
+					});
+					// $modal = Modals.NewFile;
 				}} class="button is-medium is-clear">
 				<span class="icon">
 					<Icon data={faFileAlt} scale={1.6} />

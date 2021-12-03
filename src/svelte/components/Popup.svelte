@@ -1,18 +1,35 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { popup } from "src/svelte/store/overlays"
+
+	import Icon from 'svelte-awesome';
+	import { faInfo, faExclamationTriangle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <div class="container">
 	{#each $popup as entry (entry.uid)}
-		<div transition:fly="{{ x:-500, delay: 300 }}" animate:flip
-				class="popup box"
-				class:popup-info="{entry.type === "info"}"
-				class:popup-warning="{entry.type === "warning"}"
-				class:popup-error="{entry.type === "error"}">
-			<h1>{entry.title}</h1>
-			<p>{entry.message}</p>
+		<div in:fly="{{ x:-500, delay: 300 }}" out:fade animate:flip
+				class="popup notification"
+				class:is-info="{entry.type === "info"}"
+				class:is-warning="{entry.type === "warning"}"
+				class:is-danger="{entry.type === "error"}">
+			<button on:click={() => popup.close(entry.uid)} class="delete"></button>
+			<span class="icon popup-icon">
+				<div>
+					{#if entry.type === "info"}
+						<Icon data={faInfo} scale={1.4} />
+					{:else if entry.type === "warning"}
+						<Icon data={faExclamationTriangle} scale={1.4} />
+					{:else if entry.type === "error"}
+						<Icon data={faTimesCircle} scale={1.4} />
+					{/if}
+				</div>
+			</span>
+			<div class="popup-message">
+				<h1>{entry.title}</h1>
+				<p>{entry.message}</p>
+			</div>
 		</div>
 	{/each}
 </div>
@@ -40,17 +57,22 @@
 	.popup {
 		width: 100%;
 		margin-bottom: 0.5rem !important;
+		display: flex;
+		pointer-events: auto;
 	}
 
-	.popup-info {
-		background-color: hsl(204, 86%, 53%);
+	.popup-icon {
+		flex: 0 0 auto;
+		position: relative;
+		margin-right: 1rem;
 	}
 
-	.popup-warning {
-		background-color: hsl(48, 100%, 67%);
+	.popup-icon > div {
+		position: absolute;
+		top: 50%;
 	}
 
-	.popup-error {
-		background-color: hsl(348, 100%, 61%);
+	.popup-message {
+		flex: 1 0 auto;
 	}
 </style>
