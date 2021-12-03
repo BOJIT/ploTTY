@@ -1,35 +1,40 @@
 <script lang="ts">
-    /* Interface and default message */
-    export let title:string = "Example Popup";
-    export let message:string = "Lorem amet do minim voluptate esse enim labore sunt.";
-    export let type: "info" | "warning" | "error" = "info";
-    export let timeout: Number | undefined = undefined;
-
-    if(timeout !== undefined) {
-        console.log("No Timeout...");
-    }
+    import { popup } from "src/svelte/store/overlays"
 
 </script>
 
 <div class="container">
-    <div class="box"
-            class:popup-info="{type === "info"}"
-            class:popup-warning="{type === "warning"}"
-            class:popup-error="{type === "error"}">
-        <h1>{title}</h1>
-        <p>{message}</p>
-    </div>
+    {#each $popup as entry}
+        <div class="box"
+                class:popup-info="{entry.type === "info"}"
+                class:popup-warning="{entry.type === "warning"}"
+                class:popup-error="{entry.type === "error"}">
+            <h1>{entry.title}</h1>
+            <p>{entry.message}</p>
+        </div>
+    {/each}
 </div>
 
+<style lang="scss">
+    @charset "utf-8";
+    @import "src/constants.scss";
 
-<style>
     .container {
         position: fixed;
         display: grid;
         place-items: center;
-        height: 100%;
-        width: 100%;
+        height: 20%;    /* TODO make dependent on message height + a bit */
+        width: 30em;
+        bottom: 0;
+        left: 0;
         pointer-events: none;
+        background-color: blue;
+    }
+
+    @media screen and (max-width: ($desktop - 1)) {
+        .container {
+            width: 100%;
+        }
     }
 
     .popup-info {

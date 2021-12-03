@@ -3,7 +3,7 @@
 	export let title: string = "Example Modal";
 	export let confirm: boolean = true;
 
-	import { modal } from '../../../store/overlays';
+	import { modal } from 'src/svelte/store/overlays';
 	import { fade, scale } from 'svelte/transition';
 
 	/* Handler to close modal */

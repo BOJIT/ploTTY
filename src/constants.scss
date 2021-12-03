@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+$primary: rgb(33, 37, 37);
+$gap: 32px;
+$tablet: 400px;
+$desktop: 600px + (2 * $gap);
+$widescreen: 1152px + (2 * $gap);
+$fullhd: 1344px + (2 * $gap);

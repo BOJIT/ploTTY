@@ -4,10 +4,10 @@
 	import { faPlay, faStop, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars } from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
-	import imgBojitLogo from '../../assets/img/bojit_logo_square.png';
+	import imgBojitLogo from 'src/assets/img/bojit_logo_square.png';
 
 	/* Overlays */
-	import { modal, popup } from '../store/overlays';
+	import { modal, popup } from 'src/svelte/store/overlays';
 	import Modals from './modals';
 </script>
 

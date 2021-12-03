@@ -4,6 +4,10 @@
 	"exclude": ["node_modules/*", "__sapper__/*", "static/*"],
 	"compilerOptions": {
 		"allowJs": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"baseUrl": "./",
+		"paths": {
+			"src/*": ["src/*"]
+		}
 	}
 }

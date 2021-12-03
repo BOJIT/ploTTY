@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store';
-import Popup__SvelteComponent_ from '../components/Popup.svelte';
 
 /* Modal Overlay */
 export let modal = writable();
