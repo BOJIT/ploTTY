@@ -1,16 +1,13 @@
 <script lang="ts">
-	import Navbar from "./Navbar.svelte";
-	import Tabs from "./Tabs.svelte";
-	import Panels from "./panels";
+	import Navbar from "./components/Navbar.svelte";
+	import Tabs from "./components/Tabs.svelte";
+	import Panels from "./components/panels";
+	import Popup from "./components/Popup.svelte";
 
 	import { modal, popup } from "./store/overlays";
 
 	/* List of current windows (global state) */
 	let tabs = [
-		{
-			title: "Editor",
-			panel: Panels.Editor
-		},
 		{
 			title: "First Terminal",
 			panel: Panels.Terminal
@@ -38,3 +35,6 @@
 {/if}
 
 <!-- TODO add popups here -->
+{#each $popup as entry}
+	<Popup {...entry} />
+{/each}

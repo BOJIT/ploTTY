@@ -4,10 +4,10 @@
 	import { faPlay, faStop, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars } from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
-	import imgBojitLogo from '../assets/img/bojit_logo_square.png';
+	import imgBojitLogo from '../../assets/img/bojit_logo_square.png';
 
 	/* Overlays */
-	import { modal } from './store/overlays';
+	import { modal, popup } from '../store/overlays';
 	import Modals from './modals';
 </script>
 
@@ -29,12 +29,25 @@
 	<div class="navbar-menu">
 		<div class="navbar-end">
 			<!-- Runtime Controls -->
-			<button class="button is-success is-medium">
+			<button on:click={() => {
+					popup.push({
+						"title": "Going...",
+						"message": "Hey there...",
+						"type": "info",
+						"timeout": 10
+					});
+				}} class="button is-success is-medium">
 				<span class="icon">
 					<Icon data={faPlay} scale={1.6} />
 				</span>
 			</button>
-			<button class="button is-danger is-medium">
+			<button on:click={() => {
+					popup.push({
+						"title": "STOP!",
+						"message": "stop pressed!",
+						"type": "error"
+					});
+				}} class="button is-danger is-medium">
 				<span class="icon">
 					<Icon data={faStop} scale={1.6} />
 				</span>
