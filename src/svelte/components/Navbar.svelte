@@ -11,127 +11,157 @@
 	import Modals from './modals';
 </script>
 
-<div class="navbar is-primary" role="navigation" aria-label="main navigation">
+<div class="nav is-primary" role="navigation" aria-label="main navigation">
 	<!-- Navbar Left-Hand Side -->
-	<div class="navbar-brand">
-		<div class="px-1 py-1">
-			<a class="navbar-item px-0 py-0" href="https://bojit.org/" target="_blank">
-				<img src="{imgBojitLogo}" alt="BOJIT logo" style="max-height:3.5rem">
-			</a>
-		</div>
+	<div class="nav-left" style="margin-top: 6px">
+		<a href="https://bojit.org/" target="_blank">
+			<img src="{imgBojitLogo}" alt="BOJIT logo" style="max-height:3.5rem">
+		</a>
+	</div>
 
-		<div class="navbar-item">
-			<h1>ploTTY</h1>
-		</div>
+	<div class="nav-left">
+		<h1>ploTTY</h1>
 	</div>
 
 	<!-- Navbar Right-Hand Side -->
-	<div class="navbar-menu">
-		<div class="navbar-end">
-			<!-- Runtime Controls -->
-			<button on:click={() => {
-					popup.push({
-						"title": "Going...",
-						"message": "Hey there...",
-						"type": "info",
-						"timeout": 5
-					});
-				}} class="button is-success is-medium">
-				<span class="icon">
-					<Icon data={faPlay} scale={1.6} />
-				</span>
-			</button>
-			<button on:click={() => {
-					popup.push({
-						"title": "STOP!",
-						"message": "stop pressed!",
-						"type": "error"
-					});
-				}} class="button is-danger is-medium">
-				<span class="icon">
-					<Icon data={faStop} scale={1.6} />
-				</span>
-			</button>
-			<hr class="icon-divider">
-			<!-- File Controls -->
-			<button on:click={() => {
-					popup.push({
-						"title": "Test Warning",
-						"message": "message content to go here!!!!",
-						"type": "warning"
-					});
-					// $modal = Modals.NewFile;
-				}} class="button is-medium is-clear">
-				<span class="icon">
-					<Icon data={faFileAlt} scale={1.6} />
-				</span>
-			</button>
-			<button on:click={() => {
-					$modal = Modals.OpenFile;
-				}} class="button is-medium is-clear">
-				<span class="icon">
-					<Icon data={faFolderOpen} scale={1.6} />
-				</span>
-			</button>
-			<button on:click={() => {
-					$modal = Modals.SaveFile;
-				}} class="button is-medium is-clear">
-				<span class="icon">
-					<Icon data={faSave} scale={1.6} />
-				</span>
-			</button>
-			<button on:click={() => {
-					$modal = Modals.CopyFile;
-				}} class="button is-medium is-clear">
-				<span class="icon">
-					<Icon data={faCopy} scale={1.6} />
-				</span>
-			</button>
-			<hr class="icon-divider">
-			<!-- Settings -->
-			<button on:click={() => {
-					$modal = Modals.Settings;
-				}} class="button is-medium is-clear">
-				<span class="icon">
-					<Icon data={faCog} scale={1.6} />
-				</span>
-			</button>
-		</div>
+	<div class="nav-right">
 
-		<!-- Burger Menu (Overflow) -->
-		<button class="button is-medium is-clear navbar-burger">
+		<!-- Runtime Controls -->
+		<button on:click={() => {
+				popup.push({
+					"title": "Going...",
+					"message": "Hey there...",
+					"type": "info",
+					"timeout": 5
+				});
+			}} class="button is-success is-medium">
+			<span class="icon">
+				<Icon data={faPlay} scale={1.6} />
+			</span>
+		</button>
+
+		<button on:click={() => {
+				popup.push({
+					"title": "STOP!",
+					"message": "stop pressed!",
+					"type": "error"
+				});
+			}} class="button is-danger is-medium">
+			<span class="icon">
+				<Icon data={faStop} scale={1.6} />
+			</span>
+		</button>
+
+		<div class="divider desktop"><hr></div>
+
+		<!-- File Controls -->
+		<button on:click={() => {
+				popup.push({
+					"title": "Test Warning",
+					"message": "message content to go here!!!!",
+					"type": "warning"
+				});
+				// $modal = Modals.NewFile;
+			}} class="button desktop is-medium is-clear">
+			<span class="icon">
+				<Icon data={faFileAlt} scale={1.6} />
+			</span>
+		</button>
+
+		<button on:click={() => {
+				$modal = Modals.OpenFile;
+			}} class="button desktop is-medium is-clear">
+			<span class="icon">
+				<Icon data={faFolderOpen} scale={1.6} />
+			</span>
+		</button>
+
+		<button on:click={() => {
+				$modal = Modals.SaveFile;
+			}} class="button desktop is-medium is-clear">
+			<span class="icon">
+				<Icon data={faSave} scale={1.6} />
+			</span>
+		</button>
+
+		<button on:click={() => {
+				$modal = Modals.CopyFile;
+			}} class="button desktop is-medium is-clear">
+			<span class="icon">
+				<Icon data={faCopy} scale={1.6} />
+			</span>
+		</button>
+
+		<div class="divider"><hr></div>
+
+		<!-- Settings -->
+		<button on:click={() => {
+				$modal = Modals.Settings;
+			}} class="button desktop is-medium is-clear">
+			<span class="icon">
+				<Icon data={faCog} scale={1.6} />
+			</span>
+		</button>
+
+		<!-- Burger Menu -->
+		<button class="button mobile is-medium is-clear">
 			<span class="icon">
 				<Icon data={faBars} scale={1.6} />
 			</span>
 		</button>
-		<!-- TODO this does not currently work! -->
+
 	</div>
+
 </div>
 
-<style>
+<style lang="scss">
+	@charset "utf-8";
+	@import "src/constants.scss";
+
 	h1 {
 		font-size: 2rem;
 		font-weight: 50;
 		font-family: "comfortaa";
+		color: whitesmoke;
 	}
 
-	hr.icon-divider{
+	.divider {
 		width: 1px;
-		height: 60%;
+		display: flex;
+		margin-left: 4px;
+		margin-right: 4px;
+		margin-top: 0px;
+		margin-bottom: 0px;
+		background-color: whitesmoke;
+	}
+
+	/* Navbar Styling */
+	.nav {
+		flex: 0 0 auto;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		width: 100%;
+		background-color: $primary;
+	}
+
+	.nav-left {
+		flex: 0 0 auto;
 		margin-left: 4px;
 		margin-right: 4px;
 	}
 
-	.navbar {
-		flex: 0 0 auto;
-	}
-
-	.navbar-end {
+	.nav-right {
+		display: flex;
+		width: auto;
+		justify-content: flex-end;
 		align-items: center;
-		margin-right: 4px;
+		flex: 1 0 auto;
+		padding-right: 4px;
 	}
 
-	.navbar-end > button {
+	/* Button Styling */
+	.button {
 		margin: 4px;
 	}
 
@@ -148,5 +178,24 @@
 
 	.is-clear:hover {
 		background-color: rgba(83, 83, 83, 0.5);
+	}
+
+	/* Mobile/Desktop Display Overflow */
+	.mobile {
+		display: none;
+	}
+
+	.desktop {
+		display: block;
+	}
+
+	@media screen and (max-width: ($desktop - 1)) {
+		.mobile {
+			display: block !important;
+		}
+
+		.desktop {
+			display: none !important;
+		}
 	}
 </style>
