@@ -1,15 +1,15 @@
 /* List of all available modal components */
 import Settings from './Settings.svelte';
-import CopyFile from './CopyFile.svelte';
-import NewFile from './NewFile.svelte';
-import OpenFile from './OpenFile.svelte';
-import SaveFile from './SaveFile.svelte';
+import DuplicatePatch from './DuplicatePatch.svelte';
+import NewPatch from './NewPatch.svelte';
+import OpenPatch from './OpenPatch.svelte';
+import SavePatch from './SavePatch.svelte';
 
 /* Expose components as a single JS object */
 export default {
-	CopyFile,
-	NewFile,
-	OpenFile,
-	SaveFile,
+	DuplicatePatch,
+	NewPatch,
+	OpenPatch,
+	SavePatch,
 	Settings
 }

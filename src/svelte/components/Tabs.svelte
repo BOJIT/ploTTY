@@ -39,7 +39,10 @@
 	{/each}
 </main>
 
-<style>
+<style lang="scss">
+	@charset "utf-8";
+	@import "src/constants.scss";
+
 	main {
 		flex: 1 1 auto;
 		position: relative;
@@ -51,5 +54,10 @@
 
 	.tabs {
 		flex: 0 0 auto;
+		background-color: rgb(54, 55, 59);
+	}
+
+	a {
+		color: whitesmoke;
 	}
 </style>

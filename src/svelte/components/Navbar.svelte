@@ -1,6 +1,8 @@
 <script lang="ts">
 	/* Font Awesome */
 	import Icon from 'svelte-awesome';
+	import { fade, fly } from 'svelte/transition';
+
 	import { faPlay, faStop, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars } from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
@@ -9,8 +11,15 @@
 	/* Overlays */
 	import { modal, popup } from 'src/svelte/store/overlays';
 	import Modals from './modals';
+import SavePatch from './modals/SavePatch.svelte';
+import DuplicatePatch from './modals/DuplicatePatch.svelte';
+import Settings from './modals/Settings.svelte';
+
+	/* Burger Menu */
+	let visible = false;
 </script>
 
+<!-- Navbar -->
 <div class="nav is-primary" role="navigation" aria-label="main navigation">
 	<!-- Navbar Left-Hand Side -->
 	<div class="nav-left" style="margin-top: 6px">
@@ -61,7 +70,7 @@
 					"message": "message content to go here!!!!",
 					"type": "warning"
 				});
-				// $modal = Modals.NewFile;
+				// $modal = Modals.NewPatch;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faFileAlt} scale={1.6} />
@@ -69,7 +78,7 @@
 		</button>
 
 		<button on:click={() => {
-				$modal = Modals.OpenFile;
+				$modal = Modals.OpenPatch;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faFolderOpen} scale={1.6} />
@@ -77,7 +86,7 @@
 		</button>
 
 		<button on:click={() => {
-				$modal = Modals.SaveFile;
+				$modal = Modals.SavePatch;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faSave} scale={1.6} />
@@ -85,7 +94,7 @@
 		</button>
 
 		<button on:click={() => {
-				$modal = Modals.CopyFile;
+				$modal = Modals.DuplicatePatch;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faCopy} scale={1.6} />
@@ -104,26 +113,61 @@
 		</button>
 
 		<!-- Burger Menu -->
-		<button class="button mobile is-medium is-clear">
+		<button on:click={() => {
+				visible = !visible;
+			}} class="button mobile is-medium is-clear">
 			<span class="icon">
 				<Icon data={faBars} scale={1.6} />
 			</span>
 		</button>
-
 	</div>
-
 </div>
+
+<!-- Burger Menu -->
+{#if visible }
+	<div class="burger-container">
+		<div transition:fly="{{ y:-100 }}" class="burger">
+			<button on:click={() => {
+					$modal = Modals.NewPatch;
+					visible = !visible;
+				}} class="button burger-entry">
+				<h1>New Patch</h1>
+			</button>
+			<hr>
+			<button on:click={() => {
+					$modal = Modals.OpenPatch;
+					visible = !visible;
+				}} class="button burger-entry">
+				<h1>Open Patch</h1>
+			</button>
+			<hr>
+			<button on:click={() => {
+					$modal = Modals.SavePatch;
+					visible = !visible;
+				}} class="button burger-entry">
+				<h1>Save Patch</h1>
+			</button>
+			<hr>
+			<button on:click={() => {
+					$modal = Modals.DuplicatePatch;
+					visible = !visible;
+				}} class="button burger-entry">
+				<h1>Duplicate Patch</h1>
+			</button>
+			<hr>
+			<button on:click={() => {
+					$modal = Modals.Settings;
+					visible = !visible;
+				}} class="button burger-entry">
+				<h1>Settings</h1>
+			</button>
+		</div>
+	</div>
+{/if}
 
 <style lang="scss">
 	@charset "utf-8";
 	@import "src/constants.scss";
-
-	h1 {
-		font-size: 2rem;
-		font-weight: 50;
-		font-family: "comfortaa";
-		color: whitesmoke;
-	}
 
 	.divider {
 		width: 1px;
@@ -143,6 +187,7 @@
 		align-items: center;
 		width: 100%;
 		background-color: $primary;
+		z-index: 11;
 	}
 
 	.nav-left {
@@ -160,11 +205,50 @@
 		padding-right: 4px;
 	}
 
-	/* Button Styling */
-	.button {
+	.nav h1 {
+		font-size: 2rem;
+		font-weight: 50;
+		font-family: "comfortaa";
+		color: whitesmoke;
+	}
+
+	.nav .button {
 		margin: 4px;
 	}
 
+	/* Burger Menu Styling */
+	.burger-container {
+		position: relative;
+	}
+
+	.burger {
+		width: 100%;
+		background-color: rgba(59, 59, 59, 0.9);
+		position: absolute;
+		z-index: 10;
+	}
+
+	.burger > hr {
+		margin: 1px;
+		height: 1px;
+	}
+
+	.burger h1 {
+		font-size: 1.5rem;
+		font-weight: 20;
+		font-family: "comfortaa";
+		color: whitesmoke;
+	}
+
+	.burger .button {
+		width: 100%;
+		border: none;
+		background: none;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	/* Button Styling */
 	.button:focus {
 		outline: none;
 		box-shadow: none;
