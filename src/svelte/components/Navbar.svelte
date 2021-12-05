@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* Font Awesome */
 	import Icon from 'svelte-awesome';
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 
 	import { faPlay, faStop, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,12 +11,26 @@
 	/* Overlays */
 	import { modal, popup } from 'src/svelte/store/overlays';
 	import Modals from './modals';
-import SavePatch from './modals/SavePatch.svelte';
-import DuplicatePatch from './modals/DuplicatePatch.svelte';
-import Settings from './modals/Settings.svelte';
+
 
 	/* Burger Menu */
 	let visible = false;
+
+	function clickOutside(node: Node) {
+		const handleClick = (event: Event) => {
+			if (!node.contains(event.target as Node)) {
+				visible = false;
+			}
+		};
+
+		document.addEventListener("click", handleClick, true);
+
+		return {
+			destroy() {
+				document.removeEventListener("click", handleClick, true);
+			}
+		};
+	}
 </script>
 
 <!-- Navbar -->
@@ -126,38 +140,38 @@ import Settings from './modals/Settings.svelte';
 <!-- Burger Menu -->
 {#if visible }
 	<div class="burger-container">
-		<div transition:fly="{{ y:-100 }}" class="burger">
+		<div transition:fly="{{ y:-100 }}" use:clickOutside class="burger">
 			<button on:click={() => {
 					$modal = Modals.NewPatch;
-					visible = !visible;
+					visible = false;
 				}} class="button burger-entry">
 				<h1>New Patch</h1>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.OpenPatch;
-					visible = !visible;
+					visible = false;
 				}} class="button burger-entry">
 				<h1>Open Patch</h1>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.SavePatch;
-					visible = !visible;
+					visible = false;
 				}} class="button burger-entry">
 				<h1>Save Patch</h1>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.DuplicatePatch;
-					visible = !visible;
+					visible = false;
 				}} class="button burger-entry">
 				<h1>Duplicate Patch</h1>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.Settings;
-					visible = !visible;
+					visible = false;
 				}} class="button burger-entry">
 				<h1>Settings</h1>
 			</button>

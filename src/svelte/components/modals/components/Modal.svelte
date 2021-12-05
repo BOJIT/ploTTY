@@ -35,3 +35,20 @@
 		</footer>
 	</div>
 </div>
+
+<style lang="scss">
+	@charset "utf-8";
+	@import "src/constants.scss";
+
+	.modal-card {
+		margin: 5px;
+	}
+
+	@media screen and (max-width: ($desktop - 1)) {
+		.modal-card.modal-content {
+			width: calc(100% - 40px);
+			height: 100%;
+		}
+	}
+
+</style>
