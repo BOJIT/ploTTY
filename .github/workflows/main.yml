@@ -48,10 +48,10 @@ jobs:
 
       - name: Clean gh-pages area
         if: startsWith(github.event.ref, 'refs/tags')
-          run: |
-            rm -rf gh-pages/*
-            touch ./gh-pages/.nojekyll
-            echo 'plotty.bojit.org' >gh-pages/CNAME
+        run: |
+          rm -rf gh-pages/*
+          touch ./gh-pages/.nojekyll
+          echo 'plotty.bojit.org' >gh-pages/CNAME
 
 
       - name: Copy dist files across
