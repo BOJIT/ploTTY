@@ -1,1 +1,0 @@
-(()=>{"use strict";var t=new(function(){function t(){this.x='<template id="template_window"> <p>Hello World!</p> </template>',this.y=10}return t.prototype.scale=function(t){this.x*=t,this.y*=t},t}());console.log(t.x)})();
