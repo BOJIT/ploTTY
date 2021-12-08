@@ -57,12 +57,12 @@ module.exports = merge(common, {
 			name: 'ploTTY',
 			orientation: 'portrait',
 			display: 'standalone',
-			start_url: './',
-			scope: '.',
+			start_url: 'https://plotty.bojit.org/',
+			scope: 'https://plotty.bojit.org/',
 			short_name: 'ploTTY',
 			description: 'Browser Based Serial Monitor/Plotter that doesn\'t suck!',
-			background_color: '#2c2c2c',
-			theme_color: '#2c2c2c',
+			background_color: '#2b3534',
+			theme_color: '#2b3534',
 			icons: [
 				{
 					src: "./src/assets/favicon/apple-touch-icon.png",
