@@ -53,11 +53,12 @@ module.exports = merge(common, {
 	},
 	plugins: [
 		new WebpackPwaManifest({
-			publicPath: '/',
+			publicPath: './',
 			name: 'ploTTY',
 			orientation: 'portrait',
 			display: 'standalone',
-			start_url: '/',
+			start_url: './',
+			scope: '.',
 			short_name: 'ploTTY',
 			description: 'Browser Based Serial Monitor/Plotter that doesn\'t suck!',
 			background_color: '#2c2c2c',
