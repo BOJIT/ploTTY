@@ -1,17 +1,17 @@
 {
   "icons": [
     {
-      "src": "./assets/icon_512x512.32124186f7d2001d19a23a18e999f0c9.png",
+      "src": "/assets/icon_512x512.32124186f7d2001d19a23a18e999f0c9.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "./assets/icon_192x192.617564233c8557c62bfa4aac6ba27041.png",
+      "src": "/assets/icon_192x192.617564233c8557c62bfa4aac6ba27041.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./assets/icon_180x180.7571171a82b1a1b3a6885dd3466b4c50.png",
+      "src": "/assets/icon_180x180.7571171a82b1a1b3a6885dd3466b4c50.png",
       "sizes": "180x180",
       "type": "image/png"
     }
@@ -20,7 +20,7 @@
   "short_name": "ploTTY",
   "orientation": "portrait",
   "display": "standalone",
-  "start_url": ".",
+  "start_url": "/",
   "description": "Browser Based Serial Monitor/Plotter that doesn't suck!",
   "background_color": "#2c2c2c",
   "theme_color": "#2c2c2c"
