@@ -128,7 +128,9 @@
 
 		<!-- Burger Menu -->
 		<button on:click={() => {
-				visible = !visible;
+				if(visible === false) {
+					visible = true;
+				}
 			}} class="button mobile is-medium is-clear">
 			<span class="icon">
 				<Icon data={faBars} scale={1.6} />

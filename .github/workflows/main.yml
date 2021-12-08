@@ -49,6 +49,9 @@ jobs:
       - name: Copy dist files across
         if: startsWith(github.event.ref, 'refs/tags')
         run: |
+          cd gh-pages
+          rm -rf -v !("CNAME"|".nojekyll")
+          cd ../
           cp -r main/dist/. gh-pages/
           ls -al gh-pages
 
