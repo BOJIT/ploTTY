@@ -4,7 +4,7 @@
       "src": "./assets/icon_512x512.a39db5e06260f8f7f7f780b6b31ff3e0.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "./assets/icon_384x384.df7cb61181fc744cb41805b9cb17df32.png",
