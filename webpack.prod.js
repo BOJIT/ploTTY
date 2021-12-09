@@ -104,7 +104,7 @@ module.exports = merge(common, {
 					size: "512x512",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any maskable"
 				}
 			],
 			}),
