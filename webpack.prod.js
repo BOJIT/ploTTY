@@ -65,19 +65,46 @@ module.exports = merge(common, {
 			theme_color: '#2b3534',
 			icons: [
 				{
-					src: "./src/assets/favicon/apple-touch-icon.png",
-					size: "180x180",
-					destination: "assets"
+					src: "./src/assets/favicon/icon_x72.png",
+					size: "72x72",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
 				},
 				{
-					src: "./src/assets/favicon/android-chrome-192x192.png",
+					src: "./src/assets/favicon/icon_x96.png",
+					size: "96x96",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/icon_x128.png",
+					size: "128x128",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/icon_x192.png",
 					size: "192x192",
-					destination: "assets"
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
 				},
 				{
-					src: "./src/assets/favicon/android-chrome-512x512.png",
+					src: "./src/assets/favicon/icon_x384.png",
+					size: "384x384",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/icon_x512.png",
 					size: "512x512",
-					destination: "assets"
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
 				}
 			],
 			}),
