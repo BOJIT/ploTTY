@@ -1,0 +1,49 @@
+{
+  "icons": [
+    {
+      "src": "./assets/icon_512x512.a39db5e06260f8f7f7f780b6b31ff3e0.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_384x384.df7cb61181fc744cb41805b9cb17df32.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_192x192.eb0fcb084b5a0b7f47434c1f6d9876db.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_128x128.2414bca3bf10a3e5ab2360eccdc5116e.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_96x96.444412be703172678f13510b27b4439c.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_72x72.159aea3deebcd817b4567a0cd45e93dc.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "name": "ploTTY",
+  "short_name": "ploTTY",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": ".",
+  "description": "Browser Based Serial Monitor/Plotter that doesn't suck!",
+  "background_color": "#2b3534",
+  "theme_color": "#2b3534"
+}
