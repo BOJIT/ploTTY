@@ -36,7 +36,7 @@
 
 <style lang="scss">
 	@charset "utf-8";
-	@import "src/constants.scss";
+	@use "src/scss/_constants.scss";
 
 	.container {
 		position: fixed;
@@ -48,7 +48,7 @@
 		padding: 0.5rem;
 		}
 
-	@media screen and (max-width: ($desktop - 1)) {
+	@media screen and (max-width: (constants.$desktop - 1)) {
 		.container {
 			width: 100%;
 		}

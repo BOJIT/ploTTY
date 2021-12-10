@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+/* Default Variable Values - Sass 2.0 doesn't allow dynamic variable creation */
+$primary-color: "primary-color";
+$secondary-color: "secondary-color";
+
+/* Theme Schema */
+$themes: (
+    light: (
+        primary-color: #00FFBB,
+        secondary-color: #0FFFFF,
+    ),
+    dark: (
+        primary-color: rgb(33, 37, 37),
+        secondary-color: rgb(62, 66, 66),
+    )
+);
+
+@mixin themed() {
+    @each $theme, $map in $themes {
+        :global(.theme--#{$theme}) & {
+            $theme-map: () !global;
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), '#{$key}');
+                $theme-map: map-merge($theme-map, ($key: $value)) !global;
+            }
+            @content;
+            $theme-map: null !global;
+        }
+    }
+}
+
+@function t($key) {
+    @return map-get($theme-map, $key);
+}

@@ -41,7 +41,8 @@
 
 <style lang="scss">
 	@charset "utf-8";
-	@import "src/constants.scss";
+	@use "src/scss/_constants.scss";
+	@use "src/scss/theme.scss";
 
 	main {
 		flex: 1 1 auto;
@@ -53,8 +54,11 @@
 	}
 
 	.tabs {
+		@include theme.themed() {
+			background-color: theme.t(theme.$secondary-color);
+		}
+
 		flex: 0 0 auto;
-		background-color: rgb(54, 55, 59);
 	}
 
 	a {

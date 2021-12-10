@@ -4,10 +4,10 @@
 
 <style lang="scss">
 	@charset "utf-8";
-	@import "src/constants.scss";
+	@use "src/scss/_constants.scss";
 
 	.full {
-		background-color: $primary;
+		background-color: constants.$primary;
 		width: 100%;
 		height: 100%;
 	}

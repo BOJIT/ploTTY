@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-@import "./constants.scss";
+/* Global constants and bulma overrides */
+@use "scss/constants.scss";
 
 @import "~bulma/bulma";
 

@@ -12,10 +12,14 @@
 	import { modal, popup } from 'src/svelte/store/overlays';
 	import Modals from './modals';
 
+	/* TODO - put theme toggle in settings loader */
+	import theme from 'src/ts/theme';
+	let theme_toggle = true;
 
 	/* Burger Menu */
 	let visible = false;
 
+	/* Function to detect a click outside the burger menu */
 	function clickOutside(node: Node) {
 		const handleClick = (event: Event) => {
 			if (!node.contains(event.target as Node)) {
@@ -64,11 +68,12 @@
 		</button>
 
 		<button on:click={() => {
-				popup.push({
-					"title": "STOP!",
-					"message": "stop pressed!",
-					"type": "error"
-				});
+				if(theme_toggle) {
+					theme.light();
+				} else {
+					theme.dark();
+				}
+				theme_toggle = !theme_toggle;
 			}} class="button is-danger is-medium">
 			<span class="icon">
 				<Icon data={faStop} scale={1.6} />
@@ -128,10 +133,9 @@
 
 		<!-- Burger Menu -->
 		<button on:click={() => {
-				if(visible === false) {
-					visible = true;
-				}
-			}} class="button mobile is-medium is-clear">
+				visible = true;
+			}} class="button mobile is-medium is-clear"
+			style="pointer-events: {visible ? 'none' : 'auto'}">
 			<span class="icon">
 				<Icon data={faBars} scale={1.6} />
 			</span>
@@ -183,7 +187,7 @@
 
 <style lang="scss">
 	@charset "utf-8";
-	@import "src/constants.scss";
+	@use "src/scss/_constants.scss";
 
 	.divider {
 		width: 1px;
@@ -202,7 +206,7 @@
 		justify-content: flex-end;
 		align-items: center;
 		width: 100%;
-		background-color: $primary;
+		background-color: constants.$primary;
 		z-index: 11;
 	}
 
@@ -289,7 +293,7 @@
 		display: block;
 	}
 
-	@media screen and (max-width: ($desktop - 1)) {
+	@media screen and (max-width: (constants.$desktop - 1)) {
 		.mobile {
 			display: block !important;
 		}
