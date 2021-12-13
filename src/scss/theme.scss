@@ -1,18 +1,39 @@
 @charset "utf-8";
 
 /* Default Variable Values - Sass 2.0 doesn't allow dynamic variable creation */
-$primary-color: "primary-color";
-$secondary-color: "secondary-color";
+$text-primary: "text-primary";
+$text-secondary: "text-secondary";
+
+$background-primary: "background-primary";
+$background-secondary: "background-secondary";
+$background-info: "background-info";
+$background-success: "background-success";
+$background-warning: "background-warning";
+$background-error: "background-error";
 
 /* Theme Schema */
 $themes: (
     light: (
-        primary-color: #00FFBB,
-        secondary-color: #0FFFFF,
+        text-primary: rgb(10, 10, 10),
+        text-secondary: rgb(41, 41, 41),
+
+        background-primary: hsl(180, 5.7%, 75%),
+        background-secondary: hsl(180, 3.1%, 90%),
+        background-info: hsl(204, 71%, 39%),
+        background-success: hsl(141, 53%, 31%),
+        background-warning: hsl(48, 100%, 29%),
+        background-error: hsl(348, 86%, 43%),
     ),
     dark: (
-        primary-color: rgb(33, 37, 37),
-        secondary-color: rgb(62, 66, 66),
+        text-primary: rgb(245, 245, 245),
+        text-secondary: rgb(161, 161, 161),
+
+        background-primary: hsl(180, 5.7%, 13.7%),
+        background-secondary: hsl(180, 3.1%, 25.1%),
+        background-info: hsl(204, 86%, 53%),
+        background-success: hsl(153, 53%, 53%),
+        background-warning: hsl(48, 100%, 67%),
+        background-error: hsl(348, 100%, 61%),
     )
 );
 

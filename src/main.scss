@@ -2,6 +2,7 @@
 
 /* Global constants and bulma overrides */
 @use "scss/constants.scss";
+@use "scss/theme.scss";
 
 @import "~bulma/bulma";
 
@@ -23,10 +24,16 @@ body {
 
 p {
 	font-family: "comfortaa";
+	@include theme.themed() {
+		color: theme.t(theme.$text-secondary);
+	}
 }
 
 h2 {
 	font-family: "comfortaa";
 	font-weight: 50;
 	font-size: 1.5rem;
+	@include theme.themed() {
+		color: theme.t(theme.$text-primary);
+	}
 }

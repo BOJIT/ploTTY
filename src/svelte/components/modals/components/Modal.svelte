@@ -39,6 +39,7 @@
 <style lang="scss">
 	@charset "utf-8";
 	@use "src/scss/_constants.scss";
+	@use "src/scss/theme.scss";
 
 	.modal-card {
 		margin: 5px;
@@ -48,6 +49,55 @@
 		.modal-card.modal-content {
 			width: calc(100% - 40px);
 			height: 100%;
+		}
+	}
+
+	.modal-card-head {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-primary);
+		}
+	}
+
+	.modal-card-body {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-secondary);
+		}
+	}
+
+	.modal-card-foot {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-primary);
+		}
+	}
+
+	.modal-card-title {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.modal-card-body :global(h2) {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.modal-card-body :global(p) {
+		@include theme.themed() {
+			color: theme.t(theme.$text-secondary);
+		}
+	}
+
+	button {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+			background-color: theme.t(theme.$background-secondary);
+		}
+	}
+
+	button.is-success {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-success);
 		}
 	}
 

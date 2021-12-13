@@ -37,6 +37,7 @@
 <style lang="scss">
 	@charset "utf-8";
 	@use "src/scss/_constants.scss";
+	@use "src/scss/theme.scss";
 
 	.container {
 		position: fixed;
@@ -74,5 +75,23 @@
 
 	.popup-message {
 		flex: 1 0 auto;
+	}
+
+	.is-info {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-info);
+		}
+	}
+
+	.is-warning {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-warning);
+		}
+	}
+
+	.is-danger {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-error);
+		}
 	}
 </style>

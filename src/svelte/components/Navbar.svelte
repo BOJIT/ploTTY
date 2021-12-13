@@ -188,6 +188,7 @@
 <style lang="scss">
 	@charset "utf-8";
 	@use "src/scss/_constants.scss";
+	@use "src/scss/theme.scss";
 
 	.divider {
 		width: 1px;
@@ -196,7 +197,15 @@
 		margin-right: 4px;
 		margin-top: 0px;
 		margin-bottom: 0px;
-		background-color: whitesmoke;
+		@include theme.themed() {
+			background-color: theme.t(theme.$text-primary);
+		}
+
+		hr {
+			@include theme.themed() {
+				background-color: theme.t(theme.$text-primary);
+			}
+		}
 	}
 
 	/* Navbar Styling */
@@ -206,7 +215,9 @@
 		justify-content: flex-end;
 		align-items: center;
 		width: 100%;
-		background-color: constants.$primary;
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-primary);
+		}
 		z-index: 11;
 	}
 
@@ -229,7 +240,9 @@
 		font-size: 2rem;
 		font-weight: 50;
 		font-family: "comfortaa";
-		color: whitesmoke;
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
 	}
 
 	.nav .button {
@@ -274,6 +287,18 @@
 		box-shadow: none;
 	}
 
+	.is-success {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-success);
+		}
+	}
+
+	.is-danger {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-error);
+		}
+	}
+
 	.is-clear {
 		color: whitesmoke;
 		background-color: transparent;
@@ -282,6 +307,12 @@
 
 	.is-clear:hover {
 		background-color: rgba(83, 83, 83, 0.5);
+	}
+
+	.icon {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
 	}
 
 	/* Mobile/Desktop Display Overflow */

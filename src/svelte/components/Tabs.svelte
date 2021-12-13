@@ -55,13 +55,20 @@
 
 	.tabs {
 		@include theme.themed() {
-			background-color: theme.t(theme.$secondary-color);
+			background-color: theme.t(theme.$background-secondary);
 		}
 
 		flex: 0 0 auto;
 	}
 
 	a {
-		color: whitesmoke;
+		@include theme.themed() {
+			color: theme.t(theme.$text-secondary);
+		}
 	}
+
+	li.is-active a {
+		color: hsl(229,52%,52%);
+	}
+
 </style>
