@@ -1,5 +1,5 @@
 .the-graph-dark .the-graph-app {
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.8);
   position: relative;
 }
 .the-graph-dark svg {

@@ -3,8 +3,10 @@
 	import Tabs from "./components/Tabs.svelte";
 	import Panels from "./components/panels";
 	import Popup from "./components/Popup.svelte";
+	import Editor from "./components/Editor.svelte";
 
 	import { modal } from "./store/overlays";
+	import editor from "./store/editor";
 
 	/* List of current windows (global state) */
 	let tabs = [
@@ -23,10 +25,13 @@
 	];
 </script>
 
-<!-- Top Navbar -->
+<!-- Editor - overlays entire page -->
+<Editor hidden={!$editor.visible} locked={$editor.locked}/>
+
+<!-- Top navbar -->
 <Navbar/>
 
-<!-- Main Tabs + Panel content -->
+<!-- Main tabs + panel content -->
 <Tabs tabs={tabs} />
 
 <!-- Overlays -->

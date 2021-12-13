@@ -100,5 +100,4 @@
 			background-color: theme.t(theme.$background-success);
 		}
 	}
-
 </style>

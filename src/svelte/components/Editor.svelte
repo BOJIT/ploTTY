@@ -4,10 +4,12 @@
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
 
-	// // require('font-awesome/css/font-awesome.css');
+	// require('font-awesome/css/font-awesome.css');
 
-	// The graph editor
-	const editor = document.getElementById('editor');
+	/* State variables */
+	export let hidden = true;
+	export let locked = false;
+	let editor: HTMLElement;	// Handle to Editor DOM (React Component)
 
 	// Component library
 	const library = {
@@ -53,11 +55,10 @@
 	let graph = new fbpGraph.Graph();
 
 	function renderEditor(redraw: boolean) {
-		const editor = <HTMLDivElement>document.getElementById('editor');
 		const props = {
 			readonly: false,
-			height: editor.offsetHeight,
-			width: editor.offsetWidth,
+			height: window.innerHeight,
+			width: window.innerWidth,
 			graph,
 			library,
 		};
@@ -78,15 +79,15 @@
 
 	// Add node button
 	const addnode = function () {
-	const id = Math.round(Math.random() * 100000).toString(36);
-	const component = Math.random() > 0.5 ? 'basic' : 'tall';
-	const metadata = {
-		label: component,
-		x: Math.round(Math.random() * 800),
-		y: Math.round(Math.random() * 600),
-	};
-	const newNode = graph.addNode(id, component, metadata);
-	return newNode;
+		const id = Math.round(Math.random() * 100000).toString(36);
+		const component = Math.random() > 0.5 ? 'basic' : 'tall';
+		const metadata = {
+			label: component,
+			x: Math.round(Math.random() * 800),
+			y: Math.round(Math.random() * 600),
+		};
+		const newNode = graph.addNode(id, component, metadata);
+		return newNode;
 	};
 
 	// Add edge button
@@ -121,25 +122,39 @@
 
 </script>
 
-<div id="editor" class="the-graph-dark"></div>
+<div bind:this={editor} class="editor the-graph-dark" class:hidden class:locked></div>
 
-<div id="testing">
+<div class="testing" class:hidden class:locked>
 	<button id="random" on:click="{randomGraph}"><i class="fa fa-random"></i> random graph</button>
 	<button id="addnode" on:click="{addnode}">add node</button>
 	<button id="addedge" on:click="{addedge}">add edge</button>
 	<button id="clear" on:click="{clearGraph}"><i class="fa fa-trash"></i> clear</button>
 </div>
 
+<style lang="scss">
+	@charset "utf-8";
+	@use "src/scss/_constants.scss";
+	@use "src/scss/theme.scss";
 
-
-<style>
-	#editor {
-		height: 100%;
+	.hidden {
+		display: none;
 	}
 
-	#testing {
+	.locked {
+		pointer-events: none;
+	}
+
+	.editor {
+		height: 100%;
+		width: 100%;
 		position: absolute;
-		top: 0;
+		z-index: 10;
+	}
+
+	.testing {
+		position: absolute;
+		bottom: 0;
 		left: 0;
+		z-index: 11;
 	}
 </style>

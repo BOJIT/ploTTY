@@ -3,7 +3,7 @@
 	import Icon from 'svelte-awesome';
 	import { fly } from 'svelte/transition';
 
-	import { faPlay, faStop, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars } from '@fortawesome/free-solid-svg-icons';
+	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars} from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
 	import imgBojitLogo from 'src/assets/img/bojit_logo_square.png';
@@ -11,6 +11,9 @@
 	/* Overlays */
 	import { modal, popup } from 'src/svelte/store/overlays';
 	import Modals from './modals';
+
+	/* Editor state */
+	import editor from 'src/svelte/store/editor';
 
 	/* TODO - put theme toggle in settings loader */
 	import theme from 'src/ts/theme';
@@ -35,6 +38,8 @@
 			}
 		};
 	}
+
+	let patchRunning = false;
 </script>
 
 <!-- Navbar -->
@@ -61,22 +66,22 @@
 					"type": "info",
 					"timeout": 5
 				});
-			}} class="button is-success is-medium">
+				patchRunning = !patchRunning;
+			}} class="button is-medium {patchRunning ? 'is-danger' : 'is-success'}">
 			<span class="icon">
-				<Icon data={faPlay} scale={1.6} />
+				<Icon data={patchRunning ? faStop : faPlay} scale={1.6} />
 			</span>
 		</button>
 
 		<button on:click={() => {
-				if(theme_toggle) {
-					theme.light();
+				if($editor.visible) {
+					editor.hide();
 				} else {
-					theme.dark();
+					editor.show();
 				}
-				theme_toggle = !theme_toggle;
-			}} class="button is-danger is-medium">
+			}} class="button is-medium {$editor.visible ? 'is-warning' : 'is-info'}">
 			<span class="icon">
-				<Icon data={faStop} scale={1.6} />
+				<Icon data={faEdit} scale={1.6} />
 			</span>
 		</button>
 
@@ -84,12 +89,12 @@
 
 		<!-- File Controls -->
 		<button on:click={() => {
-				popup.push({
-					"title": "Test Warning",
-					"message": "message content to go here!!!!",
-					"type": "warning"
-				});
-				// $modal = Modals.NewPatch;
+				if(theme_toggle) {
+					theme.light();
+				} else {
+					theme.dark();
+				}
+				theme_toggle = !theme_toggle;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faFileAlt} scale={1.6} />
@@ -218,7 +223,7 @@
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-primary);
 		}
-		z-index: 11;
+		z-index: 20;
 	}
 
 	.nav-left {
@@ -256,7 +261,9 @@
 
 	.burger {
 		width: 100%;
-		background-color: rgba(59, 59, 59, 0.9);
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay);
+		}
 		position: absolute;
 		z-index: 10;
 	}
@@ -270,7 +277,9 @@
 		font-size: 1.5rem;
 		font-weight: 20;
 		font-family: "comfortaa";
-		color: whitesmoke;
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
 	}
 
 	.burger .button {
@@ -287,9 +296,21 @@
 		box-shadow: none;
 	}
 
+	.is-info {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-info);
+		}
+	}
+
 	.is-success {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-success);
+		}
+	}
+
+	.is-warning {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-warning);
 		}
 	}
 
