@@ -60,6 +60,7 @@
 		margin-bottom: 0.5rem !important;
 		display: flex;
 		pointer-events: auto;
+		z-index: 21;
 	}
 
 	.popup-icon {

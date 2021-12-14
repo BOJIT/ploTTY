@@ -26,7 +26,7 @@
 </script>
 
 <!-- Editor - overlays entire page -->
-<Editor hidden={!$editor.visible} locked={$editor.locked}/>
+<Editor hidden={!$editor.visible} locked={$editor.locked} />
 
 <!-- Top navbar -->
 <Navbar/>

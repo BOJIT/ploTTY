@@ -41,6 +41,10 @@
 	@use "src/scss/_constants.scss";
 	@use "src/scss/theme.scss";
 
+	.modal {
+		z-index: 30;
+	}
+
 	.modal-card {
 		margin: 5px;
 	}

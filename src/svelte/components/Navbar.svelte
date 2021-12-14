@@ -16,8 +16,7 @@
 	import editor from 'src/svelte/store/editor';
 
 	/* TODO - put theme toggle in settings loader */
-	import theme from 'src/ts/theme';
-	let theme_toggle = true;
+	import theme from 'src/svelte/store/theme';
 
 	/* Burger Menu */
 	let visible = false;
@@ -89,12 +88,11 @@
 
 		<!-- File Controls -->
 		<button on:click={() => {
-				if(theme_toggle) {
-					theme.light();
+				if($theme.mode === "dark") {
+					$theme.mode = "light";
 				} else {
-					theme.dark();
+					$theme.mode = "dark";
 				}
-				theme_toggle = !theme_toggle;
 			}} class="button desktop is-medium is-clear">
 			<span class="icon">
 				<Icon data={faFileAlt} scale={1.6} />

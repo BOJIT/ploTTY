@@ -4,6 +4,8 @@
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
 
+	import theme from 'src/svelte/store/theme';
+
 	// require('font-awesome/css/font-awesome.css');
 
 	/* State variables */
@@ -122,7 +124,10 @@
 
 </script>
 
-<div bind:this={editor} class="editor the-graph-dark" class:hidden class:locked></div>
+<div bind:this={editor} class="editor" class:hidden class:locked
+	class:the-graph-dark="{$theme.mode === "dark"}"
+	class:the-graph-light="{$theme.mode === "light"}">
+</div>
 
 <div class="testing" class:hidden class:locked>
 	<button id="random" on:click="{randomGraph}"><i class="fa fa-random"></i> random graph</button>

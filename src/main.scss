@@ -8,10 +8,11 @@
 
 /* Custom Fonts */
 @import "~@fontsource/comfortaa/index.css";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 
 /* NoFlo Editor Stylesheets */
-@import "noflo/themes/the-graph-dark.css";
-@import "noflo/themes/the-graph-light.css";
+@import "scss/the-graph-dark.scss";
+@import "scss/the-graph-light.scss";
 
 /* Global CSS */
 body {
