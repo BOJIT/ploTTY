@@ -5,7 +5,6 @@
 	import TheGraph from 'the-graph';
 
 	import theme from 'src/svelte/store/theme';
-
 	// require('font-awesome/css/font-awesome.css');
 
 	/* State variables */

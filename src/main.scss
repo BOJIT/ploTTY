@@ -1,18 +1,22 @@
 @charset "utf-8";
 
 /* Global constants and bulma overrides */
-@use "scss/constants.scss";
+@use "scss/_constants.scss";
 @use "scss/theme.scss";
 
+/* NoFlo Fontawesome Patch */
+@use "scss/_fontawesome.scss";
+
+/* NoFlo Editor Stylesheets */
+@use "scss/the-graph-dark.scss";
+@use "scss/the-graph-light.scss";
+
+/* Bulma CSS */
 @import "~bulma/bulma";
 
 /* Custom Fonts */
 @import "~@fontsource/comfortaa/index.css";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
-
-/* NoFlo Editor Stylesheets */
-@import "scss/the-graph-dark.scss";
-@import "scss/the-graph-light.scss";
 
 /* Global CSS */
 body {
