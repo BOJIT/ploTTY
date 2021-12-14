@@ -1,11 +1,14 @@
 <script lang="ts">
+	/* NoFlo Imports */
 	import fbpGraph from 'fbp-graph';
 	import React from 'react';
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
 
+	/* Themes and UI */
 	import theme from 'src/svelte/store/theme';
-	// require('font-awesome/css/font-awesome.css');
+	import Icon from 'svelte-awesome';
+	import { faExpand, faMagic, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 	/* State variables */
 	export let hidden = true;
@@ -128,11 +131,30 @@
 	class:the-graph-light="{$theme.mode === "light"}">
 </div>
 
-<div class="testing" class:hidden class:locked>
-	<button id="random" on:click="{randomGraph}"><i class="fa fa-random"></i> random graph</button>
-	<button id="addnode" on:click="{addnode}">add node</button>
-	<button id="addedge" on:click="{addedge}">add edge</button>
-	<button id="clear" on:click="{clearGraph}"><i class="fa fa-trash"></i> clear</button>
+<div class:hidden class:locked>
+	<div class="controls">
+		<button on:click={() => {
+				addnode();
+			}} class="button is-large is-clear">
+			<span class="icon">
+				<Icon data={faPlus} scale={1.75} />
+			</span>
+		</button>
+		<button on:click={() => {
+				clearGraph();
+			}} class="button is-large is-clear">
+			<span class="icon">
+				<Icon data={faExpand} scale={1.75} />
+			</span>
+		</button>
+		<button on:click={() => {
+				randomGraph();
+			}} class="button is-large is-clear">
+			<span class="icon">
+				<Icon data={faMagic} scale={1.75} />
+			</span>
+		</button>
+	</div>
 </div>
 
 <style lang="scss">
@@ -140,6 +162,7 @@
 	@use "src/scss/_constants.scss";
 	@use "src/scss/theme.scss";
 
+	/* State Styling */
 	.hidden {
 		display: none;
 	}
@@ -148,6 +171,7 @@
 		pointer-events: none;
 	}
 
+	/* Editor/NoFlo Styling */
 	.editor {
 		height: 100%;
 		width: 100%;
@@ -155,10 +179,43 @@
 		z-index: 10;
 	}
 
-	.testing {
+	/* Overlay Styling */
+	.controls {
 		position: absolute;
-		bottom: 0;
-		left: 0;
-		z-index: 11;
+		bottom: 2rem;
+		right: 2rem;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem
+	}
+
+	.controls .button {
+		border-radius: 50%;
+	}
+
+	/* Button Styling */
+	.button:focus {
+		outline: none;
+		box-shadow: none;
+	}
+
+	.button.is-clear {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay);
+		}
+		border: none;
+	}
+
+	.button.is-clear:hover {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay-hover);
+		}
+	}
+
+	.icon {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
 	}
 </style>

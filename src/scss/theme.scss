@@ -7,6 +7,8 @@ $text-secondary: "text-secondary";
 $background-primary: "background-primary";
 $background-secondary: "background-secondary";
 $background-overlay: "background-overlay";
+$background-overlay-hover: "background-overlay-hover";
+
 $background-info: "background-info";
 $background-success: "background-success";
 $background-warning: "background-warning";
@@ -21,6 +23,8 @@ $themes: (
         background-primary: hsl(180, 5.7%, 75%),
         background-secondary: hsl(180, 3.1%, 90%),
         background-overlay: rgba(167, 167, 167, 0.9),
+        background-overlay-hover: darken(rgba(167, 167, 167, 0.9), 10%),
+
         background-info: hsl(204, 71%, 39%),
         background-success: hsl(141, 53%, 31%),
         background-warning: hsl(48, 100%, 29%),
@@ -33,6 +37,8 @@ $themes: (
         background-primary: hsl(180, 5.7%, 13.7%),
         background-secondary: hsl(180, 3.1%, 25.1%),
         background-overlay: rgba(59, 59, 59, 0.9),
+        background-overlay-hover: lighten(rgba(59, 59, 59, 0.9), 10%),
+
         background-info: hsl(204, 86%, 53%),
         background-success: hsl(153, 53%, 53%),
         background-warning: hsl(48, 100%, 67%),

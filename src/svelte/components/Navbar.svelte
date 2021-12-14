@@ -3,7 +3,7 @@
 	import Icon from 'svelte-awesome';
 	import { fly } from 'svelte/transition';
 
-	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars} from '@fortawesome/free-solid-svg-icons';
+	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars, faChartBar} from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
 	import imgBojitLogo from 'src/assets/img/bojit_logo_square.png';
@@ -80,7 +80,7 @@
 				}
 			}} class="button is-medium {$editor.visible ? 'is-warning' : 'is-info'}">
 			<span class="icon">
-				<Icon data={faEdit} scale={1.6} />
+				<Icon data={$editor.visible ? faChartBar : faEdit} scale={1.6} />
 			</span>
 		</button>
 
@@ -154,35 +154,60 @@
 					$modal = Modals.NewPatch;
 					visible = false;
 				}} class="button burger-entry">
-				<h1>New Patch</h1>
+				<span class="icon-text">
+					<span class="icon mr-2">
+						<Icon data={faFileAlt} />
+					</span>
+					<h1>New Patch</h1>
+				</span>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.OpenPatch;
 					visible = false;
-				}} class="button burger-entry">
-				<h1>Open Patch</h1>
+				}} class="button">
+				<span class="icon-text">
+					<span class="icon mr-2">
+						<Icon data={faFolderOpen} />
+					</span>
+					<h1>Open Patch</h1>
+				</span>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.SavePatch;
 					visible = false;
-				}} class="button burger-entry">
-				<h1>Save Patch</h1>
+				}} class="button">
+				<span class="icon-text">
+					<span class="icon mr-2">
+						<Icon data={faSave} />
+					</span>
+					<h1>Save Patch</h1>
+				</span>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.DuplicatePatch;
 					visible = false;
-				}} class="button burger-entry">
-				<h1>Duplicate Patch</h1>
+				}} class="button">
+				<span class="icon-text">
+					<span class="icon mr-2">
+						<Icon data={faCopy} />
+					</span>
+					<h1>Duplicate Patch</h1>
+				</span>
 			</button>
 			<hr>
 			<button on:click={() => {
 					$modal = Modals.Settings;
 					visible = false;
-				}} class="button burger-entry">
-				<h1>Settings</h1>
+				}} class="button">
+				<span class="icon-text">
+					<span class="icon mr-2">
+						<Icon data={faCog} />
+					</span>
+					<h1>Settings</h1>
+				</span>
 			</button>
 		</div>
 	</div>
@@ -263,7 +288,7 @@
 			background-color: theme.t(theme.$background-overlay);
 		}
 		position: absolute;
-		z-index: 10;
+		z-index: 15;
 	}
 
 	.burger > hr {
@@ -284,8 +309,13 @@
 		width: 100%;
 		border: none;
 		background: none;
-		margin-top: 5px;
-		margin-bottom: 5px;
+	}
+
+	.burger .button:hover {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay-hover);
+		}
+		transition: background-color 0.1s ease;
 	}
 
 	/* Button Styling */
@@ -294,38 +324,43 @@
 		box-shadow: none;
 	}
 
-	.is-info {
+	.button.is-info {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-info);
 		}
 	}
 
-	.is-success {
+	.button.is-success {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-success);
 		}
 	}
 
-	.is-warning {
+	.button.is-warning {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-warning);
 		}
 	}
 
-	.is-danger {
+	.button.is-danger {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-error);
 		}
 	}
 
-	.is-clear {
-		color: whitesmoke;
+	.button.is-clear {
 		background-color: transparent;
 		border: none;
 	}
 
-	.is-clear:hover {
+	.button:not(.is-clear):hover {
+		filter: brightness(85%);
+		transition: filter 0.2s ease;
+	}
+
+	.button.is-clear:hover {
 		background-color: rgba(83, 83, 83, 0.5);
+		transition: background-color 0.2s ease;
 	}
 
 	.icon {

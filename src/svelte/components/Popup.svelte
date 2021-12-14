@@ -40,14 +40,14 @@
 	@use "src/scss/theme.scss";
 
 	.container {
-		position: fixed;
+		position: absolute;
 		height: 8em;    /* TODO make dependent on message height + a bit */
 		width: 30em;
 		bottom: 0;
 		left: 0;
 		pointer-events: none;
 		padding: 0.5rem;
-		}
+	}
 
 	@media screen and (max-width: (constants.$desktop - 1)) {
 		.container {
@@ -60,7 +60,7 @@
 		margin-bottom: 0.5rem !important;
 		display: flex;
 		pointer-events: auto;
-		z-index: 21;
+		z-index: 100;
 	}
 
 	.popup-icon {

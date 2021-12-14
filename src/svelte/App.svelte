@@ -25,14 +25,14 @@
 	];
 </script>
 
-<!-- Editor - overlays entire page -->
-<Editor hidden={!$editor.visible} locked={$editor.locked} />
-
 <!-- Top navbar -->
 <Navbar/>
 
 <!-- Main tabs + panel content -->
 <Tabs tabs={tabs} />
+
+<!-- Editor - overlays entire page -->
+<Editor hidden={!$editor.visible} locked={$editor.locked} />
 
 <!-- Overlays -->
 {#if $modal}
