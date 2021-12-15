@@ -6,7 +6,7 @@
 	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars, faChartBar} from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
-	import imgBojitLogo from 'src/assets/img/bojit_logo_square.png';
+	import imgLogo from 'src/assets/favicon/icon_x128.png';
 
 	/* Overlays */
 	import { modal, popup } from 'src/svelte/store/overlays';
@@ -46,7 +46,7 @@
 	<!-- Navbar Left-Hand Side -->
 	<div class="nav-left" style="margin-top: 6px">
 		<a href="https://bojit.org/" target="_blank">
-			<img src="{imgBojitLogo}" alt="BOJIT logo" style="max-height:3.5rem">
+			<img src="{imgLogo}" alt="BOJIT logo" style="max-height:3.3rem">
 		</a>
 	</div>
 

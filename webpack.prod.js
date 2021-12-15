@@ -65,46 +65,102 @@ module.exports = merge(common, {
 			theme_color: '#2b3534',
 			icons: [
 				{
+					src: "./src/assets/favicon/icon_x48.png",
+					size: "48x48",
+					destination: "assets",
+					type: "image/png",
+					purpose: "any"
+				},
+				{
 					src: "./src/assets/favicon/icon_x72.png",
 					size: "72x72",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any"
 				},
 				{
 					src: "./src/assets/favicon/icon_x96.png",
 					size: "96x96",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any"
 				},
 				{
 					src: "./src/assets/favicon/icon_x128.png",
 					size: "128x128",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any"
 				},
 				{
 					src: "./src/assets/favicon/icon_x192.png",
 					size: "192x192",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any"
 				},
 				{
 					src: "./src/assets/favicon/icon_x384.png",
 					size: "384x384",
 					destination: "assets",
 					type: "image/png",
-					purpose: "maskable"
+					purpose: "any"
 				},
 				{
 					src: "./src/assets/favicon/icon_x512.png",
 					size: "512x512",
 					destination: "assets",
 					type: "image/png",
-					purpose: "any maskable"
+					purpose: "any"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x48.png",
+					size: "48x48",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x72.png",
+					size: "72x72",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x96.png",
+					size: "96x96",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x128.png",
+					size: "128x128",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x192.png",
+					size: "192x192",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x384.png",
+					size: "384x384",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
+				},
+				{
+					src: "./src/assets/favicon/maskable_icon_x512.png",
+					size: "512x512",
+					destination: "assets",
+					type: "image/png",
+					purpose: "maskable"
 				}
 			],
 			}),
