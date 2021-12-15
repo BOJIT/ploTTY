@@ -16,9 +16,10 @@
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
 			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('/service-worker.js');
+				navigator.serviceWorker.register('/service-worker.js').catch((err) => {
+					console.warn("SW registration failed with error " + err);
+				});
 			});
-			// TODO handle service worker load fail (devtools)
 		}
 	</script>
 </body>

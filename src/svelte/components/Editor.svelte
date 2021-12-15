@@ -8,7 +8,8 @@
 	/* Themes and UI */
 	import theme from 'src/svelte/store/theme';
 	import Icon from 'svelte-awesome';
-	import { faExpand, faMagic, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { fly } from 'svelte/transition';
+	import { faCog, faEllipsisH, faExpand, faMagic, faPlus, faRedo, faTimes, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
 
 	/* State variables */
 	export let hidden = true;
@@ -124,6 +125,9 @@
 		renderEditor(false);
 	}
 
+	/* Control Overlay Functions */
+	let component_selected = false;
+	let extended_visible = false;
 </script>
 
 <div bind:this={editor} class="editor" class:hidden class:locked
@@ -132,7 +136,52 @@
 </div>
 
 <div class:hidden class:locked>
+	{#if extended_visible }
+		<div transition:fly="{{ x:100 }}" class="controls extended">
+			<button on:click={() => {
+				}} class="button is-large is-danger">
+				<span class="icon">
+					<Icon data={faTimes} scale={1.75} />
+				</span>
+			</button>
+			<button on:click={() => {
+				}} class="button is-large is-clear">
+				<span class="icon">
+					<Icon data={faMagic} scale={1.75} />
+				</span>
+			</button>
+			<button on:click={() => {
+				}} class="button is-large is-clear">
+				<span class="icon">
+					<Icon data={faUndo} scale={1.75} />
+				</span>
+			</button>
+			<button on:click={() => {
+					component_selected = !component_selected;
+				}} class="button is-large is-clear">
+				<span class="icon">
+					<Icon data={faRedo} scale={1.75} />
+				</span>
+			</button>
+		</div>
+	{/if}
+
 	<div class="controls">
+		{#if component_selected }
+			<button transition:fly="{{ y:100 }}" on:click={() => {
+				}} class="button is-large is-clear">
+				<span class="icon">
+					<Icon data={faCog} scale={1.75} />
+				</span>
+			</button>
+			<button transition:fly="{{ y:100 }}" on:click={() => {
+				}} class="button is-large is-clear">
+				<span class="icon">
+					<Icon data={faTrash} scale={1.75} />
+				</span>
+			</button>
+		{/if}
+
 		<button on:click={() => {
 				addnode();
 			}} class="button is-large is-clear">
@@ -148,10 +197,10 @@
 			</span>
 		</button>
 		<button on:click={() => {
-				randomGraph();
+				extended_visible = !extended_visible;
 			}} class="button is-large is-clear">
 			<span class="icon">
-				<Icon data={faMagic} scale={1.75} />
+				<Icon data={faEllipsisH} scale={1.75} />
 			</span>
 		</button>
 	</div>
@@ -192,6 +241,11 @@
 
 	.controls .button {
 		border-radius: 50%;
+	}
+
+	.controls.extended {
+		right: 7rem;
+		flex-direction: row;
 	}
 
 	/* Button Styling */

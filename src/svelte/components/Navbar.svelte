@@ -3,7 +3,7 @@
 	import Icon from 'svelte-awesome';
 	import { fly } from 'svelte/transition';
 
-	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars, faChartBar} from '@fortawesome/free-solid-svg-icons';
+	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars, faChartLine} from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
 	import imgLogo from 'src/assets/favicon/icon_x128.png';
@@ -80,7 +80,7 @@
 				}
 			}} class="button is-medium {$editor.visible ? 'is-warning' : 'is-info'}">
 			<span class="icon">
-				<Icon data={$editor.visible ? faChartBar : faEdit} scale={1.6} />
+				<Icon data={$editor.visible ? faChartLine : faEdit} scale={1.6} />
 			</span>
 		</button>
 
