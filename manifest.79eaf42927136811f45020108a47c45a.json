@@ -1,0 +1,97 @@
+{
+  "icons": [
+    {
+      "src": "./assets/icon_512x512.d160f6f3b3b8d206beeea9242457b24f.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_384x384.aec6e755c5f738cfb8d24aa297ee60d1.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_192x192.855828f2a385ee160e7be25974956078.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_128x128.30586a740bcaaa18bdcbce5271728345.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_96x96.e56c4a601c56c7a89d305ed5f1b3ff87.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_72x72.9acb3c8c8f564ebdd263dd137ef21901.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_48x48.3c2bb4e1627232e40e5277f4f3e69050.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icon_512x512.7c41cc780fdf22fcd60974ba93e8b007.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_384x384.54cd8786f3ad58ef3261638888e0f048.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_192x192.59ac42500c9444ad52054ee339cd0f1a.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_128x128.efc7e88226ed3cc64143f544aae91d65.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_96x96.b779ec6d40c2f70e8c1c89963519f6e5.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_72x72.0a65508a6d9fcb77f3b5c269d93f6333.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon_48x48.1145cb96fcacd8bd5b18d68ce0049814.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "name": "ploTTY",
+  "short_name": "ploTTY",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": ".",
+  "description": "Browser Based Serial Monitor/Plotter that doesn't suck!",
+  "background_color": "#2b3534",
+  "theme_color": "#2b3534"
+}
