@@ -30,27 +30,28 @@
 	</ul>
 </div>
 
-<main>
+<div class="container">
 	<!-- Render main window as the selected Svelte component -->
 	{#each tabs as tab, idx}
 		<div style="display: {idx === currentTabIdx ? 'block' : 'none'}">
 			<svelte:component this={tab.panel} />
 		</div>
 	{/each}
-</main>
+	</div>
 
 <style lang="scss">
 	@charset "utf-8";
 	@use "src/scss/_constants.scss";
 	@use "src/scss/theme.scss";
 
-	main {
+	.container {
 		flex: 1 1 auto;
 		position: relative;
 	}
 
-	main > div {
+	.container > div {
 		height: 100%;
+		width: 100%;
 	}
 
 	.tabs {
