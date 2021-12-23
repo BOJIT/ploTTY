@@ -1,10 +1,13 @@
 <script lang="ts">
 	import Modal from "./Modal.svelte";
 	import Tabs from "src/svelte/components/Tabs.svelte";
-	import { faAdjust, faFileExport, faFileImport, faMoon, faSun, faTrash } from '@fortawesome/free-solid-svg-icons';
 	import Icon from 'svelte-awesome';
+	import { faAdjust, faFileExport, faFileImport, faMoon, faSun, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 	import imgBojit from 'src/assets/img/bojit_logo_square.png';
+
+	/* TODO - put theme toggle in settings loader */
+	import theme from 'src/svelte/store/theme';
 
 	let tabs = [
 		"Global",
@@ -41,7 +44,13 @@
 			<br>
 			<div class="field has-addons">
 				<p class="control">
-					<button class="button">
+					<button on:click={() => {
+						if($theme.mode === "dark") {
+							$theme.mode = "light";
+						} else {
+							$theme.mode = "dark";
+						}
+					}} class="button">
 						<span class="icon"><Icon data={faSun} /></span>
 						<span>Light</span>
 					</button>
