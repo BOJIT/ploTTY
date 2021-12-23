@@ -46,14 +46,7 @@
 	}
 
 	.modal-card {
-		margin: 5px;
-	}
-
-	@media screen and (max-width: (constants.$desktop - 1)) {
-		.modal-card.modal-content {
-			width: calc(100% - 40px);
-			height: 100%;
-		}
+		padding: 20px;
 	}
 
 	.modal-card-head {
@@ -81,6 +74,12 @@
 	}
 
 	.modal-card-body :global(h2) {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.modal-card-body :global(h3) {
 		@include theme.themed() {
 			color: theme.t(theme.$text-primary);
 		}

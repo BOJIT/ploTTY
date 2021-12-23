@@ -45,8 +45,8 @@
 <div class="nav is-primary" role="navigation" aria-label="main navigation">
 	<!-- Navbar Left-Hand Side -->
 	<div class="nav-left" style="margin-top: 6px">
-		<a href="https://bojit.org/" target="_blank">
-			<img src="{imgLogo}" alt="BOJIT logo" style="max-height:3.3rem">
+		<a href="https://github.com/BOJIT/ploTTY" target="_blank">
+			<img src="{imgLogo}" alt="ploTTY logo" style="max-height:3.3rem">
 		</a>
 	</div>
 

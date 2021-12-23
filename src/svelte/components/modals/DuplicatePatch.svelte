@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Modal from "./components/Modal.svelte";
+    import Modal from "./Modal.svelte";
 </script>
 
 <Modal title="Duplicate Patch">

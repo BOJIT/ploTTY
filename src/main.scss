@@ -25,6 +25,13 @@ body {
 	height: 100%;
 	display: flex;
 	flex-flow: column;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	overflow-y: scroll; 
+}
+
+body::-webkit-scrollbar {
+	display: none;
 }
 
 p {
@@ -38,6 +45,15 @@ h2 {
 	font-family: "comfortaa";
 	font-weight: 50;
 	font-size: 1.5rem;
+	@include theme.themed() {
+		color: theme.t(theme.$text-primary);
+	}
+}
+
+h3 {
+	font-family: "comfortaa";
+	font-weight: 30;
+	font-size: 1rem;
 	@include theme.themed() {
 		color: theme.t(theme.$text-primary);
 	}

@@ -33,7 +33,8 @@
 				{#each currentPanels as panel, idx}
 					<button class="button" on:click|preventDefault={() => {
 						currentPanelIdx = idx;
-					}} style="background-color: {theme.colourmap($theme, idx)};"></button>
+					}} class:selected={currentPanelIdx === idx}
+					style="background-color: {theme.colourmap($theme, idx)};"></button>
 				{/each}
 			</div>
 		</div>
@@ -114,6 +115,14 @@
 		width: 1rem;
 		padding: 0rem;
 		border: none;
+	}
+
+	.plot-tabs > .button:not(:hover) {
+		filter: saturate(40%);
+	}
+
+	.selected {
+		filter: saturate(100%) !important;
 	}
 
 	.button:focus {
