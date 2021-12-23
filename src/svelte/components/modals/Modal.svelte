@@ -91,16 +91,61 @@
 		}
 	}
 
-	button {
+	.modal-card-body :global(hr) {
+		@include theme.themed() {
+			background-color: theme.t(theme.$text-primary);
+		}
+		height: 0.5px;
+		border: none;
+		margin-top: 0.6rem;
+		margin-bottom: 0.6rem;
+	}
+
+	.modal-card-body :global(br) {
+		line-height: 0.5rem;
+	}
+
+	.modal-card-body :global(.button) {
 		@include theme.themed() {
 			color: theme.t(theme.$text-primary);
 			background-color: theme.t(theme.$background-secondary);
+			border-color: theme.t(theme.$text-primary);
 		}
 	}
 
-	button.is-success {
+	.modal-card-body :global(.button.is-info) {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-info);
+		}
+	}
+
+	.modal-card-body :global(.button.is-success) {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-success);
+		}
+	}
+
+	.modal-card-body :global(.button.is-warning) {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-warning);
+		}
+	}
+
+	.modal-card-body :global(.button.is-danger) {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-error);
+		}
+	}
+
+	.modal-card-body :global(.button):focus {
+		outline: none;
+		box-shadow: none;
+	}
+
+	.modal-card-body :global(.button.selected) {
+		@include theme.themed() {
+			color: theme.t(theme.$background-secondary);
+			background-color: theme.t(theme.$text-primary);
 		}
 	}
 </style>

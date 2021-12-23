@@ -14,6 +14,8 @@ $background-success: "background-success";
 $background-warning: "background-warning";
 $background-error: "background-error";
 
+$filter-white: "filter-white";
+
 /* Theme Schema */
 $themes: (
     light: (
@@ -29,6 +31,8 @@ $themes: (
         background-success: hsl(141, 53%, 31%),
         background-warning: hsl(48, 100%, 29%),
         background-error: hsl(348, 86%, 43%),
+
+        filter-white: 0%,
     ),
     dark: (
         text-primary: rgb(245, 245, 245),
@@ -43,6 +47,8 @@ $themes: (
         background-success: hsl(153, 53%, 53%),
         background-warning: hsl(48, 100%, 67%),
         background-error: hsl(348, 100%, 61%),
+
+        filter-white: 100%,
     )
 );
 
