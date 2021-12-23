@@ -33,7 +33,7 @@
 				{#each currentPanels as panel, idx}
 					<button class="button" on:click|preventDefault={() => {
 						currentPanelIdx = idx;
-					}} style="background-color: {theme.colourmap(idx)};"></button>
+					}} style="background-color: {theme.colourmap($theme, idx)};"></button>
 				{/each}
 			</div>
 		</div>

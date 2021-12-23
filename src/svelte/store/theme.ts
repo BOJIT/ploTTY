@@ -25,16 +25,6 @@ const colourmap_dark = [
 	"#729ea1"
 ];
 
-function colourmap(idx: number) {
-	if(document.body.classList.contains("theme--light")) {
-		return colourmap_light[idx % colourmap_light.length];
-	} else if(document.body.classList.contains("theme--dark")) {
-		return colourmap_dark[idx % colourmap_dark.length];
-	} else {
-		return 0;
-	}
-}
-
 /*----------------------------------------------------------------------------*/
 
 type Theme = {
@@ -60,6 +50,16 @@ theme_store.subscribe((theme) => {
 
 function reset() {
 	theme_store.set(DEFAULT_THEME);
+}
+
+function colourmap(theme: Theme, idx: number) {
+	if(theme.mode === "light") {
+		return colourmap_light[idx % colourmap_light.length];
+	} else if(theme.mode === "dark") {
+		return colourmap_dark[idx % colourmap_dark.length];
+	} else {
+		return 0;
+	}
 }
 
 /*----------------------------------------------------------------------------*/
