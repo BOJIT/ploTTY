@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Navbar from "./components/Navbar.svelte";
-	import Tabs from "./components/Tabs.svelte";
-	// import panels from "./components/panels";
 	import Popup from "./components/Popup.svelte";
 	import Editor from "./components/Editor.svelte";
 	import Panels from "./components/Panels.svelte";
@@ -9,29 +7,28 @@
 	import { modal } from "./store/overlays";
 	import editor from "./store/editor";
 
-	/* List of current windows (global state) */
-	// let tabs = [
-	// 	{
-	// 		title: "First Terminal",
-	// 		panel: panels.Terminal
-	// 	},
-	// 	{
-	// 		title: "Second Terminal",
-	// 		panel: panels.Terminal
-	// 	},
-	// 	{
-	// 		title: "Time Plotter",
-	// 		panel: panels.PlotterTime
-	// 	}
-	// ];
+	/* List of current panels (global state) */
+	let panels = [
+		{
+			title: "First Terminal",
+			panel: "Terminal"
+		},
+		{
+			title: "Second Terminal",
+			panel: "Terminal"
+		},
+		{
+			title: "Time Plotter",
+			panel: "PlotterTime"
+		}
+	];
 </script>
 
 <!-- Top navbar -->
 <Navbar/>
 
 <!-- Main tabs + panel content -->
-<!-- <Tabs tabs={tabs} /> -->
-<Panels/>
+<Panels currentPanels={panels} />
 
 <!-- Editor - overlays entire page -->
 <Editor hidden={!$editor.visible} locked={$editor.locked} />

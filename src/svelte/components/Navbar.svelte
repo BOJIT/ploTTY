@@ -215,8 +215,8 @@
 
 <style lang="scss">
 	@charset "utf-8";
-	@use "src/scss/_constants.scss";
-	@use "src/scss/theme.scss";
+	@use "src/styles/_constants.scss";
+	@use "src/styles/theme.scss";
 
 	.divider {
 		width: 1px;
