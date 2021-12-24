@@ -40,6 +40,7 @@
     "bulma": "^0.9.3",
     "react": "^15.7.0",
     "react-dom": "^15.7.0",
+    "simplebar": "^5.3.6",
     "svelte-awesome": "^2.4.2",
     "the-graph": "^0.13.1"
   }

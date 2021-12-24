@@ -1,15 +1,32 @@
 <script lang="ts">
+	/* Font Awesome */
 	import Icon from 'svelte-awesome';
 	import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 
+	/* Custom Scrollbar */
+	import 'simplebar';
+	import 'simplebar/dist/simplebar.css';
+
+	/* External Props */
 	export let placeholder: string = "Placeholder";
 	export let selections: string[];
+	export let height: string = "7rem";
 
 	/* Searchbox Filtering */
 	let search = "";
 	function searchSelections(current: string, filter: string) {
-		console.log("Changed");
-		return true;
+		if(current.toLowerCase().includes(filter.toLowerCase())) {
+			// if(current.toLowerCase() === filter.toLowerCase()) {
+
+			// }
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function clearSearch() {
+		search = "";
 	}
 </script>
 
@@ -19,13 +36,13 @@
 		<span class="icon is-small is-left">
 			<Icon data={faSearch} />
 		</span>
-		<span class="icon is-small is-right">
+		<span on:click={clearSearch} class="icon is-small is-right">
 			<Icon data={faTimes} />
 		</span>
 	</p>
 </div>
-<div class="selector">
-	{#each selections as selection}
+<div class="selector" style="max-height: {height}" data-simplebar>
+	{#each selections.sort() as selection}
 		{#if searchSelections(selection, search)}
 			<button class="selection button">
 				<h3>{selection}</h3>
@@ -40,8 +57,12 @@
 	@use "src/styles/theme.scss";
 
 	.selector {
-		max-height: 7rem;
 		overflow-y: scroll;
+		scrollbar-width: none;
+	}
+
+	.selector::-webkit-scrollbar {
+		display: none;
 	}
 
 	.selection {
@@ -49,7 +70,45 @@
 		border-radius: 0px;
 	}
 
+	.selection:hover {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay-hover);
+		}
+	}
+
 	.input {
 		border-radius: 0px;
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-primary);
+			color: theme.t(theme.$text-secondary);
+		}
+	}
+
+	.icon {
+		@include theme.themed() {
+			color: theme.t(theme.$text-secondary);
+		}
+	}
+
+	.input:focus {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+	
+	.input:focus ~ .icon {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.icon.is-right {
+		pointer-events: auto;
+	}
+
+	.icon.is-right:hover {
+		@include theme.themed() {
+			color: theme.t(theme.$background-overlay-hover);
+		}
 	}
 </style>

@@ -1,4 +1,8 @@
 <script lang="ts">
+	/* Custom Scrollbar */
+	import 'simplebar';
+	import 'simplebar/dist/simplebar.css';
+
 	/* Callback for tab click event */
 	function handleClick(idx) {
 		index = idx;
@@ -11,7 +15,7 @@
 	export let index = 0;
 </script>
 
-<div class="tabs mb-0">
+<div class="tabs mb-0" data-simplebar>
 	<ul>
 		<!-- Render each tab - updates when the list updates -->
 		{#each tabs as tab, idx}
@@ -35,6 +39,12 @@
 		}
 
 		flex: 0 0 auto;
+		overflow-x: scroll;
+		scrollbar-width: none;
+	}
+
+	.tabs::-webkit-scrollbar {
+		display: none;
 	}
 
 	a {

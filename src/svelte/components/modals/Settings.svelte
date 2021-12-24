@@ -6,14 +6,33 @@
 
 	import imgBojit from 'src/assets/img/bojit_logo_square.png';
 
+	import Selector from "src/svelte/components/Selector.svelte";
+
 	/* TODO - put theme toggle in settings loader */
 	import theme from 'src/svelte/store/theme';
 
-	let tabs = [
+	let tabs: string[] = [
 		"Global",
 		"Components",
 		"Logs",
 		"About"
+	];
+
+	let components: string[] = [
+		"Data/SerialIn",
+		"Data/SerialOut",
+		"Data/BluetoothIn",
+		"Data/BluetoothOut",
+		"Panel/TimePlot",
+		"Panel/XYPlot",
+		"Panel/Terminal",
+		"Core/Reshape",
+		"Core/Filter"
+	];
+
+	let logs: string[] = [
+		"Example_Log_1",
+		"Example_Log_2"
 	];
 
 	let index = 0;
@@ -72,12 +91,14 @@
 
 		<!-- Components -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Components') ? 'visible' : 'hidden' }">
-			<h2>Components</h2>
+			<br>
+			<Selector placeholder={"User Components"} selections={components} height="12rem" />
 		</div>
 
 		<!-- Logs -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Logs') ? 'visible' : 'hidden' }">
-			<h2>Logs</h2>
+			<br>
+			<Selector placeholder={"Logs"} selections={logs} height="7rem" />
 		</div>
 
 		<!-- About -->

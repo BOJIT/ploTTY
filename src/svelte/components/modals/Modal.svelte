@@ -3,6 +3,10 @@
 	export let title: string = "Example Modal";
 	export let confirm: boolean = true;
 
+	/* Custom Scrollbar */
+	import 'simplebar';
+	import 'simplebar/dist/simplebar.css';
+
 	import { modal } from 'src/svelte/store/overlays';
 	import { fade, scale } from 'svelte/transition';
 
@@ -24,7 +28,7 @@
 			<p class="modal-card-title">{title}</p>
 			<button on:click={closeModal} class="delete"></button>
 		</header>
-		<section class="modal-card-body">
+		<section class="modal-card-body" data-simplebar>
 			<slot></slot>
 		</section>
 		<footer class="modal-card-foot">
@@ -59,6 +63,12 @@
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-secondary);
 		}
+		overflow-y: scroll;
+		scrollbar-width: none;
+	}
+
+	.modal-card-body::-webkit-scrollbar {
+		display: none;
 	}
 
 	.modal-card-foot {
