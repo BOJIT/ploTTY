@@ -11,14 +11,38 @@
 	export let placeholder: string = "Placeholder";
 	export let selections: string[];
 	export let height: string = "7rem";
+	
+	/* Word Match Highlighting */
+	import Mark from 'mark.js/dist/mark.es6.min.js';
+	import { onMount } from 'svelte';
+
+	let selector: HTMLElement;
+	let instance: any = undefined;
+	onMount(() => {
+		instance = new Mark(selector);
+	});
 
 	/* Searchbox Filtering */
 	let search = "";
-	function searchSelections(current: string, filter: string) {
-		if(current.toLowerCase().includes(filter.toLowerCase())) {
-			// if(current.toLowerCase() === filter.toLowerCase()) {
+	let numMatches: number = selections.length;
 
-			// }
+	function inputChange() {
+		/* Highlight Matches */
+		if(instance) {
+			instance.unmark({
+				done: () => {
+					instance.mark(search);
+				}
+			});
+		}
+
+		/* Get number of matches */
+		numMatches = selections.filter(s => s.toLowerCase().includes(search.toLowerCase())).length;
+	}
+
+	function searchSelections(current: string, filter: string) {
+		/* Show if current length matches */
+		if(current.toLowerCase().includes(filter.toLowerCase())) {
 			return true;
 		} else {
 			return false;
@@ -27,12 +51,15 @@
 
 	function clearSearch() {
 		search = "";
+		inputChange();	// Is not automatically called
 	}
 </script>
 
 <div class="field mb-0">
 	<p class="control has-icons-left has-icons-right">
-		<input bind:value={search} class="input" placeholder="{placeholder}">
+		<input bind:value={search} on:input={inputChange}
+			class:is-danger={numMatches == 0} class:is-success={numMatches == 1}
+			class="input" placeholder="{placeholder}">
 		<span class="icon is-small is-left">
 			<Icon data={faSearch} />
 		</span>
@@ -41,7 +68,7 @@
 		</span>
 	</p>
 </div>
-<div class="selector" style="max-height: {height}" data-simplebar>
+<div bind:this={selector} class="selector" style="max-height: {height}" data-simplebar>
 	{#each selections.sort() as selection}
 		{#if searchSelections(selection, search)}
 			<button class="selection button">
