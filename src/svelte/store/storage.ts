@@ -6,6 +6,9 @@ import settings from "./settings";
 import patches from "./patches";
 import components from "./components";
 
+/* Import environment variables */
+import env from 'src/env';
+
 /* Database Index */
 const stores = {
 	settings: settings,
@@ -39,8 +42,16 @@ function importJSON() {
 
 }
 
-function exportJSON() {
-
+async function exportJSON() {
+	let now = new Date();
+	let obj = {
+		exportDate: now.getDate(),
+		exportVersion: env.__GIT_TAG__,
+		config: {}
+	}
+	// for (const [key, store] of Object.entries(stores)) {
+		
+	// }
 }
 
 export default {
