@@ -1,8 +1,5 @@
-import { writable } from 'svelte/store';
-
-/*----------------------------------------------------------------------------*/
-
 /* Colourmap Themes - not accessed through CSS */
+
 const colourmap_light = [
 	"#fe4a49",
 	"#fed766",
@@ -25,7 +22,9 @@ const colourmap_dark = [
 	"#729ea1"
 ];
 
-/*----------------------------------------------------------------------------*/
+/* Light/Dark Mode Control */
+import { writable } from 'svelte/store';
+import settings from './settings';
 
 type Theme = {
 	mode: "light" | "dark";
@@ -35,7 +34,38 @@ const DEFAULT_THEME: Theme = {
 	mode: "dark"
 };
 
+/* Create separate theme store - this can be updated independently of settings
+   by the system theme preference */
 const theme_store = writable(DEFAULT_THEME);
+
+settings.subscribe((s) => {
+	switch (s.colourScheme) {
+		case "light":
+			theme_store.set({mode: "light"});
+			break;
+		
+		case "dark":
+			theme_store.set({mode: "dark"});
+			break;
+
+		case "auto":
+			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				theme_store.set({mode: "dark"});
+			} else {
+				theme_store.set({mode: "light"});
+			}
+			break;
+	}
+});
+
+/* Handle window theme change without page refresh */
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+	if(e.matches) {
+		theme_store.set({mode: "dark"});
+	} else {
+		theme_store.set({mode: "light"});
+	}
+});
 
 theme_store.subscribe((theme) => {
 	/* Global theme setting */
@@ -48,10 +78,6 @@ theme_store.subscribe((theme) => {
 	}
 });
 
-function reset() {
-	theme_store.set(DEFAULT_THEME);
-}
-
 function colourmap(theme: Theme, idx: number) {
 	if(theme.mode === "light") {
 		return colourmap_light[idx % colourmap_light.length];
@@ -62,11 +88,7 @@ function colourmap(theme: Theme, idx: number) {
 	}
 }
 
-/*----------------------------------------------------------------------------*/
-
 export default {
 	subscribe: theme_store.subscribe,
-	set: theme_store.set,
-	reset,
 	colourmap,
 }

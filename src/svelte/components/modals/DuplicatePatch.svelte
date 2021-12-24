@@ -21,7 +21,7 @@
 
 	p.invalid {
 		@include theme.themed() {
-			color: theme.t(theme.$background-error);
+			color: theme.t(theme.$background-error) !important;
 		}
 		margin-top: 0.5rem;
 	}

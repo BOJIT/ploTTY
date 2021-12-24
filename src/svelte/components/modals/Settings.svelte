@@ -1,17 +1,16 @@
 <script lang="ts">
-	import Modal from "./Modal.svelte";
-	import Tabs from "src/svelte/components/Tabs.svelte";
 	import Icon from 'svelte-awesome';
 	import { faAdjust, faFileExport, faFileImport, faMoon, faSun, faTrash } from '@fortawesome/free-solid-svg-icons';
-
+	
 	import imgBojit from 'src/assets/img/bojit_logo_square.png';
-
-	import Selector from "src/svelte/components/Selector.svelte";
-	import { modal } from 'src/svelte/store/overlays';
+	
+	import Modal from "./Modal.svelte";
 	import Modals from '../modals';
+	import Tabs from "src/svelte/components/Tabs.svelte";
+	import Selector from "src/svelte/components/Selector.svelte";
 
-	/* TODO - put theme toggle in settings loader */
-	import theme from 'src/svelte/store/theme';
+	import { modal } from 'src/svelte/store/overlays';
+	import settings from 'src/svelte/store/settings';
 
 	let tabs: string[] = [
 		"Global",
@@ -68,24 +67,24 @@
 			<div class="field has-addons">
 				<p class="control">
 					<button on:click={() => {
-						if($theme.mode === "dark") {
-							$theme.mode = "light";
-						} else {
-							$theme.mode = "dark";
-						}
-					}} class="button">
+						$settings.colourScheme = "light";
+					}} class="button" class:selected={$settings.colourScheme == "light"}>
 						<span class="icon"><Icon data={faSun} /></span>
 						<span>Light</span>
 					</button>
 				</p>
 				<p class="control">
-					<button class="button">
+					<button on:click={() => {
+						$settings.colourScheme = "auto";
+					}} class="button" class:selected={$settings.colourScheme == "auto"}>
 						<span class="icon"><Icon data={faAdjust} /></span>
 						<span>Auto</span>
 					</button>
 				</p>
 				<p class="control">
-					<button class="button selected">
+					<button on:click={() => {
+						$settings.colourScheme = "dark";
+					}} class="button" class:selected={$settings.colourScheme == "dark"}>
 						<span class="icon"><Icon data={faMoon} /></span>
 						<span>Dark</span>
 					</button>

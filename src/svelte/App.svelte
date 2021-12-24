@@ -1,11 +1,17 @@
 <script lang="ts">
+	/* UI Components */
 	import Navbar from "./components/Navbar.svelte";
 	import Popup from "./components/Popup.svelte";
 	import Editor from "./components/Editor.svelte";
 	import Panels from "./components/Panels.svelte";
 
+	/* Svelte stores */
 	import { modal } from "./store/overlays";
 	import editor from "./store/editor";
+
+	/* Initialise local storage */
+	import storage from "./store/storage";
+	storage.init();
 
 	/* List of current panels (global state) */
 	let panels = [
