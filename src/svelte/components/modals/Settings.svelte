@@ -11,6 +11,7 @@
 
 	import { modal } from 'src/svelte/store/overlays';
 	import settings from 'src/svelte/store/settings';
+	import storage from 'src/svelte/store/storage';
 
 	/* Import environment variables */
 	import env from 'src/env';
@@ -50,11 +51,15 @@
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Global') ? 'visible' : 'hidden' }">
 			<h2>Config</h2>
 			<br>
-			<button class="button mr-2">
+			<button on:click={() => {
+					storage.importJSON();
+				}} class="button mr-2">
 				<span class="icon"><Icon data={faFileImport} /></span>
 				<span>Import</span>
 			</button>
-			<button class="button mr-2">
+			<button on:click={() => {
+					storage.exportJSON();
+				}} class="button mr-2">
 				<span class="icon"><Icon data={faFileExport} /></span>
 				<span>Export</span>
 			</button>
@@ -133,7 +138,7 @@
 				by <a href="https://github.com/BOJIT" target="_blank">James Bennion-Pedley</a>.
 			</p>
 			<hr>
-			<h3>Current Release: <a href="https://github.com/BOJIT/ploTTY/releases/tag/{env.__GIT_TAG__}">{env.__GIT_TAG__}</a></h3>
+			<h3>Current Release: <a href="https://github.com/BOJIT/ploTTY/releases/tag/{env.__GIT_TAG__}" target="_blank">{env.__GIT_TAG__}</a></h3>
 			<p>If you have feature requests/issues with this tool let me know on GitHub!</p>
 			<hr>
 			<a class="centre-child" href="https://bojit.org/" target="_blank">

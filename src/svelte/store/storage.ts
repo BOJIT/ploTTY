@@ -6,6 +6,9 @@ import settings from "./settings";
 import patches from "./patches";
 import components from "./components";
 
+/* Popups */
+import { popup } from "./overlays";
+
 /* Import environment variables */
 import env from 'src/env';
 
@@ -16,7 +19,41 @@ const stores = {
 	components: components
 }
 
+/*----------------------------------------------------------------------------*/
+
+function downloadBlob(blob: Blob, filename: string) {
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename || 'download';
+	document.body.appendChild(a);
+	a.click();
+	URL.revokeObjectURL(url);
+	document.body.removeChild(a);
+}
+
+function uploadBlob(multiple?: boolean) {
+	const i = document.createElement('input');
+	i.type = "file";
+	i.accept = ".json";
+	if(multiple) {
+		i.multiple = true;
+	}
+	document.body.appendChild(i);
+	i.click();
+	document.body.removeChild(i);
+
+	/* File upload handler */
+	i.addEventListener('change', (event) => {
+		console.log("test");
+		// TODO delete if blob is desired file
+	});
+}
+
+/*----------------------------------------------------------------------------*/
+
 async function init() {
+	// TODO replace with Promise.all() approach? Overhead is not huge currently
 	for (const [key, store] of Object.entries(stores)) {
 		/* Pull entry from local storage */
 		let entry = await localForage.getItem(key);
@@ -39,19 +76,34 @@ function clear() {
 }
 
 function importJSON() {
+	uploadBlob();
 
+	popup.push({
+		"title": "Import Error",
+		"message": "Configuration file could not be parsed!",
+		"type": "error"
+	});
 }
 
 async function exportJSON() {
 	let now = new Date();
 	let obj = {
-		exportDate: now.getDate(),
+		exportDate: now,
 		exportVersion: env.__GIT_TAG__,
 		config: {}
 	}
-	// for (const [key, store] of Object.entries(stores)) {
-		
-	// }
+
+	/* Populate JSON to export */
+	for (const [key, store] of Object.entries(stores)) {
+		let entry = await localForage.getItem(key);
+		if(entry != null) {
+			obj.config[key] = entry;
+		}
+	}
+	
+	let filename = "ploTTY_config_" + now.getDate() + now.getMonth() + now.getFullYear() + ".json";
+	const blob = new Blob([ JSON.stringify(obj) ], { type: 'application/json' });
+	downloadBlob(blob, filename);
 }
 
 export default {
