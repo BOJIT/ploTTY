@@ -7,6 +7,8 @@
 	import imgBojit from 'src/assets/img/bojit_logo_square.png';
 
 	import Selector from "src/svelte/components/Selector.svelte";
+	import { modal } from 'src/svelte/store/overlays';
+	import Modals from '../modals';
 
 	/* TODO - put theme toggle in settings loader */
 	import theme from 'src/svelte/store/theme';
@@ -54,7 +56,9 @@
 				<span class="icon"><Icon data={faFileExport} /></span>
 				<span>Export</span>
 			</button>
-			<button class="button mr-2 is-danger">
+			<button on:click={() => {
+					$modal = Modals.Confirm;
+				}} class="button mr-2 is-danger">
 				<span class="icon"><Icon data={faTrash} /></span>
 				<span>Reset</span>
 			</button>
@@ -93,12 +97,30 @@
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Components') ? 'visible' : 'hidden' }">
 			<br>
 			<Selector placeholder={"User Components"} selections={components} height="12rem" />
+			<br>
+			<button class="button mr-2">
+				<span class="icon"><Icon data={faFileImport} /></span>
+				<span>Upload</span>
+			</button>
+			<button on:click={() => {
+					$modal = Modals.Confirm;
+				}} class="button mr-2 is-danger">
+				<span class="icon"><Icon data={faTrash} /></span>
+				<span>Delete All</span>
+			</button>
 		</div>
 
 		<!-- Logs -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Logs') ? 'visible' : 'hidden' }">
 			<br>
 			<Selector placeholder={"Logs"} selections={logs} height="7rem" />
+			<br>
+			<button on:click={() => {
+					$modal = Modals.Confirm;
+				}} class="button mr-2 is-danger">
+				<span class="icon"><Icon data={faTrash} /></span>
+				<span>Delete All</span>
+			</button>
 		</div>
 
 		<!-- About -->

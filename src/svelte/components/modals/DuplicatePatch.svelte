@@ -1,19 +1,28 @@
 <script lang="ts">
 	import Modal from "./Modal.svelte";
-	import Icon from 'svelte-awesome';
-	import { faCheck, faFile } from '@fortawesome/free-solid-svg-icons';
+	import Input from "src/svelte/components/Input.svelte";
+
+	let invalidFileName: boolean;
 </script>
 
 <Modal title="Duplicate Patch">
-	<div class="field">
-		<p class="control has-icons-left has-icons-right">
-			<input class="input" placeholder="file name">
-			<span class="icon is-small is-left">
-				<Icon data={faFile} />
-			</span>
-			<span class="icon is-small is-right">
-				<Icon data={faCheck} />
-			</span>
-		</p>
-	</div>
+	<h3>Duplicate File Name</h3>
+	<Input placeholder ={"Duplicate File Name"} 
+		blacklist={["Test", "N/A"]} bind:isInvalid={invalidFileName} />
+	{#if invalidFileName}
+		<p class="invalid">File name invalid/already taken!</p>
+	{/if}
 </Modal>
+
+<style lang="scss">
+	@charset "utf-8";
+	@use "src/styles/_constants.scss";
+	@use "src/styles/theme.scss";
+
+	p.invalid {
+		@include theme.themed() {
+			color: theme.t(theme.$background-error);
+		}
+		margin-top: 0.5rem;
+	}
+</style>

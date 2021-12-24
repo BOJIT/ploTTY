@@ -111,6 +111,12 @@
 		}
 	}
 
+	.input::placeholder {
+		@include theme.themed() {
+			color: theme.t(theme.$background-overlay-hover);
+		}
+	}
+
 	.icon {
 		@include theme.themed() {
 			color: theme.t(theme.$text-secondary);
@@ -130,7 +136,7 @@
 	}
 
 	.icon.is-right {
-		pointer-events: auto;
+		pointer-events: auto !important;
 	}
 
 	.icon.is-right:hover {
