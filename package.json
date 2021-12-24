@@ -1,6 +1,6 @@
 {
   "name": "plotty",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
     "@types/node": "^14.11.1",

@@ -1,6 +1,17 @@
 /* Common dependencies */
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+let commitHash = require('child_process')
+	.execSync('git rev-parse --short HEAD')
+	.toString()
+	.trim();
+
+let gitTag = require('child_process')
+	.execSync('git describe --tags')
+	.toString()
+	.trim();
 
 module.exports = {
 	entry: {
@@ -76,6 +87,10 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css'
+		}),
+		new webpack.DefinePlugin({
+			__COMMIT_HASH__: JSON.stringify(commitHash),
+			__GIT_TAG__: JSON.stringify(gitTag)
 		})
 	]
 };
