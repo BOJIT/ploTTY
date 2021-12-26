@@ -20,8 +20,13 @@ function generateLibrary() {
 
 }
 
+function addComponents(files: File[]) {
+	files.forEach(console.log);
+}
+
 export default {
 	subscribe: components_store.subscribe,
 	set: components_store.set,
 	reset,
+	addComponents
 }

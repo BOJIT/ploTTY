@@ -118,7 +118,9 @@
 			<br>
 			<Selector placeholder={"User Components"} selections={user_components} height="12rem" />
 			<br>
-			<button class="button mr-2">
+			<button on:click={() => {
+					storage.uploadFile(components.addComponents, ".plotty.js", true);
+				}} class="button mr-2">
 				<span class="icon"><Icon data={faFileImport} /></span>
 				<span>Upload</span>
 			</button>

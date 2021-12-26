@@ -160,6 +160,8 @@ function exportConfig() {
 }
 
 export default {
+	downloadFile,
+	uploadFile,
 	init,
 	clear,
 	importConfig,
