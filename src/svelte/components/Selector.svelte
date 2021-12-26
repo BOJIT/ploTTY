@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* Font Awesome */
 	import Icon from 'svelte-awesome';
-	import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faTimes, faSearch, faFileExport, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 	/* Custom Scrollbar */
 	import 'simplebar';
@@ -11,6 +11,14 @@
 	export let placeholder: string = "Placeholder";
 	export let selections: string[];
 	export let height: string = "7rem";
+
+	/* Button Hooks and Visibility */
+	export let downloadVisible = false;
+	export let deleteVisible = false;
+
+	export let selectionHook: ((sel: string) => void) = () => {};
+	export let downloadHook: ((sel: string) => void) = () => {};
+	export let deleteHook: ((sel: string) => void) = () => {};
 	
 	/* Word Match Highlighting */
 	import Mark from 'mark.js/dist/mark.es6.min.js';
@@ -71,9 +79,27 @@
 <div bind:this={selector} class="selector" style="max-height: {height}" data-simplebar>
 	{#each selections.sort() as selection}
 		{#if searchSelections(selection, search)}
-			<button class="selection button">
-				<h3>{selection}</h3>
-			</button>
+			<div class="selection button">
+				<button on:click={() => {
+					selectionHook(selection);
+				}} class="button" class:is-left={downloadVisible || deleteVisible}>
+					<h3>{selection}</h3>
+				</button>
+				{#if downloadVisible}
+					<button on:click={() => {
+							downloadHook(selection);
+						}} class="button">
+						<span class="icon"><Icon data={faFileExport} /></span>
+					</button>
+				{/if}
+				{#if deleteVisible}
+					<button on:click={() => {
+							deleteHook(selection);
+						}} class="button">
+						<span class="icon"><Icon data={faTrash} /></span>
+					</button>
+				{/if}
+			</div>
 		{/if}
 	{/each}
 </div>
@@ -95,9 +121,36 @@
 	.selection {
 		width: 100%;
 		border-radius: 0px;
+		padding: 0px;
+	}
+
+	.selection > button {
+		flex: 0 0 auto;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		border: none;
+	}
+
+	.selection > button.is-left {
+		justify-content: left;
+	}
+
+	.selection > button:first-child {
+		flex-grow: 1;
 	}
 
 	.selection:hover {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay-hover);
+		}
+	}
+
+	.selection > .button {
+		border-radius: 0px;
+	}
+
+	.selection > .button:hover {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-overlay-hover);
 		}
