@@ -52,13 +52,13 @@
 			<h2>Config</h2>
 			<br>
 			<button on:click={() => {
-					storage.importJSON();
+					storage.importConfig();
 				}} class="button mr-2">
 				<span class="icon"><Icon data={faFileImport} /></span>
 				<span>Import</span>
 			</button>
 			<button on:click={() => {
-					storage.exportJSON();
+					storage.exportConfig();
 				}} class="button mr-2">
 				<span class="icon"><Icon data={faFileExport} /></span>
 				<span>Export</span>
