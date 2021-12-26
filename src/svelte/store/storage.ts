@@ -88,6 +88,12 @@ function clear() {
 	for (const [, store] of Object.entries(stores)) {
 		store.reset();		// Reset all stores
 	}
+	popup.push({
+		"title": "Reset to Factory Default",
+		"message": "All settings/patches have been removed.",
+		"type": "info",
+		"timeout": 5
+	});
 }
 
 function importConfig() {

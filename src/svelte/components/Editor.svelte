@@ -11,8 +11,17 @@
 	import { fly } from 'svelte/transition';
 	import { faCog, faEllipsisH, faExpand, faMagic, faPlus, faRedo, faTimes, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
 
-	/* Inbuilt Component Library */
-	import library from 'src/editor/components';
+	/* Generate Component Library */
+	import components from 'src/editor/components';
+	// TODO sync to svelte store user components
+	const library = {};
+	components.forEach((c) => {
+		let g: any = c.getComponent();	// JS is not type-checked :(
+		console.log(g);
+		library[g.name] = g;
+	});
+
+	console.log(library);
 
 	/* State variables */
 	export let hidden = true;
@@ -57,31 +66,6 @@
 		const newNode = graph.addNode(id, component, metadata);
 		return newNode;
 	};
-
-	// Add edge button
-	// const addedge = function (outNodeID) {
-	// 	const { nodes } = graph;
-	// 	const len = nodes.length;
-	// 	if (len < 1) { return; }
-	// 	const node1 = outNodeID || nodes[Math.floor(Math.random() * len)].id;
-	// 	const node2 = nodes[Math.floor(Math.random() * len)].id;
-	// 	const port1 = `out${Math.floor(Math.random() * 3)}`;
-	// 	const port2 = `in${Math.floor(Math.random() * 12)}`;
-	// 	const meta = { route: Math.floor(Math.random() * 10) };
-	// 	const newEdge = graph.addEdge(node1, port1, node2, port2, meta);
-	// 	return newEdge;
-	// };
-
-	// Random graph button
-	// function randomGraph() {
-	// 	graph.startTransaction('randomgraph');
-	// 	for (let i = 0; i < 20; i++) {
-	// 		const node = addnode();
-	// 		addedge(node.id);
-	// 		addedge(node.id);
-	// 	}
-	// 	graph.endTransaction('randomgraph');
-	// }
 
 	function clearGraph() {
 		graph = new fbpGraph.Graph();

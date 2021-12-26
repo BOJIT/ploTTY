@@ -4,7 +4,7 @@ import { writable } from 'svelte/store';
 
 type Component = {
 	name: string
-	category: "Core" | "Data" | "Panel"
+	category: "Core" | "Data" | "Panel" | "User"
 	program: string // TEMP
 }
 
@@ -14,6 +14,10 @@ const components_store = writable(DEFAULT_COMPONENTS);
 
 function reset() {
 	components_store.set(DEFAULT_COMPONENTS);
+}
+
+function generateLibrary() {
+
 }
 
 export default {

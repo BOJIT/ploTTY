@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 /* Modal Overlay */
-export let modal = writable();
+export let modal: any = writable();
 
 /* Popup Overlays */
 

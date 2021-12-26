@@ -2,11 +2,10 @@ import { Component } from 'noflo';
 
 export default {
 	getComponent: () => {
+		/* Core component initialisation */
 		const c = new Component({
-			name: 'time plot',
-			description: 'plots an input against time on a graph',
+			description: 'plots time data',
 			icon: 'plus',
-			category: 'panel',
 			inPorts: {
 				augend: {
 					datatype: 'number',
@@ -25,12 +24,19 @@ export default {
 			},
 		});
 
-		return c.process((input, output) => {
+		/* Extra component fields */
+		c.name = 'time plot';
+		c.category = 'panel';
+
+		/* Component processing function */
+		c.process((input, output) => {
 			if (!input.hasData('augend', 'addend')) { return; }
 			const [augend, addend] = input.getData('augend', 'addend');
 			output.sendDone({
 			sum: Number(augend) + Number(addend),
 			});
 		});
+
+		return c;
 	}
 }

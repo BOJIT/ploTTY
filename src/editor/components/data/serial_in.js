@@ -2,11 +2,10 @@ import { Component } from 'noflo';
 
 export default {
 	getComponent: () => {
+		/* Core component initialisation */
 		const c = new Component({
-			name: 'serial in',
-			description: 'Get stream of bytes from an open serial port',
+			description: 'Gets a stream of bytes from a Serial port',
 			icon: 'plus',
-			category: 'data',
 			inPorts: {
 				augend: {
 					datatype: 'number',
@@ -25,12 +24,19 @@ export default {
 			},
 		});
 
-		return c.process((input, output) => {
+		/* Extra component fields */
+		c.name = 'serial in';
+		c.category = 'data';
+
+		/* Component processing function */
+		c.process((input, output) => {
 			if (!input.hasData('augend', 'addend')) { return; }
 			const [augend, addend] = input.getData('augend', 'addend');
 			output.sendDone({
 			sum: Number(augend) + Number(addend),
 			});
 		});
+
+		return c;
 	}
 }

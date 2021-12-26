@@ -9,8 +9,9 @@
 	import Tabs from "src/svelte/components/Tabs.svelte";
 	import Selector from "src/svelte/components/Selector.svelte";
 
-	import { modal } from 'src/svelte/store/overlays';
+	import { modal, popup } from 'src/svelte/store/overlays';
 	import settings from 'src/svelte/store/settings';
+	import components from 'src/svelte/store/components';
 	import storage from 'src/svelte/store/storage';
 
 	/* Import environment variables */
@@ -23,7 +24,7 @@
 		"About"
 	];
 
-	let components: string[] = [
+	let user_components: string[] = [
 		"Data/SerialIn",
 		"Data/SerialOut",
 		"Data/BluetoothIn",
@@ -40,7 +41,7 @@
 		"Example_Log_2"
 	];
 
-	let index = 0;
+	export let index = 0;
 </script>
 
 <Modal title={"Settings"} confirm={false}>
@@ -64,7 +65,19 @@
 				<span>Export</span>
 			</button>
 			<button on:click={() => {
-					$modal = Modals.Confirm;
+					$modal = { 
+						component: Modals.Confirm,
+						props: {
+							title: "Reset to Factory Defaults",
+							confirmHook: (() => {
+								storage.clear();
+								$modal = Modals.Settings;
+							}),
+							cancelHook: (() => {
+								$modal = Modals.Settings;
+							})
+						}
+					};
 				}} class="button mr-2 is-danger">
 				<span class="icon"><Icon data={faTrash} /></span>
 				<span>Reset</span>
@@ -103,14 +116,37 @@
 		<!-- Components -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Components') ? 'visible' : 'hidden' }">
 			<br>
-			<Selector placeholder={"User Components"} selections={components} height="12rem" />
+			<Selector placeholder={"User Components"} selections={user_components} height="12rem" />
 			<br>
 			<button class="button mr-2">
 				<span class="icon"><Icon data={faFileImport} /></span>
 				<span>Upload</span>
 			</button>
 			<button on:click={() => {
-					$modal = Modals.Confirm;
+					$modal = { 
+						component: Modals.Confirm,
+						props: {
+							title: "Remove all User Components",
+							confirmHook: (() => {
+								components.reset();
+								$modal = {
+									component: Modals.Settings,
+									props: {
+										index: 1
+									}
+								};
+							}),
+							cancelHook: (() => {
+								$modal = Modals.Settings;
+								$modal = {
+									component: Modals.Settings,
+									props: {
+										index: 1
+									}
+								};
+							})
+						}
+					};
 				}} class="button mr-2 is-danger">
 				<span class="icon"><Icon data={faTrash} /></span>
 				<span>Delete All</span>
@@ -123,7 +159,29 @@
 			<Selector placeholder={"Logs"} selections={logs} height="7rem" />
 			<br>
 			<button on:click={() => {
-					$modal = Modals.Confirm;
+					$modal = { 
+						component: Modals.Confirm,
+						props: {
+							title: "Delete all Logs",
+							confirmHook: (() => {
+								$modal = {
+									component: Modals.Settings,
+									props: {
+										index: 1
+									}
+								};
+							}),
+							cancelHook: (() => {
+								$modal = Modals.Settings;
+								$modal = {
+									component: Modals.Settings,
+									props: {
+										index: 1
+									}
+								};
+							})
+						}
+					};
 				}} class="button mr-2 is-danger">
 				<span class="icon"><Icon data={faTrash} /></span>
 				<span>Delete All</span>

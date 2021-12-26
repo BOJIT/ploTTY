@@ -41,6 +41,10 @@
 
 <!-- Overlays -->
 {#if $modal}
-	<svelte:component this={$modal} />
+	{#if $modal.props }
+		<svelte:component this={$modal.component} {...$modal.props} />
+	{:else}
+		<svelte:component this={$modal} />
+	{/if}
 {/if}
 <Popup/>

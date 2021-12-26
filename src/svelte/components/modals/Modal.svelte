@@ -2,6 +2,10 @@
 	/* Universal Modal Parameters */
 	export let title: string = "Example Modal";
 	export let confirm: boolean = true;
+	export let disabled: boolean = false;
+
+	export let confirmHook: (() => void) = (() => {});
+	export let cancelHook: (() => void) = (() => {});
 
 	/* Custom Scrollbar */
 	import 'simplebar';
@@ -11,13 +15,15 @@
 	import { fade, scale } from 'svelte/transition';
 
 	/* Handler to close modal */
-	function closeModal() {
+	function cancelModal() {
 		$modal = null;
+		cancelHook();
 	}
 
 	/* Handler to close modal with confirm callback */
 	function confirmModal() {
-		closeModal();
+		$modal = null;
+		confirmHook();
 	}
 </script>
 
@@ -26,15 +32,15 @@
 	<div transition:scale="{{ duration: 250 }}" class="modal-card modal-content">
 		<header class="modal-card-head">
 			<p class="modal-card-title">{title}</p>
-			<button on:click={closeModal} class="delete"></button>
+			<button on:click={cancelModal} class="delete"></button>
 		</header>
 		<section class="modal-card-body" data-simplebar>
 			<slot></slot>
 		</section>
 		<footer class="modal-card-foot">
 			{#if confirm != false}
-				<button on:click={confirmModal} class="button is-success">Confirm</button>
-				<button on:click={closeModal} class="button">Cancel</button>
+				<button on:click={confirmModal} class="button is-success" disabled={disabled}>Confirm</button>
+				<button on:click={cancelModal} class="button">Cancel</button>
 			{/if}
 		</footer>
 	</div>
