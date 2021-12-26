@@ -134,7 +134,7 @@ function importConfig() {
 	}, ".json");
 }
 
-async function exportConfig() {
+function exportConfig() {
 	let now = new Date();
 	let obj = {
 		exportDate: now,
@@ -144,10 +144,7 @@ async function exportConfig() {
 
 	/* Populate JSON to export */
 	for (const [key, store] of Object.entries(stores)) {
-		let entry = await localForage.getItem(key);
-		if(entry != null) {
-			obj.config[key] = entry;
-		}
+		obj.config[key] = get(store as any);
 	}
 	
 	/* Create downloadable blob */
