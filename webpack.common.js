@@ -25,7 +25,8 @@ module.exports = {
 		extensions: ['.mjs', '.js', '.ts', '.svelte'],
 		mainFields: ['svelte', 'browser', 'module', 'main'],
 		fallback: {
-			"fs": false
+			"fs": false,
+			"path": require.resolve('path-browserify')
 		}
 	},
 	output: {
@@ -35,6 +36,27 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			{
+				test: /noflo([\\]+|\/)lib([\\]+|\/)loader([\\]+|\/)register.js$/,
+					use: [
+					{
+						loader: 'noflo-component-loader',
+							options: {
+							graph: null,
+							debug: true,
+							baseDir: __dirname,
+							manifest: {
+								runtimes: ['noflo'],
+								discover: true,
+							},
+							runtimes: [
+								'noflo',
+								'noflo-browser',
+							],
+						},
+					},
+				],
+			},
 			{
 				test: /\.ts$/,
 				loader: 'ts-loader',
