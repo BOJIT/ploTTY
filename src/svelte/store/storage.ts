@@ -68,7 +68,6 @@ function uploadFile(callback: ((files: File[]) => void), ext: string, multiple?:
 /*----------------------------------------------------------------------------*/
 
 async function init() {
-	// TODO replace with Promise.all() approach? Overhead is not huge currently
 	for (const [key, store] of Object.entries(stores)) {
 		/* Pull entry from local storage */
 		let entry = await localForage.getItem(key);

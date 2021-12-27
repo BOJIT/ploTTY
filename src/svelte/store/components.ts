@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import builtinComponents from 'src/editor/components';
+// import builtinComponents from 'src/editor/components';
 
 /*---------------------------- Components Template ---------------------------*/
 
@@ -9,7 +9,7 @@ type UserComponent = {
 }
 
 /* This is the actual component object tree - it is not a public store */
-let component_tree = builtinComponents;
+// let component_tree = builtinComponents;
 
 const DEFAULT_COMPONENTS: UserComponent[] = [];
 
@@ -26,7 +26,6 @@ function getComponent(key: string) {
 async function addComponents(files: File[]) {
 	files.forEach(async (file) => {
 		const url = URL.createObjectURL(file);
-		console.log(url);
 		let module = await import(/* webpackIgnore: true */ url);
 		console.log(module);
 	})

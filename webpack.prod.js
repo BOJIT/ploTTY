@@ -1,5 +1,6 @@
 /* Get dependencies from webpack.common */
 const path = require("path");
+const webpack = require('webpack');
 const common = require("./webpack.common");
 const { merge } = require("webpack-merge");
 
@@ -9,6 +10,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const sveltePreprocess = require('svelte-preprocess');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+
+let commitHash = require('child_process')
+	.execSync('git rev-parse --short HEAD')
+	.toString()
+	.trim();
+
+let gitTag = require('child_process')
+	.execSync('git describe --tags')
+	.toString()
+	.trim();
 
 module.exports = merge(common, {
 	mode: "production",
@@ -167,6 +178,11 @@ module.exports = merge(common, {
 		new WorkboxWebpackPlugin.GenerateSW({
 			clientsClaim: true,
 			skipWaiting: true
+		}),
+		new webpack.DefinePlugin({
+			__COMMIT_HASH__: JSON.stringify(commitHash),
+			__GIT_TAG__: JSON.stringify(gitTag),
+			__MODE__: JSON.stringify("production")
 		})
 	]
 });

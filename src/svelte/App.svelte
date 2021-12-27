@@ -5,6 +5,9 @@
 	import Editor from "./components/Editor.svelte";
 	import Panels from "./components/Panels.svelte";
 
+	/* Environment Variables */
+	import env from "src/env";
+
 	/* Svelte stores */
 	import { modal } from "./store/overlays";
 	import editor from "./store/editor";
@@ -28,6 +31,17 @@
 			panel: "PlotterTime"
 		}
 	];
+
+	if(env.__MODE__ === "production") {
+		if ('serviceWorker' in navigator) {
+			// Use the window load event to keep the page load performant
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('/service-worker.js').catch((err) => {
+					console.warn("SW registration failed with error " + err);
+				});
+			});
+		}
+	}
 </script>
 
 <!-- Top navbar -->

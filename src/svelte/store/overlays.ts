@@ -4,7 +4,6 @@ import { writable } from 'svelte/store';
 export let modal: any = writable();
 
 /* Popup Overlays */
-
 type Popup = {
 	title: string,
 	message: string,

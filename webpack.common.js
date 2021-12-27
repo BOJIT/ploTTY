@@ -1,21 +1,11 @@
 /* Common dependencies */
 const path = require('path');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-let commitHash = require('child_process')
-	.execSync('git rev-parse --short HEAD')
-	.toString()
-	.trim();
-
-let gitTag = require('child_process')
-	.execSync('git describe --tags')
-	.toString()
-	.trim();
 
 module.exports = {
 	entry: {
-		'bundle': ['./src/main.ts']
+		'bundle': ['./src/main.ts'],
+		'runtime': ['./src/editor/runtime.ts']
 	},
 	resolve: {
 		alias: {
@@ -31,7 +21,9 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
-		filename: '[name].[contenthash].js',
+		filename: (pathData) => {
+			return pathData.chunk.name === 'runtime' ? '[name].js' : '[name].[contenthash].js';
+		},
 		clean: true
 	},
 	module: {
@@ -109,10 +101,6 @@ module.exports = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css'
-		}),
-		new webpack.DefinePlugin({
-			__COMMIT_HASH__: JSON.stringify(commitHash),
-			__GIT_TAG__: JSON.stringify(gitTag)
 		})
 	]
 };
