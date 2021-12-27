@@ -42,7 +42,9 @@
 
 		/* If redraw is set to true, clear out and re-render the editor */
 		if(redraw === true) {
-			editor.innerHTML = '';
+			if(editor != null) {
+				editor.innerHTML = '';
+			}
 		}
 
 		const element = React.createElement(TheGraph.App, props);
