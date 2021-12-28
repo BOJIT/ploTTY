@@ -113,6 +113,10 @@ module.exports = {
 				src: path.resolve(__dirname, 'src/')
 			},
 			extensions: ['.mjs', '.js', '.ts'],
+			fallback: {
+				"fs": false,
+				"path": require.resolve('path-browserify')
+			}
 		},
 		output: {
 			path: path.join(__dirname, '/dist'),
@@ -121,8 +125,34 @@ module.exports = {
 				type: 'module',
 			},
 		},
+		performance: {
+			hints: false,
+			maxEntrypointSize: 512000,
+			maxAssetSize: 512000
+		},
 		module: {
 			rules: [
+				{
+					test: /noflo([\\]+|\/)lib([\\]+|\/)loader([\\]+|\/)register.js$/,
+					use: [
+						{
+							loader: 'noflo-component-loader',
+								options: {
+								graph: null,
+								debug: true,
+								baseDir: __dirname,
+								manifest: {
+									runtimes: ['noflo'],
+									discover: true,
+								},
+								runtimes: [
+									'noflo',
+									'noflo-browser',
+								],
+							},
+						},
+					],
+				},
 				{
 					test: /\.ts$/,
 					loader: 'ts-loader',
