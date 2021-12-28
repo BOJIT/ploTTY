@@ -7,6 +7,9 @@ module.exports = {
 		'bundle': ['./src/main.ts'],
 		'runtime': ['./src/editor/runtime.ts']
 	},
+	experiments: {
+		outputModule: true
+	},
 	resolve: {
 		alias: {
 			svelte: path.dirname(require.resolve('svelte/package.json')),
@@ -23,6 +26,9 @@ module.exports = {
 		path: path.join(__dirname, '/dist'),
 		filename: (pathData) => {
 			return pathData.chunk.name === 'runtime' ? '[name].js' : '[name].[contenthash].js';
+		},
+		library: {
+			type: 'module',
 		},
 		clean: true
 	},

@@ -3,6 +3,6 @@
 // export { noflo };
 
 export default {
-	test: "hey",
-	f: 56
+	test: "hey test",
+	f: 58
 }
