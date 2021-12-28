@@ -11,17 +11,6 @@
 	import { fly } from 'svelte/transition';
 	import { faCog, faEllipsisH, faExpand, faMagic, faPlus, faRedo, faTimes, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
 
-	/* Generate Component Library */
-	// import components from 'src/editor/components';
-	// // TODO sync to svelte store user components
-	// const library = {};
-	// components.forEach((c) => {
-	// 	let g: any = c.getComponent();	// JS is not type-checked :(
-	// 	library[g.name] = g;
-	// });
-
-	// console.log(library);
-
 	/* State variables */
 	export let hidden = true;
 	export let locked = false;

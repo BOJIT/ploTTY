@@ -1,9 +1,9 @@
-import { noflo } from 'noflo';
+import { Component } from 'noflo';
 
 export default {
 	getComponent: () => {
 		/* Core component initialisation */
-		const c = new noflo.Component({
+		const c = new Component({
 			description: 'plots time data',
 			icon: 'plus',
 			inPorts: {

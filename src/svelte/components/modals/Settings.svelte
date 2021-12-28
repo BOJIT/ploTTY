@@ -9,7 +9,7 @@
 	import Tabs from "src/svelte/components/Tabs.svelte";
 	import Selector from "src/svelte/components/Selector.svelte";
 
-	import { modal, popup } from 'src/svelte/store/overlays';
+	import { modal } from 'src/svelte/store/overlays';
 	import settings from 'src/svelte/store/settings';
 	import components from 'src/svelte/store/components';
 	import storage from 'src/svelte/store/storage';
@@ -24,18 +24,7 @@
 		"About"
 	];
 
-	let user_components: string[] = [
-		"Data/SerialIn",
-		"Data/SerialOut",
-		"Data/BluetoothIn",
-		"Data/BluetoothOut",
-		"Panel/TimePlot",
-		"Panel/XYPlot",
-		"Panel/Terminal",
-		"Core/Reshape",
-		"Core/Filter"
-	];
-
+	// TODO move logs to store eventually
 	let logs: string[] = [
 		"Example_Log_1",
 		"Example_Log_2"
@@ -116,7 +105,16 @@
 		<!-- Components -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Components') ? 'visible' : 'hidden' }">
 			<br>
-			<Selector placeholder={"User Components"} selections={user_components} height="12rem" />
+			<Selector placeholder={"User Components"} selections={$components.map((c) => c.name)} 
+				downloadVisible={true} downloadHook={(sel) => {
+					let target = $components.filter((c) => c.name === sel)[0];
+					storage.downloadFile(target.program, target.filename);
+				}}
+				deleteVisible={true} deleteHook={(sel) => {
+					let target = $components.filter((c) => c.name === sel)[0];
+					$components = $components.filter((c) => c.name !== target.name);
+				}}
+				height="12rem" />
 			<br>
 			<button on:click={() => {
 					storage.uploadFile(components.addComponents, ".plotty.js", true);

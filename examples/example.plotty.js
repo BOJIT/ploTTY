@@ -1,11 +1,11 @@
-import { Component } from 'noflo';
+/* This file contains a sample user component */
 
 export default {
-	getComponent: () => {
+	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
-			description: 'reshapes a data packet',
-			icon: 'plus',
+			description: 'Component description',
+			icon: 'cog',
 			inPorts: {
 				augend: {
 					datatype: 'number',
@@ -25,8 +25,8 @@ export default {
 		});
 
 		/* Extra component fields */
-		c.name = 'reshape';
-		c.category = 'core';
+		c.name = 'example';
+		c.category = 'user';
 
 		/* Component processing function */
 		c.process((input, output) => {
