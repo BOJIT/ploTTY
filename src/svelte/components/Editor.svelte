@@ -16,6 +16,11 @@
 	export let locked = false;
 	let editor: HTMLElement;	// Handle to Editor DOM (React Component)
 
+	/* Component library store */
+	import library from 'src/svelte/store/library';
+
+	console.log($library);
+
 	// Load empty graph
 	let graph = new fbpGraph.Graph();
 

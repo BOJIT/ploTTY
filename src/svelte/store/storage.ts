@@ -149,7 +149,10 @@ function exportConfig() {
 
 	/* Populate JSON to export */
 	for (const [key, store] of Object.entries(stores)) {
-		obj.config[key] = get(store as any);
+		// Don't export components (security risk)
+		if(key !== "components") {
+			obj.config[key] = get(store as any);
+		}
 	}
 	
 	/* Create downloadable blob */
