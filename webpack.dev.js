@@ -18,43 +18,48 @@ let gitTag = require('child_process')
 	.toString()
 	.trim();
 
-module.exports = merge(common, {
-	mode: "development",
-	devtool: 'source-map',
-	devServer: {
-		compress: true,
-		host: '0.0.0.0',
-		port: 4000,
-		static: {
-			directory: path.join(__dirname, 'dist')
-		}
-	},
-	module: {
-		rules: [
-			{
-				test: /\.svelte$/,
-				use: {
-					loader: 'svelte-loader',
-					options: {
-						compilerOptions: {
-							dev: true
-						},
-						emitCss: false,
-						hotReload: true,
-						preprocess: sveltePreprocess({ sourceMap: true })
+module.exports = [
+	merge(common.main, {
+		mode: "development",
+		devtool: 'source-map',
+		devServer: {
+			compress: true,
+			host: '0.0.0.0',
+			port: 4000,
+			static: {
+				directory: path.join(__dirname, 'dist')
+			}
+		},
+		module: {
+			rules: [
+				{
+					test: /\.svelte$/,
+					use: {
+						loader: 'svelte-loader',
+						options: {
+							compilerOptions: {
+								dev: true
+							},
+							emitCss: false,
+							hotReload: true,
+							preprocess: sveltePreprocess({ sourceMap: true })
+						}
 					}
-				}
-			},
-		]
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: "./src/index.html"
-		}),
-		new webpack.DefinePlugin({
-			__COMMIT_HASH__: JSON.stringify(commitHash),
-			__GIT_TAG__: JSON.stringify(gitTag),
-			__MODE__: JSON.stringify("development")
-		})
-	],
-});
+				},
+			]
+		},
+		plugins: [
+			new HtmlWebpackPlugin({
+				template: "./src/index.html"
+			}),
+			new webpack.DefinePlugin({
+				__COMMIT_HASH__: JSON.stringify(commitHash),
+				__GIT_TAG__: JSON.stringify(gitTag),
+				__MODE__: JSON.stringify("development")
+			})
+		],
+	}),
+	merge(common.runtime, {
+		mode: "production"
+	})
+];
