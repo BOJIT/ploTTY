@@ -1,5 +1,5 @@
 /* Component Library Store */
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { Component } from 'noflo';
 
 import builtinComponents from 'src/editor/components';
@@ -41,7 +41,40 @@ components.subscribe(async (user_components) => {
 	});
 });
 
+/* Generate icon library from store */
+function generateIconLibrary(library: any) {
+	let icon_lib = {};
+	for (const [, component] of Object.entries(library) as any) {
+		const entry = {
+			name: component.name,
+			icon: component.icon,
+			description: component.description,
+			inports: [],
+			outports: [],
+		};
+
+		for (const [key] of Object.entries(component.inPorts)) {
+			entry.inports.push({
+				name: key,
+				type: 'all'
+			});
+		}
+
+		for (const [key] of Object.entries(component.outPorts)) {
+			entry.outports.push({
+				name: key,
+				type: 'all'
+			});
+		}
+
+		icon_lib[component.name] = entry;
+	}
+
+	return icon_lib;
+}
+
 export default {
 	subscribe: library_store.subscribe,
-	set: library_store.set
+	set: library_store.set,
+	generateIconLibrary
 }

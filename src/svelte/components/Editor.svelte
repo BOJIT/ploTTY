@@ -18,19 +18,19 @@
 
 	/* Component library store */
 	import library from 'src/svelte/store/library';
-
-	console.log($library);
+	let icon_library = {};
 
 	// Load empty graph
 	let graph = new fbpGraph.Graph();
 
 	function renderEditor(redraw: boolean) {
+		console.log(icon_library);
 		const props = {
 			readonly: false,
 			height: window.innerHeight,
 			width: window.innerWidth,
 			graph,
-			// library,
+			library: icon_library,
 		};
 
 		/* If redraw is set to true, clear out and re-render the editor */
@@ -47,7 +47,12 @@
 	// Events on which to re-render the graph
 	graph.on('endTransaction', () => renderEditor(false));
 	window.addEventListener('resize', () => renderEditor(true));
-	window.addEventListener('load', () => renderEditor(true));
+	window.addEventListener('load', () => {
+		library.subscribe((l) => {
+			icon_library = library.generateIconLibrary(l);
+			renderEditor(true);
+		});
+	});
 
 	// Add node button
 	const addnode = function () {
