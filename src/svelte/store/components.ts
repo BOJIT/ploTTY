@@ -28,6 +28,8 @@ async function addComponents(files: File[]) {
 		const url = URL.createObjectURL(file);
 		let module = await import(/* webpackIgnore: true */ url);
 		console.log(module);
+		let c = await module.default.getUserComponent();
+		console.log(c);
 	})
 }
 
