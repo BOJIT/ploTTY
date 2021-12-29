@@ -2,13 +2,12 @@
 	import { afterUpdate, onDestroy } from 'svelte';
 
 	/* NoFlo Imports */
-	import React from 'react';
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
-	import fbpGraph from 'fbp-graph';
+	import { Graph } from 'fbp-graph';
 
 	/* Public Interface */
-	export let graph = new fbpGraph.Graph();
+	export let graph = new Graph();
 	export let library;
 	export let theme = "dark";
 
@@ -113,7 +112,7 @@
 
 	/* Clear whole graph */
 	function clearGraph() {
-		graph = new fbpGraph.Graph();
+		graph = new Graph();
 	}
 
 	/* Expose function API */
