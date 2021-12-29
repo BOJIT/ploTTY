@@ -11,8 +11,36 @@
 	export let graph = new fbpGraph.Graph();
 	export let library;
 	export let theme = "dark";
-	
-	let container; // Editor handle
+
+	/* Internal State */
+	let container;
+	let app;
+
+	/*------------------------------------------------------------------------*/
+
+	/* Handle component selection */
+	function nodeSelectedCallback(key, item) {
+		const graph_tree = app.refs.graph.props.graph;
+		// const { selectedNodes } = app.refs.graph.state;
+		if(key === undefined) {
+			// app.selectedNodes = [];
+		} else {
+			// app.selectedNodes = [item];
+			// app.focusNode(item);
+			console.log(key);
+			console.log(app);
+			const node = graph_tree.getNode(key);
+			app.focusNode(node);
+			console.log(node);
+			// app.refs.graph.setSelectedNodes(item);
+			// console.log(app.refs.graph.state);
+			// Object.keys(selectedNodes).forEach((nodeKey) => {
+			// 	console.log();
+			// 	const node = graph_tree.getNode(nodeKey);
+			// 	app.focusNode(node);
+			// });
+		}
+	}
 
 	/*------------------------------------------------------------------------*/
 
@@ -25,17 +53,8 @@
 			graph,
 			library,
 			enableHotKeys: false, // TODO make true when editor is visible
-			// selectedNodes: {}
-			onNodeSelection: ((key, item, toggle) => {
-				console.log(key);
-				console.log(item);
-				console.log(toggle);
-			}),
-			onEdgeSelection: ((key, item, toggle) => {
-				console.log(key);
-				console.log(item);
-				console.log(toggle);
-			})
+			onNodeSelection: nodeSelectedCallback,
+			onEdgeSelection: ((key, item, toggle) => {})
 		};
 
 		/* If redraw is set to true, clear out and re-render the editor */
@@ -45,7 +64,7 @@
 			}
 		}
 
-		ReactDOM.render(React.createElement(TheGraph.App, props), container);
+		app = ReactDOM.render(TheGraph.App(props), container);
 	}
 
 	/*------------------------------------------------------------------------*/
