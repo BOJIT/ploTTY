@@ -1,9 +1,6 @@
 <script lang="ts">
-	/* NoFlo Imports */
-	import fbpGraph from 'fbp-graph';
-	import React from 'react';
-	import ReactDOM from 'react-dom';
-	import TheGraph from 'the-graph';
+	/* TheGraph Editor */
+	import TheGraph from 'src/svelte/components/TheGraph.svelte';
 
 	/* Themes and UI */
 	import theme from 'src/svelte/store/theme';
@@ -18,99 +15,22 @@
 	/* State variables */
 	export let hidden = true;
 	export let locked = false;
-	let editor: HTMLElement;	// Handle to Editor DOM (React Component)
 
 	/* Component library store */
 	import library from 'src/svelte/store/library';
-	let icon_library = {};
 
 	// Load empty graph
-	let graph = new fbpGraph.Graph();
-
-	function renderEditor(redraw: boolean) {
-		const props = {
-			readonly: false,
-			height: window.innerHeight,
-			width: window.innerWidth,
-			graph,
-			library: icon_library,
-			enableHotKeys: false, // TODO make true when editor is visible
-			// selectedNodes: {}
-			onNodeSelection: ((key, item, toggle) => {
-				console.log(key);
-				console.log(item);
-				console.log(toggle);
-			}),
-			onEdgeSelection: ((key, item, toggle) => {
-				console.log(key);
-				console.log(item);
-				console.log(toggle);
-			})
-		};
-
-		/* If redraw is set to true, clear out and re-render the editor */
-		if(redraw === true) {
-			if(editor != null) {
-				editor.innerHTML = '';
-			}
-		}
-
-		// let t = TheGraph.App();
-		// console.log(t);
-
-		const element = React.createElement(TheGraph.App, props);
-		console.log(element);
-		ReactDOM.render(element, editor);
-	}
-
-	// Events on which to re-render the graph
-	graph.on('endTransaction', () => renderEditor(false));
-	window.addEventListener('resize', () => renderEditor(true));
-	window.addEventListener('load', () => {
-		library.subscribe((l) => {
-			icon_library = library.generateIconLibrary(l);
-			renderEditor(true);
-		});
-	});
-
-	/* Graph editor functions */
-	function addComponent(name: string) {
-		/* Generate random ID then check that it is unique for the graph */
-		let id = Math.round(Math.random() * 100000).toString(36);
-		while(graph.nodes.some((node: any) => node.id === id)) {
-			id = Math.round(Math.random() * 100000).toString(36);
-		}
-
-		const component = icon_library[name];
-
-		/* Place in stack if place is taken */
-		let increment: number = 0;
-		while(graph.nodes.some((node: any) => node.metadata.x === (window.innerWidth/2 + increment))) {
-			increment += 20;
-		}
-
-		const metadata = {
-			label: component.name,
-			x: window.innerWidth/2 + increment,
-			y: window.innerHeight/2 + increment,
-		};
-		const newNode = graph.addNode(id, component.name, metadata);
-		return newNode;
-	};
-
-	function clearGraph() {
-		graph = new fbpGraph.Graph();
-		renderEditor(false);
-	}
+	let graph: any;
+	let API: any;
 
 	/* Control Overlay Functions */
 	let component_selected = false;
 	let extended_visible = false;
 </script>
 
-<div bind:this={editor} class="editor" class:hidden class:locked
-	class:the-graph-dark="{$theme.mode === "dark"}"
-	class:the-graph-light="{$theme.mode === "light"}">
+<div class="editor" class:hidden class:locked >
+	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API}
+					library={library.generateIconLibrary($library)} />
 </div>
 
 <div class:hidden class:locked>
@@ -166,7 +86,7 @@
 					props: {
 						addHook: ((sel) => {
 							$modal = null;
-							addComponent(sel.split('/').pop());
+							API.addComponent(sel.split('/').pop());
 						})
 					}
 				}
@@ -176,7 +96,7 @@
 			</span>
 		</button>
 		<button on:click={() => {
-				clearGraph();
+				API.clearGraph();
 			}} class="button is-large is-clear">
 			<span class="icon">
 				<Icon data={faExpand} scale={1.75} />
