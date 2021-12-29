@@ -5,18 +5,8 @@ export default {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'Gets a stream of bytes from a Serial port',
-			icon: 'plus',
-			inPorts: {
-				augend: {
-					datatype: 'number',
-					required: true,
-				},
-				addend: {
-					datatype: 'number',
-					required: true,
-					control: true,
-				},
-			},
+			icon: 'plug',
+			inPorts: {},
 			outPorts: {
 				sum: {
 					datatype: 'number',

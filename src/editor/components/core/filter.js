@@ -5,20 +5,15 @@ export default {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'filters based on an input string',
-			icon: 'plus',
+			icon: 'filter',
 			inPorts: {
-				augend: {
+				input: {
 					datatype: 'number',
 					required: true,
-				},
-				addend: {
-					datatype: 'number',
-					required: true,
-					control: true,
-				},
+				}
 			},
 			outPorts: {
-				sum: {
+				output: {
 					datatype: 'number',
 				},
 			},

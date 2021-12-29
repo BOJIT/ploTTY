@@ -1,5 +1,5 @@
 /* Component Library Store */
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { Component } from 'noflo';
 
 import builtinComponents from 'src/editor/components';
@@ -53,18 +53,30 @@ function generateIconLibrary(library: any) {
 			outports: [],
 		};
 
+		const blacklist = {
+			_events: "",
+			_eventsCount: "",
+			_maxListeners: "",
+			model: "",
+			ports: ""
+		};
+
 		for (const [key] of Object.entries(component.inPorts)) {
-			entry.inports.push({
-				name: key,
-				type: 'all'
-			});
+			if(!(key in blacklist)) {
+				entry.inports.push({
+					name: key,
+					type: 'all'
+				});
+			}
 		}
 
 		for (const [key] of Object.entries(component.outPorts)) {
-			entry.outports.push({
-				name: key,
-				type: 'all'
-			});
+			if(!(key in blacklist)) {
+				entry.outports.push({
+					name: key,
+					type: 'all'
+				});
+			}
 		}
 
 		icon_lib[component.name] = entry;

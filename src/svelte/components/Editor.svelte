@@ -11,6 +11,10 @@
 	import { fly } from 'svelte/transition';
 	import { faCog, faEllipsisH, faExpand, faMagic, faPlus, faRedo, faTimes, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
 
+	/* Overlays */
+	import { modal } from 'src/svelte/store/overlays';
+	import Modal from 'src/svelte/components/modals';
+
 	/* State variables */
 	export let hidden = true;
 	export let locked = false;
@@ -24,13 +28,24 @@
 	let graph = new fbpGraph.Graph();
 
 	function renderEditor(redraw: boolean) {
-		console.log(icon_library);
 		const props = {
 			readonly: false,
 			height: window.innerHeight,
 			width: window.innerWidth,
 			graph,
 			library: icon_library,
+			enableHotKeys: false, // TODO make true when editor is visible
+			// selectedNodes: {}
+			onNodeSelection: ((key, item, toggle) => {
+				console.log(key);
+				console.log(item);
+				console.log(toggle);
+			}),
+			onEdgeSelection: ((key, item, toggle) => {
+				console.log(key);
+				console.log(item);
+				console.log(toggle);
+			})
 		};
 
 		/* If redraw is set to true, clear out and re-render the editor */
@@ -40,7 +55,11 @@
 			}
 		}
 
+		// let t = TheGraph.App();
+		// console.log(t);
+
 		const element = React.createElement(TheGraph.App, props);
+		console.log(element);
 		ReactDOM.render(element, editor);
 	}
 
@@ -54,16 +73,28 @@
 		});
 	});
 
-	// Add node button
-	const addnode = function () {
-		const id = Math.round(Math.random() * 100000).toString(36);
-		const component = Math.random() > 0.5 ? 'filter' : 'reshape';
+	/* Graph editor functions */
+	function addComponent(name: string) {
+		/* Generate random ID then check that it is unique for the graph */
+		let id = Math.round(Math.random() * 100000).toString(36);
+		while(graph.nodes.some((node: any) => node.id === id)) {
+			id = Math.round(Math.random() * 100000).toString(36);
+		}
+
+		const component = icon_library[name];
+
+		/* Place in stack if place is taken */
+		let increment: number = 0;
+		while(graph.nodes.some((node: any) => node.metadata.x === (window.innerWidth/2 + increment))) {
+			increment += 20;
+		}
+
 		const metadata = {
-			label: component,
-			x: Math.round(Math.random() * 800),
-			y: Math.round(Math.random() * 600),
+			label: component.name,
+			x: window.innerWidth/2 + increment,
+			y: window.innerHeight/2 + increment,
 		};
-		const newNode = graph.addNode(id, component, metadata);
+		const newNode = graph.addNode(id, component.name, metadata);
 		return newNode;
 	};
 
@@ -130,7 +161,15 @@
 		{/if}
 
 		<button on:click={() => {
-				addnode();
+				$modal = {
+					component: Modal.AddComponent,
+					props: {
+						addHook: ((sel) => {
+							$modal = null;
+							addComponent(sel.split('/').pop());
+						})
+					}
+				}
 			}} class="button is-large is-clear">
 			<span class="icon">
 				<Icon data={faPlus} scale={1.75} />

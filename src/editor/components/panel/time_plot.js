@@ -5,7 +5,7 @@ export default {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'plots time data',
-			icon: 'plus',
+			icon: 'bookmark',
 			inPorts: {
 				augend: {
 					datatype: 'number',
@@ -17,11 +17,7 @@ export default {
 					control: true,
 				},
 			},
-			outPorts: {
-				sum: {
-					datatype: 'number',
-				},
-			},
+			outPorts: {},
 		});
 
 		/* Extra component fields */

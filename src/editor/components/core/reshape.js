@@ -5,7 +5,7 @@ export default {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'reshapes a data packet',
-			icon: 'plus',
+			icon: 'shapes',
 			inPorts: {
 				augend: {
 					datatype: 'number',
