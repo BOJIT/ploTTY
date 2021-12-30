@@ -10,6 +10,7 @@
 	export let graph = new Graph();
 	export let library;
 	export let theme = "dark";
+	export let selected = "";
 
 	/* Internal State */
 	let container;
@@ -18,26 +19,15 @@
 	/*------------------------------------------------------------------------*/
 
 	/* Handle component selection */
-	function nodeSelectedCallback(key, item) {
-		const graph_tree = app.refs.graph.props.graph;
-		// const { selectedNodes } = app.refs.graph.state;
+	function nodeSelectedCallback(key) {
 		if(key === undefined) {
-			// app.selectedNodes = [];
+			app.refs.graph.setSelectedNodes({});
+			selected = "";
 		} else {
-			// app.selectedNodes = [item];
-			// app.focusNode(item);
-			console.log(key);
-			console.log(app);
-			const node = graph_tree.getNode(key);
-			app.focusNode(node);
-			console.log(node);
-			// app.refs.graph.setSelectedNodes(item);
-			// console.log(app.refs.graph.state);
-			// Object.keys(selectedNodes).forEach((nodeKey) => {
-			// 	console.log();
-			// 	const node = graph_tree.getNode(nodeKey);
-			// 	app.focusNode(node);
-			// });
+			let sel = {};
+			sel[key] = true;
+			app.refs.graph.setSelectedNodes(sel);
+			selected = key;
 		}
 	}
 
@@ -53,7 +43,7 @@
 			library,
 			enableHotKeys: false, // TODO make true when editor is visible
 			onNodeSelection: nodeSelectedCallback,
-			onEdgeSelection: ((key, item, toggle) => {})
+			onEdgeSelection: ((key, item, toggle) => {}),
 		};
 
 		/* If redraw is set to true, clear out and re-render the editor */
@@ -108,6 +98,9 @@
 		};
 
 		graph.addNode(id, component.name, metadata);
+
+		/* Reset any component selections */
+		app.unselectAll();
 	};
 
 	/* Clear whole graph */

@@ -47,6 +47,6 @@
     "react-dom": "^15.7.0",
     "simplebar": "^5.3.6",
     "svelte-awesome": "^2.4.2",
-    "the-graph": "github:flowhub/the-graph#8465fd603a9a29be4ae30986c9be4419bd65a4da"
+    "the-graph": "github:BOJIT/the-graph"
   }
 }

@@ -22,15 +22,15 @@
 	// Load empty graph
 	let graph: any;
 	let API: any;
+	let selected: string;
 
 	/* Control Overlay Functions */
-	let component_selected = false;
 	let extended_visible = false;
 </script>
 
 <div class="editor" class:hidden class:locked >
 	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API}
-					library={library.generateIconLibrary($library)} />
+		bind:selected={selected} library={library.generateIconLibrary($library)} />
 </div>
 
 <div class:hidden class:locked>
@@ -55,7 +55,6 @@
 				</span>
 			</button>
 			<button on:click={() => {
-					component_selected = !component_selected;
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faRedo} scale={1.75} />
@@ -65,7 +64,7 @@
 	{/if}
 
 	<div class="controls">
-		{#if component_selected }
+		{#if selected !== "" }
 			<button transition:fly="{{ y:100 }}" on:click={() => {
 				}} class="button is-large is-clear">
 				<span class="icon">

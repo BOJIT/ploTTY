@@ -5,7 +5,7 @@ export default {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'plots time data',
-			icon: 'bookmark',
+			icon: 'line-chart',
 			inPorts: {
 				augend: {
 					datatype: 'number',
