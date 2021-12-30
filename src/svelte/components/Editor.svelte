@@ -10,7 +10,7 @@
 
 	/* Overlays */
 	import { modal } from 'src/svelte/store/overlays';
-	import Modal from 'src/svelte/components/modals';
+	import Modals from 'src/svelte/components/modals';
 
 	/* State variables */
 	export let hidden = true;
@@ -26,6 +26,23 @@
 
 	/* Control Overlay Functions */
 	let extended_visible = false;
+
+	/* Function to detect a click outside the burger menu */
+	function clickOutside(node: Node) {
+		const handleClick = (event: Event) => {
+			if (!node.contains(event.target as Node)) {
+				extended_visible = false;
+			}
+		};
+
+		document.addEventListener("click", handleClick, true);
+
+		return {
+			destroy() {
+				document.removeEventListener("click", handleClick, true);
+			}
+		};
+	}
 </script>
 
 <div class="editor" class:hidden class:locked >
@@ -35,8 +52,18 @@
 
 <div class:hidden class:locked>
 	{#if extended_visible }
-		<div transition:fly="{{ x:100 }}" class="controls extended">
+		<div transition:fly="{{ x:100 }}" use:clickOutside class="controls extended">
 			<button on:click={() => {
+					$modal = { 
+						component: Modals.Confirm,
+						props: {
+							title: "Clear Graph",
+							confirmHook: (() => {
+								API.clearGraph();
+								$modal = null;
+							})
+						}
+					}
 				}} class="button is-large is-danger">
 				<span class="icon">
 					<Icon data={faTimes} scale={1.75} />
@@ -72,6 +99,7 @@
 				</span>
 			</button>
 			<button transition:fly="{{ y:100 }}" on:click={() => {
+					API.removeComponent(selected);
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faTrash} scale={1.75} />
@@ -81,7 +109,7 @@
 
 		<button on:click={() => {
 				$modal = {
-					component: Modal.AddComponent,
+					component: Modals.AddComponent,
 					props: {
 						addHook: ((sel) => {
 							$modal = null;
@@ -95,7 +123,7 @@
 			</span>
 		</button>
 		<button on:click={() => {
-				API.clearGraph();
+				API.clearGraph(); // TODO change to FIT
 			}} class="button is-large is-clear">
 			<span class="icon">
 				<Icon data={faExpand} scale={1.75} />

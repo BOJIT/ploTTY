@@ -31,6 +31,10 @@
 		}
 	}
 
+	function edgeSelectedCallback(key) {
+		// TODO
+	}
+
 	/*------------------------------------------------------------------------*/
 
 	/* Re-render TheGraph component */
@@ -103,6 +107,14 @@
 		app.unselectAll();
 	};
 
+	/* Remove component from graph and UI */
+	function removeComponent(id) {
+		/* Reset any component selections */
+		app.unselectAll();
+
+		graph.removeNode(id);
+	}
+
 	/* Clear whole graph */
 	function clearGraph() {
 		graph = new Graph();
@@ -111,6 +123,7 @@
 	/* Expose function API */
 	export const API = {
 		addComponent,
+		removeComponent,
 		clearGraph
 	}
 </script>
