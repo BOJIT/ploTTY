@@ -6,6 +6,8 @@
 	import TheGraph from 'the-graph';
 	import { Graph } from 'fbp-graph';
 
+	import 'klayjs/klay.js';
+
 	/* Auto Layout Engine */
 	// import { KlayNoflo } from 'klayjs-noflo/klay-noflo.js';
 
@@ -265,7 +267,7 @@
 		return kGraph;
 	}
 
-	const worker = new Worker(new URL('klayjs/klay.js', import.meta.url));
+	const worker = new Worker('worker/klay.js');
 	worker.addEventListener('message', function (e) {
 		klayjsCallback(e.data);
 	}, false);

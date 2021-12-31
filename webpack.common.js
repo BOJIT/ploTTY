@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: {
-		'bundle': ['./src/main.ts'],
+		'bundle': ['./src/main.ts']
 	},
 	resolve: {
 		alias: {
@@ -24,6 +24,7 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			// Use Static Loader for NoFlo
 			{
 				test: /noflo([\\]+|\/)lib([\\]+|\/)loader([\\]+|\/)register.js$/,
 				use: [
@@ -44,6 +45,14 @@ module.exports = {
 						},
 					},
 				],
+			},
+			// KlayJS Web Worker
+			{
+				test: /klay\.js$/,
+				type: 'asset/resource',
+				generator: {
+					filename: 'worker/[name].js'
+				}
 			},
 			{
 				test: /\.ts$/,
