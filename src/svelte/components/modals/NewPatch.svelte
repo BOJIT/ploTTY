@@ -6,8 +6,8 @@
 </script>
 
 <Modal title="New Patch">
-	<h3>New File Name</h3>
-	<Input placeholder ={"New File Name"} 
+	<h3>New Patch Name</h3>
+	<Input placeholder ={"New Patch Name"} 
 		blacklist={["Test", "N/A"]} bind:isInvalid={invalidFileName} />
 	{#if invalidFileName}
 		<p class="invalid">File name invalid/already taken!</p>

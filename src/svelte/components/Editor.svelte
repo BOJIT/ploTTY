@@ -28,15 +28,18 @@
 	let extended_visible = false;
 
 	/* Function to detect a click outside the burger menu */
+	let blacklist: any = {};
 	function clickOutside(node: Node) {
 		const handleClick = (event: Event) => {
 			if (!node.contains(event.target as Node)) {
-				extended_visible = false;
+				for (const [, el] of Object.entries(blacklist) as any) {
+					if (!el.contains(event.target as Node)) {
+						extended_visible = false;
+					}
+				}
 			}
 		};
-
 		document.addEventListener("click", handleClick, true);
-
 		return {
 			destroy() {
 				document.removeEventListener("click", handleClick, true);
@@ -70,6 +73,7 @@
 				</span>
 			</button>
 			<button on:click={() => {
+					API.autolayoutGraph();
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faMagic} scale={1.75} />
@@ -93,6 +97,7 @@
 	<div class="controls">
 		{#if selected !== "" }
 			<button transition:fly="{{ y:100 }}" on:click={() => {
+				// TODO settings overlay
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faCog} scale={1.75} />
@@ -123,13 +128,13 @@
 			</span>
 		</button>
 		<button on:click={() => {
-				API.clearGraph(); // TODO change to FIT
+				API.recentreGraph();
 			}} class="button is-large is-clear">
 			<span class="icon">
 				<Icon data={faExpand} scale={1.75} />
 			</span>
 		</button>
-		<button on:click={() => {
+		<button bind:this={blacklist.trigger} on:click={() => {
 				extended_visible = !extended_visible;
 			}} class="button is-large is-clear">
 			<span class="icon">

@@ -19,15 +19,18 @@
 	let visible = false;
 
 	/* Function to detect a click outside the burger menu */
+	let blacklist: any = {};
 	function clickOutside(node: Node) {
 		const handleClick = (event: Event) => {
 			if (!node.contains(event.target as Node)) {
-				visible = false;
+				for (const [, el] of Object.entries(blacklist) as any) {
+					if (!el.contains(event.target as Node)) {
+						visible = false;
+					}
+				}
 			}
 		};
-
 		document.addEventListener("click", handleClick, true);
-
 		return {
 			destroy() {
 				document.removeEventListener("click", handleClick, true);
@@ -137,10 +140,9 @@
 		</button>
 
 		<!-- Burger Menu -->
-		<button on:click={() => {
-				visible = true;
-			}} class="button mobile is-medium is-clear"
-			style="pointer-events: {visible ? 'none' : 'auto'}">
+		<button bind:this={blacklist.trigger} on:click={() => {
+				visible = !visible;
+			}} class="button mobile is-medium is-clear">
 			<span class="icon">
 				<Icon data={faBars} scale={1.6} />
 			</span>

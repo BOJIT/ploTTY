@@ -40,6 +40,8 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "bulma": "^0.9.3",
+    "klayjs": "^0.2.1",
+    "klayjs-noflo": "^0.3.1",
     "localforage": "^1.10.0",
     "mark.js": "^8.11.1",
     "noflo": "^1.4.3",
