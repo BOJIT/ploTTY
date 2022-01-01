@@ -22,7 +22,11 @@
 	// Load empty graph
 	let graph: any;
 	let API: any;
-	let selected: string;
+	let state: any = {
+		selected: "",
+		canUndo: false,
+		canRedo: false
+	};
 
 	/* Control Overlay Functions */
 	let extended_visible = false;
@@ -50,7 +54,7 @@
 
 <div class="editor" class:hidden class:locked >
 	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API}
-		bind:selected={selected} library={library.generateIconLibrary($library)} />
+		bind:state={state} library={library.generateIconLibrary($library)} />
 </div>
 
 <div class:hidden class:locked>
@@ -80,13 +84,15 @@
 				</span>
 			</button>
 			<button on:click={() => {
-				}} class="button is-large is-clear">
+					API.undo();
+				}} class="button is-large is-clear" disabled={!state.canUndo}>
 				<span class="icon">
 					<Icon data={faUndo} scale={1.75} />
 				</span>
 			</button>
 			<button on:click={() => {
-				}} class="button is-large is-clear">
+					API.redo();
+				}} class="button is-large is-clear" disabled={!state.canRedo}>
 				<span class="icon">
 					<Icon data={faRedo} scale={1.75} />
 				</span>
@@ -95,7 +101,7 @@
 	{/if}
 
 	<div class="controls">
-		{#if selected !== "" }
+		{#if state.selected !== "" }
 			<button transition:fly="{{ y:100 }}" on:click={() => {
 				// TODO settings overlay
 				}} class="button is-large is-clear">
@@ -104,7 +110,7 @@
 				</span>
 			</button>
 			<button transition:fly="{{ y:100 }}" on:click={() => {
-					API.removeComponent(selected);
+					API.removeComponent(state.selected);
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faTrash} scale={1.75} />

@@ -4,9 +4,8 @@
 	/* NoFlo Imports */
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
-	import { Graph } from 'fbp-graph';
+	import { Graph, Journal } from 'fbp-graph';
 
-	
 	/* Auto Layout Engine */
 	import 'klayjs/klay.js';
 	import KlayNoflo from 'klayjs-noflo-npm/klay-noflo.js';
@@ -73,7 +72,14 @@
 	export let graph = new Graph();
 	export let library;
 	export let theme = "dark";
-	export let selected = "";
+
+	let journal = new Journal(graph);	// Local journal for Undo/Redo
+
+	export let state = {
+		selected: "",
+		canUndo: false,
+		canRedo: false
+	}
 
 	/* Internal State */
 	let container;
@@ -85,18 +91,30 @@
 	function nodeSelectedCallback(key) {
 		if(key === undefined) {
 			app.refs.graph.setSelectedNodes({});
-			selected = "";
+			state.selected = "";
 		} else {
 			let sel = {};
 			sel[key] = true;
 			app.refs.graph.setSelectedNodes(sel);
-			selected = key;
+			state.selected = key;
 		}
 	}
 
+	/* Handle edge selection */
 	function edgeSelectedCallback(key) {
 		// TODO
 	}
+
+	/* Handle graph change */
+	graph.on('endTransaction', () => {
+		if(!journal) {
+			state.canUndo = false;
+			state.canRedo = false;
+			return;
+		}
+		state.canUndo = journal.canUndo;
+		state.canRedo = journal.canRedo;
+	});
 
 	/*------------------------------------------------------------------------*/
 
@@ -215,13 +233,31 @@
 		graph = new Graph();
 	}
 
+	/* Undo last graph change */
+	function undo() {
+		if(!journal) {
+			return;
+		}
+		journal.undo();
+	}
+
+	/* Redo last node change */
+	function redo() {
+		if(!journal) {
+			return;
+		}
+		journal.redo();
+	}
+
 	/* Expose function API */
 	export const API = {
 		addComponent,
 		removeComponent,
 		recentreGraph,
 		autolayoutGraph,
-		clearGraph
+		clearGraph,
+		undo,
+		redo 
 	}
 </script>
 
