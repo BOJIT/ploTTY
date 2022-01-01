@@ -1,8 +1,10 @@
 <script lang="ts">
 	/* TheGraph Editor */
 	import TheGraph from 'src/svelte/components/TheGraph.svelte';
+	import { Graph, graph as graph_api } from 'fbp-graph';
 
 	/* Themes and UI */
+	import { onDestroy } from 'svelte';
 	import theme from 'src/svelte/store/theme';
 	import Icon from 'svelte-awesome';
 	import { fly } from 'svelte/transition';
@@ -16,17 +18,36 @@
 	export let hidden = true;
 	export let locked = false;
 
-	/* Component library store */
+	/* Stores */
 	import library from 'src/svelte/store/library';
+	import settings from "src/svelte/store/settings";
+	import patches from "src/svelte/store/patches";
 
-	// Load empty graph
-	let graph: any;
+	/* Internal State */
+	let graph: Graph;
 	let API: any;
 	let state: any = {
 		selected: "",
 		canUndo: false,
 		canRedo: false
 	};
+	
+	/* Handle changes in the graph editor */
+	function graphChanged() {
+		let idx = $patches.findIndex((p) => p.name === $settings.currentPatch);
+		$patches[idx].graph = graph.toJSON();
+	}
+
+	/* Load new graph when selected patch changes */
+	let us = settings.subscribe((s) => {
+		let idx = $patches.findIndex((p) => p.name === s.currentPatch);
+		graph_api.loadJSON($patches[idx].graph).then((g) => {
+			graph = g;
+			// API.recentreGraph();
+			// TODO call recentreGraph on new graph load
+		});
+	});
+	onDestroy(us);
 
 	/* Control Overlay Functions */
 	let extended_visible = false;
@@ -53,8 +74,8 @@
 </script>
 
 <div class="editor" class:hidden class:locked >
-	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API}
-		bind:state={state} library={library.generateIconLibrary($library)} />
+	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API} bind:state={state}
+		on:graphChange={graphChanged} library={library.generateIconLibrary($library)} />
 </div>
 
 <div class:hidden class:locked>

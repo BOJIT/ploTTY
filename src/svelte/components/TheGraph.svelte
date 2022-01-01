@@ -1,5 +1,8 @@
 <script>
+	/* Svelte Core */
 	import { afterUpdate, onDestroy } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 
 	/* NoFlo Imports */
 	import ReactDOM from 'react-dom';
@@ -88,7 +91,6 @@
 
 	/* Public Interface */
 	export let graph = new Graph();
-	
 	export let library;
 	export let theme = "dark";
 	
@@ -149,7 +151,9 @@
 			state.canUndo = true;
 			state.canRedo = false;
 
+			/* Re-render and dispatch change notification */
 			render(false)
+			dispatch('graphChange');
 		});
 	}
 

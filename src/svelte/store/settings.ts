@@ -4,15 +4,13 @@ import { writable } from 'svelte/store';
 
 type Settings = {
 	colourScheme: "light" | "dark" | "auto"
-	patchList: string[]
-	componentList: string[]
+	currentPatch: string
 	logList: string[]
 }
 
 const DEFAULT_SETTINGS: Settings = {
 	colourScheme: "dark",
-	patchList: ["Example Patch 1", "Example Patch 2", "Example Patch 3"],
-	componentList: [],
+	currentPatch: "Example Patch 1",	// TODO change to set of example graphs
 	logList: []
 }
 /* TODO add examples in default store */

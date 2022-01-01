@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+import { Graph } from 'fbp-graph';
+
 /*------------------------------ Patches Template ----------------------------*/
 
 type Patch = {
@@ -9,23 +11,26 @@ type Patch = {
 	window: any
 }
 
+let emptyGraphJSON = new Graph().toJSON();
+
+/* TODO pull from examples directory */
 const DEFAULT_PATCHES: Patch[] = [
 	{
 		name: "Example Patch 1",
 		metadata: {},
-		graph: {},
+		graph: emptyGraphJSON,
 		window: {}
 	},
 	{
 		name: "Example Patch 2",
 		metadata: {},
-		graph: {},
+		graph: emptyGraphJSON,
 		window: {}
 	},
 	{
 		name: "Example Patch 3",
 		metadata: {},
-		graph: {},
+		graph: emptyGraphJSON,
 		window: {}
 	}
 ];
