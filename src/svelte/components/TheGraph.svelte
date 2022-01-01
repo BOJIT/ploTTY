@@ -4,13 +4,21 @@
 	/* NoFlo Imports */
 	import ReactDOM from 'react-dom';
 	import TheGraph from 'the-graph';
-	import { Graph, Journal } from 'fbp-graph';
+	import { Graph, graph as graph_api } from 'fbp-graph';
 
 	/* Auto Layout Engine */
 	import 'klayjs/klay.js';
 	import KlayNoflo from 'klayjs-noflo-npm/klay-noflo.js';
 
+	/* Internal State */
+	let container;
+	let app;
+	let history = []; let revision = 0;
+
 	function klayjsCallback(kGraph) {
+		// Back up old history
+		let old_history = history.slice();
+
 		const props = { snap: 10 };
 		const children = kGraph.children.slice();
 
@@ -60,6 +68,16 @@
 			}
 		}
 
+		// Load single-change history tree
+		let last_change = history.pop();
+		history = old_history.slice();
+
+		history.push(last_change);
+		if(history.length > 10) {
+			history.shift();
+		}
+		revision = history.length - 1;
+
 		app.triggerFit();
 	}
 
@@ -70,20 +88,19 @@
 
 	/* Public Interface */
 	export let graph = new Graph();
+	
 	export let library;
 	export let theme = "dark";
-
-	let journal = new Journal(graph);	// Local journal for Undo/Redo
-
+	
 	export let state = {
 		selected: "",
 		canUndo: false,
 		canRedo: false
 	}
 
-	/* Internal State */
-	let container;
-	let app;
+	/* Initialise new graph with no history */
+	initGraph();
+	clearHistory();
 
 	/*------------------------------------------------------------------------*/
 
@@ -106,15 +123,35 @@
 	}
 
 	/* Handle graph change */
-	graph.on('endTransaction', () => {
-		if(!journal) {
-			state.canUndo = false;
-			state.canRedo = false;
+	function initGraph() {
+		/* Ensure graph is only initialised once */
+		if(("hasBeenInitialised" in graph) && (graph.hasBeenInitialised == true)) {
 			return;
 		}
-		state.canUndo = journal.canUndo;
-		state.canRedo = journal.canRedo;
-	});
+		graph.hasBeenInitialised = true;
+
+		graph.on('startTransaction', () => {
+			/* Ensure initial state is in history */
+			if(history.length === 0) {
+				history.push(graph.toJSON());
+				revision = history.length - 1;
+			}
+		});
+	
+		graph.on('endTransaction', () => {
+			/* handle version history */
+			history.length = revision + 1;
+			history.push(graph.toJSON());
+			if(history.length > 10) {
+				history.shift();
+			}
+			revision = history.length - 1;
+			state.canUndo = true;
+			state.canRedo = false;
+
+			render(false)
+		});
+	}
 
 	/*------------------------------------------------------------------------*/
 
@@ -145,11 +182,11 @@
 
 	/* Trigger React update on Svelte change */
 	afterUpdate(() => {
+		initGraph();
 		render(false);
 	});
 
 	/* Extra render hooks */
-	graph.on('endTransaction', () => render(false));
 	window.addEventListener('resize', () => render(true));
 
 	/* Unmount Graph Component */
@@ -231,22 +268,45 @@
 	/* Clear whole graph */
 	function clearGraph() {
 		graph = new Graph();
+		initGraph();
 	}
 
 	/* Undo last graph change */
 	function undo() {
-		if(!journal) {
-			return;
+		if(state.canUndo) {
+			revision -= 1;
+			graph_api.loadJSON(history[revision]).then((g) => {
+				graph = g;
+				initGraph();
+			});
+			if(revision == 0) {
+				state.canUndo = false;
+			}
+			state.canRedo = true;
 		}
-		journal.undo();
 	}
 
 	/* Redo last node change */
 	function redo() {
-		if(!journal) {
-			return;
+		if(state.canRedo) {
+			revision += 1;
+			graph_api.loadJSON(history[revision]).then((g) => {
+				graph = g;
+				initGraph();
+			});
+			if(revision == history.length - 1) {
+				state.canRedo = false;
+			}
+			state.canUndo = true;
 		}
-		journal.redo();
+	}
+
+	/* Clear history - advisable if loading completely new graph */
+	function clearHistory() {
+		history = [];
+		revision = 0;
+		state.canUndo = false;
+		state.canRedo = false;
 	}
 
 	/* Expose function API */
@@ -257,7 +317,8 @@
 		autolayoutGraph,
 		clearGraph,
 		undo,
-		redo 
+		redo,
+		clearHistory
 	}
 </script>
 
