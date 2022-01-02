@@ -70,10 +70,15 @@ function deletePatch(name: string) {
 	});
 }
 
+function addPatches(files: File[]) {
+
+}
+
 export default {
 	subscribe: patches_store.subscribe,
 	set: patches_store.set,
 	reset,
 	newPatch,
-	deletePatch
+	deletePatch,
+	addPatches
 }

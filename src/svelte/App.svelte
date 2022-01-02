@@ -3,7 +3,7 @@
 	import Navbar from "./components/Navbar.svelte";
 	import Popup from "./components/Popup.svelte";
 	import Editor from "./components/Editor.svelte";
-	import Panels from "./components/Panels.svelte";
+	import TiledPanels from "./components/TiledPanels.svelte";
 
 	/* Environment Variables */
 	import env from "src/env";
@@ -48,7 +48,7 @@
 <Navbar/>
 
 <!-- Main tabs + panel content -->
-<Panels currentPanels={panels} />
+<TiledPanels currentPanels={panels} />
 
 <!-- Editor - overlays entire page -->
 <Editor hidden={!$editor.visible} locked={$editor.locked} />
