@@ -15,11 +15,15 @@ import { popup } from "./overlays";
 /* Import environment variables */
 import env from 'src/env';
 
-/* Database Index */
+/*
+	Database Index
+	Note the order is important here!
+	Settings store updated last
+*/
 const stores = {
-	settings: settings,
 	patches: patches,
-	components: components
+	components: components,
+	settings: settings
 }
 
 /*----------------------------------------------------------------------------*/

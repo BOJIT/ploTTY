@@ -35,7 +35,9 @@
 	/* Handle changes in the graph editor */
 	function graphChanged() {
 		let idx = $patches.findIndex((p) => p.name === $settings.currentPatch);
-		$patches[idx].graph = graph.toJSON();
+		if(idx !== -1) {
+			$patches[idx].graph = graph.toJSON();
+		}
 	}
 
 	/* Load new graph when selected patch changes */
@@ -43,8 +45,9 @@
 		let idx = $patches.findIndex((p) => p.name === s.currentPatch);
 		graph_api.loadJSON($patches[idx].graph).then((g) => {
 			graph = g;
-			// API.recentreGraph();
+			API.clearHistory();
 			// TODO call recentreGraph on new graph load
+			// API.recentreGraph();
 		});
 	});
 	onDestroy(us);

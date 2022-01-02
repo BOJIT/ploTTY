@@ -6,9 +6,10 @@
 	import Icon from 'svelte-awesome';
 	import { faFileImport, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-	import { modal } from "src/svelte/store/overlays";
+	import { modal, popup } from "src/svelte/store/overlays";
 	import settings from "src/svelte/store/settings";
 	import patches from "src/svelte/store/patches";
+	import storage from "src/svelte/store/storage";
 
 	function patchSelected(sel: string) {
 		$settings.currentPatch = sel;
@@ -16,12 +17,22 @@
 	}
 
 	function patchDownloaded(sel: string) {
-		console.log("Downloaded: " + sel);
+		const patch = $patches.find((p) => p.name === sel);
+		const blob = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
+		storage.downloadFile(blob, sel + ".plotty.json");
 	}
 
 	function patchDeleted(sel: string) {
-		console.log("Deleted: " + sel);
-		// TODO do not let last patch be deleted OR the current patch
+		if($settings.currentPatch === sel) {
+			popup.push({
+				"title": "Warning!",
+				"message": "Cannot delete currently active patch!",
+				"type": "warning",
+				"timeout": 3
+			});
+		} else {
+			patches.deletePatch(sel);
+		}
 	}
 </script>
 
@@ -43,7 +54,8 @@
 				props: {
 					title: "Restore Default Patches",
 					confirmHook: (() => {
-						// TODO remove all, restore default patches
+						patches.reset();
+						$settings.currentPatch = $patches[0].name;
 						$modal = Modals.OpenPatch;
 					}),
 					cancelHook: (() => {

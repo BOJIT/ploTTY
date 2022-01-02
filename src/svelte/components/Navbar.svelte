@@ -39,17 +39,6 @@
 	}
 
 	let patchRunning = false;
-
-	/* Save Patch */
-	function savePatch() {
-		// Currently just pushes notification
-		popup.push({
-			"title": "Save File",
-			"message": "File successfully saved to disk",
-			"type": "info",
-			"timeout": 3
-		});
-	}
 </script>
 
 <!-- Navbar -->
@@ -114,12 +103,6 @@
 			</span>
 		</button>
 
-		<button on:click={savePatch} class="button desktop is-medium is-clear">
-			<span class="icon">
-				<Icon data={faSave} scale={1.6} />
-			</span>
-		</button>
-
 		<button on:click={() => {
 				$modal = Modals.DuplicatePatch;
 			}} class="button desktop is-medium is-clear">
@@ -175,15 +158,6 @@
 						<Icon data={faFolderOpen} />
 					</span>
 					<h1>Open Patch</h1>
-				</span>
-			</button>
-			<hr>
-			<button on:click={savePatch} class="button">
-				<span class="icon-text">
-					<span class="icon mr-2">
-						<Icon data={faSave} />
-					</span>
-					<h1>Save Patch</h1>
 				</span>
 			</button>
 			<hr>

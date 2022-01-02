@@ -6,14 +6,31 @@
 	/* External Props */
 	export let placeholder: string = "Placeholder";
 	export let blacklist: string[] = [];
+	export let isBlacklisted: boolean = false;
 	export let isInvalid: boolean = false;
+	export let input = "";
 
-	let input = "";
+	function invalidString(txt) { 
+		var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+		if (format.test(txt)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	function inputChange() {
-		if(blacklist.filter(s => s.toLowerCase() == (input.toLowerCase())).length) {
+		/* Test if invalid */
+		if(invalidString(input)) {
 			isInvalid = true;
 		} else {
 			isInvalid = false;
+		}
+		/* Test if blacklisted */
+		if(blacklist.filter(s => s.toLowerCase() == (input.toLowerCase())).length) {
+			isBlacklisted = true;
+		} else {
+			isBlacklisted = false;
 		}
 	}
 
@@ -26,7 +43,7 @@
 <div class="field mb-0">
 	<p class="control has-icons-left has-icons-right">
 		<input bind:value={input} on:input={inputChange}
-			class:is-danger={isInvalid} class="input" placeholder="{placeholder}">
+			class:is-danger={isInvalid || isBlacklisted} class="input" placeholder="{placeholder}">
 		<span class="icon is-small is-left">
 			<Icon data={faFile} />
 		</span>
