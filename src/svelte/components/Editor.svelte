@@ -18,6 +18,10 @@
 	export let hidden = true;
 	export let locked = false;
 
+	/* Autolayout worker */
+	import 'klayjs/klay.js';
+	let workerURL = 'worker/klay.js';
+
 	/* Stores */
 	import library from 'src/svelte/store/library';
 	import settings from "src/svelte/store/settings";
@@ -31,7 +35,7 @@
 		canUndo: false,
 		canRedo: false
 	};
-	
+
 	/* Handle changes in the graph editor */
 	function graphChanged() {
 		let idx = $patches.findIndex((p) => p.name === $settings.currentPatch);
@@ -78,14 +82,14 @@
 
 <div class="editor" class:hidden class:locked >
 	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API} bind:state={state}
-		on:graphChange={graphChanged} library={library.generateIconLibrary($library)} />
+		workerURL={workerURL} on:graphChange={graphChanged} library={library.generateIconLibrary($library)} />
 </div>
 
 <div class:hidden class:locked>
 	{#if extended_visible }
 		<div transition:fly="{{ x:100 }}" use:clickOutside class="controls extended">
 			<button on:click={() => {
-					$modal = { 
+					$modal = {
 						component: Modals.Confirm,
 						props: {
 							title: "Clear Graph",

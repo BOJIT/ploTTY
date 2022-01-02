@@ -9,14 +9,24 @@
 	import TheGraph from 'the-graph';
 	import { Graph, graph as graph_api } from 'fbp-graph';
 
-	/* Auto Layout Engine */
-	import 'klayjs/klay.js';
-	import KlayNoflo from 'klayjs-noflo-npm/klay-noflo.js';
-
 	/* Internal State */
 	let container;
 	let app;
 	let history = []; let revision = 0;
+
+	/* Auto Layout Engine */
+	import KlayNoflo from 'klayjs-noflo-npm/klay-noflo.js';
+
+	/* Initialise worker if URL provided */
+	let worker = null;
+	function klayjsInit(url) {
+		if((url !== "") && (worker === null)) {
+			worker = new Worker(url);
+			worker.addEventListener('message', function (e) {
+				klayjsCallback(e.data);
+			}, false);
+		}
+	}
 
 	function klayjsCallback(kGraph) {
 		// Back up old history
@@ -84,16 +94,12 @@
 		app.triggerFit();
 	}
 
-	const worker = new Worker('worker/klay.js');
-	worker.addEventListener('message', function (e) {
-		klayjsCallback(e.data);
-	}, false);
-
 	/* Public Interface */
 	export let graph = new Graph();
 	export let library;
 	export let theme = "dark";
-	
+	export let workerURL = "";
+
 	export let state = {
 		selected: "",
 		canUndo: false,
@@ -139,7 +145,7 @@
 				revision = history.length - 1;
 			}
 		});
-	
+
 		graph.on('endTransaction', () => {
 			/* handle version history */
 			history.length = revision + 1;
@@ -175,7 +181,7 @@
 		/* If redraw is set to true, clear out and re-render the editor */
 		if(redraw === true) {
 			if(container != null) {
-				container.innerHTML = '';
+				ReactDOM.unmountComponentAtNode(container);
 			}
 		}
 
@@ -186,6 +192,7 @@
 
 	/* Trigger React update on Svelte change */
 	afterUpdate(() => {
+		klayjsInit(workerURL);
 		initGraph();
 		render(false);
 	});
@@ -212,7 +219,7 @@
 
 		/* Place in stack if place is taken */
 		let increment = 0;
-		while(graph.nodes.some((node) => node.metadata.x === 
+		while(graph.nodes.some((node) => node.metadata.x ===
 										(window.innerWidth/2 + increment))) {
 			increment += 20;
 		}
@@ -244,6 +251,9 @@
 
 	/* Automatically lay out graph */
 	function autolayoutGraph() {
+		if(workerURL === "") {
+			return;
+		}
 		let portInfo = app.refs.graph.getPortInfo();
 
 		var options = {
