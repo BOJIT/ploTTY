@@ -1,6 +1,6 @@
 <script lang="ts">
 	/* TheGraph Editor */
-	import TheGraph from 'src/svelte/components/TheGraph.svelte';
+	import TheGraph from 'noflo-svelte/TheGraph.svelte';
 	import { Graph, graph as graph_api } from 'fbp-graph';
 
 	/* Themes and UI */
