@@ -1,6 +1,7 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 import { Graph } from 'fbp-graph';
+import { popup } from "./overlays";
 
 /*------------------------------ Patches Template ----------------------------*/
 
@@ -70,8 +71,48 @@ function deletePatch(name: string) {
 	});
 }
 
-function addPatches(files: File[]) {
+async function addPatches(files: File[]) {
+	let patches = await Promise.all(files.map(async (file) => {
+		let json = await file.text();
+		try {
+			/* Import as JSON and check for mistakes */
+			let patch = JSON.parse(json);
+			patch.graph;
 
+			return patch;
+		} catch (error) {
+			console.error("Invalid Component: " + error);
+			return null;
+		}
+	}));
+
+	if(patches.some((c) => c === null)) {
+		popup.push({
+			"title": "Import Error",
+			"message": "Patches are not valid!",
+			"type": "error"
+		});
+		return;
+	}
+
+	patches.forEach((p) => {
+		let inc = 1;
+		let regex = /\((.*?)\)/;
+		while(get(patches_store).some((t: any) => (t.name === p.name))) {
+			/* Add numbered increment to patch name */
+			let ext = regex.exec(p.name);
+			if(ext && p.name.endsWith(ext[0])) {
+				inc = parseInt(ext[1]) + 1;
+				p.name = p.name.slice(0, -(ext[0].length + 1))
+			}
+			p.name = p.name + " (" + inc + ")";
+		}
+
+		patches_store.update((s) => {
+			s.push(p);
+			return s;
+		});
+	});
 }
 
 export default {

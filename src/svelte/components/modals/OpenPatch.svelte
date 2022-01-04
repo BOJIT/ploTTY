@@ -43,13 +43,13 @@
 
 	<br>
 	<button on:click={() => {
-			// TODO upload custom patch to patches store
+			storage.uploadFile(patches.addPatches, ".plotty.json", true);
 		}} class="button mr-2">
 		<span class="icon"><Icon data={faFileImport} /></span>
 		<span>Upload</span>
 	</button>
 	<button on:click={() => {
-			$modal = { 
+			$modal = {
 				component: Modals.Confirm,
 				props: {
 					title: "Restore Default Patches",
