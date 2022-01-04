@@ -2,6 +2,7 @@
 	import Modal from "./Modal.svelte";
 	import Modals from "../modals";
 	import Selector from "src/svelte/components/Selector.svelte";
+	import { get } from 'svelte/store';
 
 	import Icon from 'svelte-awesome';
 	import { faFileImport, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +56,7 @@
 					title: "Restore Default Patches",
 					confirmHook: (() => {
 						patches.reset();
-						$settings.currentPatch = $patches[0].name;
+						$settings.currentPatch = get(patches)[0].name;
 						$modal = Modals.OpenPatch;
 					}),
 					cancelHook: (() => {
