@@ -9,10 +9,10 @@
 	import imgLogo from 'src/assets/favicon/icon_x128.png';
 
 	/* Overlays */
-	import { modal, popup } from 'src/svelte/store/overlays';
+	import { modal } from 'src/svelte/store/overlays';
 	import Modals from './modals';
 
-	/* Editor state */
+	/* Stores */
 	import editor from 'src/svelte/store/editor';
 
 	/* Burger Menu */
@@ -37,8 +37,6 @@
 			}
 		};
 	}
-
-	let patchRunning = false;
 </script>
 
 <!-- Navbar -->
@@ -59,25 +57,15 @@
 
 		<!-- Runtime Controls -->
 		<button on:click={() => {
-				popup.push({
-					"title": "Going...",
-					"message": "Hey there...",
-					"type": "info",
-					"timeout": 5
-				});
-				patchRunning = !patchRunning;
-			}} class="button is-medium {patchRunning ? 'is-danger' : 'is-success'}">
+				$editor.running = !$editor.running;
+			}} class="button is-medium {$editor.running ? 'is-danger' : 'is-success'}">
 			<span class="icon">
-				<Icon data={patchRunning ? faStop : faPlay} scale={1.6} />
+				<Icon data={$editor.running ? faStop : faPlay} scale={1.6} />
 			</span>
 		</button>
 
 		<button on:click={() => {
-				if($editor.visible) {
-					editor.hide();
-				} else {
-					editor.show();
-				}
+				$editor.visible = !$editor.visible;
 			}} class="button is-medium {$editor.visible ? 'is-warning' : 'is-info'}">
 			<span class="icon">
 				<Icon data={$editor.visible ? faChartLine : faEdit} scale={1.6} />

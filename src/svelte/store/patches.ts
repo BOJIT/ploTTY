@@ -118,6 +118,7 @@ async function addPatches(files: File[]) {
 export default {
 	subscribe: patches_store.subscribe,
 	set: patches_store.set,
+	update: patches_store.update,
 	reset,
 	newPatch,
 	deletePatch,
