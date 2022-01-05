@@ -2,6 +2,7 @@
 	/* TheGraph Editor */
 	import TheGraph from 'noflo-svelte/TheGraph.svelte';
 	import { Graph, graph as graph_api } from 'fbp-graph';
+	import { createNetwork } from 'noflo';
 
 	/* Themes and UI */
 	import { onDestroy } from 'svelte';
@@ -14,10 +15,6 @@
 	import { modal } from 'src/svelte/store/overlays';
 	import Modals from 'src/svelte/components/modals';
 
-	/* State variables */
-	export let hidden = true;
-	export let locked = false;
-
 	/* Autolayout worker */
 	import 'klayjs/klay.js';
 	let workerURL = 'worker/klay.js';
@@ -26,6 +23,7 @@
 	import library from 'src/svelte/store/library';
 	import settings from "src/svelte/store/settings";
 	import patches from "src/svelte/store/patches";
+	import editor from "src/svelte/store/editor";
 
 	/* Internal State */
 	let graph: Graph;
@@ -35,6 +33,30 @@
 		canUndo: false,
 		canRedo: false
 	};
+
+	/*-------------------------- NoFlo Network Code --------------------------*/
+
+	async function runNetwork() {
+		console.log("init network");
+
+		createNetwork(graph, { componentLoader: library.loader }).then((network) => {
+			console.log(network);
+		});
+	}
+
+	function stopNetwork() {
+		console.log("stop network");
+	}
+
+	editor.subscribe((s) => {
+		if(s.running) {
+			runNetwork();
+		} else {
+			stopNetwork();
+		}
+	});
+
+	/*-------------------------- Graph Editor Hooks --------------------------*/
 
 	/* Handle changes in the graph editor */
 	function graphChanged() {
@@ -50,11 +72,13 @@
 		graph_api.loadJSON($patches[idx].graph).then((g) => {
 			graph = g;
 			API.clearHistory();
-			// TODO call recentreGraph on new graph load
-			// API.recentreGraph();
+			// TODO make recentreGraph smooth
+			window.setTimeout(() => API.recentreGraph(), 10);
 		});
 	});
 	onDestroy(us);
+
+	/*------------------------------ Editor UI -------------------------------*/
 
 	/* Control Overlay Functions */
 	let extended_visible = false;
@@ -80,12 +104,12 @@
 	}
 </script>
 
-<div class="editor" class:hidden class:locked >
+<div class="editor" class:hidden={!$editor.visible} >
 	<TheGraph theme={$theme.mode} bind:graph={graph} bind:API={API} bind:state={state}
 		workerURL={workerURL} on:graphChange={graphChanged} library={library.generateIconLibrary($library)} />
 </div>
 
-<div class:hidden class:locked>
+<div class:hidden={!$editor.visible} >
 	{#if extended_visible }
 		<div transition:fly="{{ x:100 }}" use:clickOutside class="controls extended">
 			<button on:click={() => {
@@ -186,10 +210,6 @@
 	/* State Styling */
 	.hidden {
 		display: none;
-	}
-
-	.locked {
-		pointer-events: none;
 	}
 
 	/* Editor/NoFlo Styling */

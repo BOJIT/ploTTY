@@ -23,6 +23,8 @@ function reset() {
 	components_store.set(DEFAULT_COMPONENTS);
 }
 
+/*---------------------------------- Helpers ---------------------------------*/
+
 async function addComponents(files: File[]) {
 	let components = await Promise.all(files.map(async (file) => {
 		const url = URL.createObjectURL(file);

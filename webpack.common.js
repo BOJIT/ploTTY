@@ -1,6 +1,7 @@
 /* Common dependencies */
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { ModuleFilenameHelpers } = require('webpack');
 
 module.exports = {
 	entry: {
@@ -24,7 +25,7 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			// Use Static Loader for NoFlo
+			// Don't use NoFlo's Component Loader
 			{
 				test: /noflo([\\]+|\/)lib([\\]+|\/)loader([\\]+|\/)register.js$/,
 				use: [
@@ -32,14 +33,13 @@ module.exports = {
 						loader: 'noflo-component-loader',
 							options: {
 							graph: null,
-							debug: true,
-							baseDir: __dirname,
+							debug: false,
+							baseDir: path.resolve(__dirname, 'src/editor/components/'),
 							manifest: {
 								runtimes: ['noflo'],
-								discover: true,
+								discover: false,
 							},
 							runtimes: [
-								'noflo',
 								'noflo-browser',
 							],
 						},
