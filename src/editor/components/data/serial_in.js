@@ -8,20 +8,28 @@ export default {
 			icon: 'plug',
 			inPorts: {},
 			outPorts: {
-				sum: {
-					datatype: 'number',
+				out: {
+					datatype: 'object',
 				},
 			},
+			autoOrdering: false
 		});
 
-		/* Component processing function */
-		c.process((input, output) => {
-			if (!input.hasData('augend', 'addend')) { return; }
-			const [augend, addend] = input.getData('augend', 'addend');
-			output.sendDone({
-			sum: Number(augend) + Number(addend),
-			});
-		});
+		// TODO what is component context?
+
+		c.setUp = (callback) => {
+			c.timer = setInterval(() => {
+				console.log("Serial Out");
+			}, 2000);
+			callback();
+		}
+
+		c.tearDown = (callback) => {
+			if (c.timer) {
+				clearInterval(c.timer);
+			}
+			callback();
+		}
 
 		return c;
 	}

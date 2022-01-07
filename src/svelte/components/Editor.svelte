@@ -42,7 +42,7 @@
 			console.log("init network");
 			createNetwork(graph, {
 				componentLoader: library.loader,
-				subscribeGraph: false
+				subscribeGraph: false // TODO this API is deprecated
 			}).then((n) => {
 				n.start();
 				network = n;
