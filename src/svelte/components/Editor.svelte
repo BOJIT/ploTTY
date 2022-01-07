@@ -36,16 +36,26 @@
 
 	/*-------------------------- NoFlo Network Code --------------------------*/
 
+	let network = null;
 	async function runNetwork() {
-		console.log("init network");
-
-		createNetwork(graph, { componentLoader: library.loader }).then((network) => {
-			console.log(network);
-		});
+		if(network === null) {
+			console.log("init network");
+			createNetwork(graph, {
+				componentLoader: library.loader,
+				subscribeGraph: false
+			}).then((n) => {
+				n.start();
+				network = n;
+			});
+		}
 	}
 
 	function stopNetwork() {
-		console.log("stop network");
+		if(network !== null) {
+			console.log("stop network");
+			network.stop();
+			network = null;
+		}
 	}
 
 	editor.subscribe((s) => {
