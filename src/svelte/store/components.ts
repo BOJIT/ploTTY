@@ -12,9 +12,6 @@ type UserComponent = {
 	program: Blob
 }
 
-/* This is the actual component object tree - it is not a public store */
-let builtin_components = builtinComponents.map((c) => c.getComponent());
-
 const DEFAULT_COMPONENTS: UserComponent[] = [];
 
 const components_store = writable(DEFAULT_COMPONENTS);
@@ -51,7 +48,7 @@ async function addComponents(files: File[]) {
 	}
 
 	components.forEach((c) => {
-		let taken = builtin_components.some((t: any) => {
+		let taken = builtinComponents.some((t: any) => {
 			return (t.name === c.c.name);
 		});
 

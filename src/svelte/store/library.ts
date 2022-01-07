@@ -8,8 +8,7 @@ import components from './components';
 /* Populate default library */
 const DEFAULT_LIBRARY: Object = {};
 
-builtinComponents.forEach((c) => {
-	let component: any = c.getComponent();
+builtinComponents.forEach((component) => {
 	if(component.name in DEFAULT_LIBRARY) {
 		console.error("Built-in Library contains duplicate name: " + component.name);
 	} else {
@@ -25,7 +24,7 @@ components.subscribe(async (user_components) => {
 		const url = URL.createObjectURL(u.program);
 		try {
 			let module = await import(/* webpackIgnore: true */ url);
-			let component: any = module.default.getComponent(Component);
+			let component: any = module.default;
 			return component;
 		} catch (error) {
 			console.error("Invalid Component: " + error);
@@ -47,10 +46,11 @@ components.subscribe(async (user_components) => {
 function generateIconLibrary(library: any) {
 	let icon_lib = {};
 	for (const [, component] of Object.entries(library) as any) {
+		const instance = component.getComponent(Component);
 		const entry = {
-			name: component.name,
-			icon: component.icon,
-			description: component.description,
+			name: instance.name,
+			icon: instance.icon,
+			description: instance.description,
 			inports: [],
 			outports: [],
 		};
@@ -63,7 +63,7 @@ function generateIconLibrary(library: any) {
 			ports: ""
 		};
 
-		for (const [key] of Object.entries(component.inPorts)) {
+		for (const [key] of Object.entries(instance.inPorts)) {
 			if(!(key in blacklist)) {
 				entry.inports.push({
 					name: key,
@@ -72,7 +72,7 @@ function generateIconLibrary(library: any) {
 			}
 		}
 
-		for (const [key] of Object.entries(component.outPorts)) {
+		for (const [key] of Object.entries(instance.outPorts)) {
 			if(!(key in blacklist)) {
 				entry.outports.push({
 					name: key,
@@ -119,8 +119,8 @@ class Loader extends ComponentLoader {
 			}
 			resolve(component);
 		}).then((component: any) => {
-			// TODO Check: do we need to return separate instances of components?
-			return component;
+			let instance = component.getComponent(Component);
+			return instance;
 		});
 		return promise;
 	}

@@ -1,7 +1,7 @@
-import { Component } from 'noflo';
-
 export default {
-	getComponent: () => {
+	name: 'reshape',
+	category: 'core',
+	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'reshapes a data packet',
@@ -23,10 +23,6 @@ export default {
 				},
 			},
 		});
-
-		/* Extra component fields */
-		c.name = 'reshape';
-		c.category = 'core';
 
 		/* Component processing function */
 		c.process((input, output) => {

@@ -1,7 +1,7 @@
-import { Component } from 'noflo';
-
 export default {
-	getComponent: () => {
+	name: 'filter',
+	category: 'core',
+	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'filters based on an input string',
@@ -18,10 +18,6 @@ export default {
 				},
 			},
 		});
-
-		/* Extra component fields */
-		c.name = 'filter';
-		c.category = 'core';
 
 		/* Component processing function */
 		c.process((input, output) => {

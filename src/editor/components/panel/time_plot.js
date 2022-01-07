@@ -1,7 +1,7 @@
-import { Component } from 'noflo';
-
 export default {
-	getComponent: () => {
+	name: 'time plot',
+	category: 'panel',
+	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'plots time data',

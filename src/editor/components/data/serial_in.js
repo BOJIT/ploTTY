@@ -1,7 +1,7 @@
-import { Component } from 'noflo';
-
 export default {
-	getComponent: () => {
+	name: 'serial in',
+	category: 'data',
+	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'Gets a stream of bytes from a Serial port',
@@ -13,10 +13,6 @@ export default {
 				},
 			},
 		});
-
-		/* Extra component fields */
-		c.name = 'serial in';
-		c.category = 'data';
 
 		/* Component processing function */
 		c.process((input, output) => {

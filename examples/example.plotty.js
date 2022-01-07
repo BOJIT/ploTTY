@@ -1,6 +1,8 @@
 /* This file contains a sample user component */
 
 export default {
+	name:'example',
+	category: 'user',
 	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
@@ -23,10 +25,6 @@ export default {
 				},
 			},
 		});
-
-		/* Extra component fields */
-		c.name = 'example';
-		c.category = 'user';
 
 		/* Component processing function */
 		c.process((input, output) => {
