@@ -19,9 +19,9 @@ Icon index available [here](https://github.com/flowhub/the-graph/blob/master/the
 
 ### Local Development
 
-clone `BOJIT/ploTTY` and `BOJIT/the-graph`.
+clone `BOJIT/ploTTY` and `BOJIT/noflo-svelte`.
 
-#### in `BOJIT/the-graph`:
+#### in `BOJIT/noflo-svelte`:
 
 ```bash
 npm install
@@ -36,5 +36,5 @@ npm link
 
 ```bash
 npm install
-npm link the-graph react react-dom
+npm link noflo-svelte react react-dom
 ```
