@@ -5,7 +5,7 @@ This app is has no backend, so can be self-hosted or accessed [here](https://plo
 
 ## Development and Contributing
 
-Built using `Node V16.13.0`
+Built using `Node v16.13.2` and `NPM v8.3.0`.
 
 ### Run in Development Mode
 `npm run dev`
