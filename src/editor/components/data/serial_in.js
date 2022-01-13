@@ -6,7 +6,11 @@ export default {
 		const c = new Component({
 			description: 'Gets a stream of bytes from a Serial port',
 			icon: 'plug',
-			inPorts: {},
+			inPorts: {
+				enable: {
+					datatype: 'bang',
+				}
+			},
 			outPorts: {
 				out: {
 					datatype: 'object',
@@ -16,6 +20,11 @@ export default {
 		});
 
 		// TODO what is component context?
+
+		c.process((input, output, context) => {
+
+		});
+
 
 		c.setUp = (callback) => {
 			c.timer = setInterval(() => {
