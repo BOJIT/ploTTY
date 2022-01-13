@@ -48,7 +48,7 @@ function generateIconLibrary(library: any) {
 	for (const [, component] of Object.entries(library) as any) {
 		const instance = component.getComponent(Component);
 		const entry = {
-			name: instance.name,
+			name: component.name,
 			icon: instance.icon,
 			description: instance.description,
 			inports: [],

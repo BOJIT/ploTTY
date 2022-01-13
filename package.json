@@ -44,10 +44,10 @@
     "localforage": "^1.10.0",
     "mark.js": "^8.11.1",
     "noflo": "^1.4.3",
+    "noflo-svelte": "github:BOJIT/noflo-svelte#1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "simplebar": "^5.3.6",
-    "svelte-awesome": "^2.4.2",
-    "noflo-svelte": "github:BOJIT/noflo-svelte#1.0.0"
+    "svelte-awesome": "^2.4.2"
   }
 }
