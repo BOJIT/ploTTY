@@ -129,6 +129,20 @@
 		}
 	}
 
+	.modal-card-foot .button {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+			background-color: theme.t(theme.$background-secondary);
+			border-color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.modal-card-foot .button.is-success {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-success);
+		}
+	}
+
 	.modal-card-body :global(.button.is-info) {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-info);

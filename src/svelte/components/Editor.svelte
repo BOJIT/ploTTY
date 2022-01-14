@@ -24,6 +24,7 @@
 	import settings from "src/svelte/store/settings";
 	import patches from "src/svelte/store/patches";
 	import editor from "src/svelte/store/editor";
+import ComponentSettings from './modals/ComponentSettings.svelte';
 
 	/* Internal State */
 	let graph: Graph;
@@ -165,7 +166,8 @@
 	<div class="controls">
 		{#if state.selected !== "" }
 			<button transition:fly="{{ y:100 }}" on:click={() => {
-				// TODO settings overlay
+					$modal = Modals.ComponentSettings;
+					// graph.addInitial('true', state.selected, 'enable');
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faCog} scale={1.75} />

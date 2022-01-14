@@ -9,6 +9,7 @@ export default {
 			inPorts: {
 				enable: {
 					datatype: 'bang',
+					control: true
 				}
 			},
 			outPorts: {
