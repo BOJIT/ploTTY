@@ -14,6 +14,22 @@
 /* Bulma CSS */
 @import "~bulma/bulma";
 
+/* Remove Bulma number definition (breaks JSON syntax highlighting) */
+.number {
+	align-items: unset;
+	background-color: unset;
+	border-radius: unset;
+	display: unset;
+	font-size: unset;
+	height: unset;
+	justify-content: unset;
+	margin-right: unset;
+	min-width: unset;
+	padding: unset;
+	text-align: unset;
+	vertical-align: unset;
+}
+
 /* Custom Fonts */
 @import "~@fontsource/comfortaa/index.css";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
@@ -27,7 +43,7 @@ body {
 	flex-flow: column;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
-	overflow-y: scroll; 
+	overflow-y: scroll;
 }
 
 body::-webkit-scrollbar {

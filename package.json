@@ -45,6 +45,7 @@
     "mark.js": "^8.11.1",
     "noflo": "^1.4.3",
     "noflo-svelte": "github:BOJIT/noflo-svelte#1.0.0",
+    "prismjs": "^1.26.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "simplebar": "^5.3.6",

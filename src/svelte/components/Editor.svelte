@@ -24,7 +24,6 @@
 	import settings from "src/svelte/store/settings";
 	import patches from "src/svelte/store/patches";
 	import editor from "src/svelte/store/editor";
-import ComponentSettings from './modals/ComponentSettings.svelte';
 
 	/* Internal State */
 	let graph: Graph;

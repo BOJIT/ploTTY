@@ -4,6 +4,7 @@
 
 	import library from "src/svelte/store/library";
 	import Input from "src/svelte/components/Input.svelte";
+	import JSONEditor from "src/svelte/components/JSONEditor.svelte";
 	import Modal from "./Modal.svelte";
 
 	import Icon from 'svelte-awesome';
@@ -104,9 +105,14 @@
 			</button>
 		</div>
 
+		<!-- Thru Menu (separator) -->
+		{#if p.mode === 'thru'}
+			<div style="padding-top: 0.5rem"/>
+		{/if}
+
 		<!-- Enum Menu -->
 		{#if p.mode === 'enum'}
-			<div>
+			<div class="enum-container">
 				{#if "enum" in p}
 					{#each p.enum as e, j}
 						<div class="enum-entry" on:click={() => {
@@ -127,12 +133,12 @@
 		<!-- Code Editor -->
 		{#if p.mode === 'constant'}
 			<div>
-				<h3>Code Editor</h3>
+				<JSONEditor bind:code={portSettings[i].constant}/>
 			</div>
 		{/if}
 	{/each}
 
-	<br><br>
+	<br>
 	<button on:click={() => {
 			portSettings = getComponentDefaults();
 			settingChanged();
@@ -146,7 +152,6 @@
 	@charset "utf-8";
 	@use "src/styles/_constants.scss";
 	@use "src/styles/theme.scss";
-	@use "sass:list";
 
 	.selection {
 		width: 100%;
@@ -204,16 +209,18 @@
 		}
 	}
 
+	.enum-container {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+
 	.enum-entry {
 		padding-top: 0.2rem;
 		padding-bottom: 0.2rem;
 		text-align: center;
 		width: 100%;
-		border-style: solid;
-		border-width: 1px;
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-primary);
-			border-color: theme.t(theme.$text-secondary);
 		}
 	}
 
