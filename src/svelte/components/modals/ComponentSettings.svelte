@@ -16,7 +16,8 @@
 		name: string,
 		mode: 'thru' | 'enum' | 'constant',
 		constant: string,
-		enum?: []
+		enum?: [],
+		enumIdx?: number
 	}
 
 	let portSettings: portSetting[] = [];
@@ -43,6 +44,7 @@
 				} else {
 					p.enum = port.options.enum;
 				}
+				p.enumIdx = 0;
 			}
 
 			settings = [...settings, p];
@@ -105,7 +107,20 @@
 		<!-- Enum Menu -->
 		{#if p.mode === 'enum'}
 			<div>
-				<h3>Enum menu</h3>
+				{#if "enum" in p}
+					{#each p.enum as e, j}
+						<div class="enum-entry" on:click={() => {
+							portSettings[i].enumIdx = j;
+							settingChanged();
+						}} class:enum-selected={j === p.enumIdx}>
+							<p>{JSON.stringify(e)}</p>
+						</div>
+					{/each}
+				{:else}
+					<div class="enum-entry" style="pointer-events: none">
+						<p>No Enum Available</p>
+					</div>
+				{/if}
 			</div>
 		{/if}
 
@@ -161,8 +176,6 @@
 		pointer-events: none;
 	}
 
-	/* Selector colouring */
-
 	.selection > .btn-group:not(.selected) {
 		pointer-events: auto;
 	}
@@ -188,6 +201,37 @@
 	.selection > .button.constant {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-warning);
+		}
+	}
+
+	.enum-entry {
+		padding-top: 0.2rem;
+		padding-bottom: 0.2rem;
+		text-align: center;
+		width: 100%;
+		border-style: solid;
+		border-width: 1px;
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-primary);
+			border-color: theme.t(theme.$text-secondary);
+		}
+	}
+
+	.enum-entry.enum-selected {
+		@include theme.themed() {
+			background-color: desaturate(theme.t(theme.$background-success), 40%);
+		}
+	}
+
+	.enum-entry.enum-selected p {
+		@include theme.themed() {
+			color: theme.t(theme.$text-primary);
+		}
+	}
+
+	.enum-entry:not(.enum-selected):hover {
+		@include theme.themed() {
+			background-color: theme.t(theme.$background-overlay-hover);
 		}
 	}
 
