@@ -8,8 +8,13 @@ export default {
 			icon: 'plug',
 			inPorts: {
 				enable: {
-					datatype: 'bang',
-					control: true
+					datatype: 'boolean',
+				},
+				port: {
+					datatype: 'string',
+				},
+				baud: {
+					datatype: 'number',
 				}
 			},
 			outPorts: {

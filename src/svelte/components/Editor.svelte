@@ -166,8 +166,15 @@ import ComponentSettings from './modals/ComponentSettings.svelte';
 	<div class="controls">
 		{#if state.selected !== "" }
 			<button transition:fly="{{ y:100 }}" on:click={() => {
-					$modal = Modals.ComponentSettings;
-					// graph.addInitial('true', state.selected, 'enable');
+					if(state.selected !== "") {
+						$modal = {
+							component: Modals.ComponentSettings,
+							props: {
+								graph: graph,
+								selected: state.selected
+							}
+						}
+					}
 				}} class="button is-large is-clear">
 				<span class="icon">
 					<Icon data={faCog} scale={1.75} />

@@ -63,22 +63,18 @@ function generateIconLibrary(library: any) {
 			ports: ""
 		};
 
-		for (const [key] of Object.entries(instance.inPorts)) {
-			if(!(key in blacklist)) {
-				entry.inports.push({
-					name: key,
-					type: 'all'
-				});
-			}
+		for (const [key] of Object.entries(instance.inPorts.ports)) {
+			entry.inports.push({
+				name: key,
+				type: 'all'
+			});
 		}
 
-		for (const [key] of Object.entries(instance.outPorts)) {
-			if(!(key in blacklist)) {
-				entry.outports.push({
-					name: key,
-					type: 'all'
-				});
-			}
+		for (const [key] of Object.entries(instance.outPorts.ports)) {
+			entry.outports.push({
+				name: key,
+				type: 'all'
+			});
 		}
 
 		icon_lib[component.name] = entry;
