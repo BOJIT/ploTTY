@@ -15,6 +15,7 @@ $background-warning: "background-warning";
 $background-error: "background-error";
 
 $filter-white: "filter-white";
+$filter-inactive: "filter-inactive";
 
 /* Theme Schema */
 $themes: (
@@ -27,12 +28,13 @@ $themes: (
         background-overlay: rgba(167, 167, 167, 0.9),
         background-overlay-hover: darken(rgba(167, 167, 167, 0.9), 10%),
 
-        background-info: hsl(204, 71%, 39%),
-        background-success: hsl(141, 53%, 31%),
-        background-warning: hsl(48, 100%, 29%),
-        background-error: hsl(348, 86%, 43%),
+        background-info: hsl(204, 93%, 43%),
+        background-success: hsl(153, 54%, 38%),
+        background-warning: hsl(48, 94%, 36%),
+        background-error: hsl(348, 83%, 47%),
 
         filter-white: 0%,
+        filter-inactive: 140%
     ),
     dark: (
         text-primary: rgb(245, 245, 245),
@@ -49,6 +51,7 @@ $themes: (
         background-error: hsl(348, 100%, 61%),
 
         filter-white: 100%,
+        filter-inactive: 60%
     )
 );
 
