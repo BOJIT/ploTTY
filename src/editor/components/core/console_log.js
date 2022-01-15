@@ -10,6 +10,7 @@ export default {
 				in: {
 					datatype: 'object',
 					required: true,
+					default: {}
 				}
 			}
 		});

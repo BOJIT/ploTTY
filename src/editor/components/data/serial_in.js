@@ -9,12 +9,35 @@ export default {
 			inPorts: {
 				enable: {
 					datatype: 'boolean',
+					default: true,
+					enum: [
+						true,
+						false
+					]
 				},
 				port: {
 					datatype: 'string',
+					default: 'none',
+					enum: () => {
+						return [
+							'COM1',
+							'COM2'
+						];
+					}
 				},
 				baud: {
 					datatype: 'number',
+					default: 9600,
+					enum: [
+						9600,
+						1200,
+						2400,
+						4800,
+						19200,
+						38400,
+						57600,
+						115200
+					]
 				}
 			},
 			outPorts: {

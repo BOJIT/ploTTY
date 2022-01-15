@@ -12,14 +12,61 @@
 	export let graph: Graph;
 	export let selected: string;
 
-	let ports = [];
-	// graph.addInitial('true', state.selected, 'enable');
+	type portSetting = {
+		name: string,
+		mode: 'thru' | 'enum' | 'constant',
+		constant: string,
+		enum?: []
+	}
 
-	onMount(() => {
+	let portSettings: portSetting[] = [];
+
+	function getComponentDefaults() {
+		let settings = [];
 		let c = $library[graph.getNode(selected).component].getComponent(Component);
 		for (const [key, port] of Object.entries(c.inPorts.ports) as any) {
-			port.name = key;
-			ports = [...ports, port];
+			/* Check if fields exist in component */
+			let constant: string = "{}";
+			if("default" in port.options) {
+				constant = JSON.stringify(port.options.default);
+			}
+
+			let p: portSetting = {
+				name: key,
+				mode: 'thru',
+				constant: constant
+			};
+
+			if("enum" in port.options) {
+				if(typeof port.options.enum === 'function') {
+					p.enum = port.options.enum();
+				} else {
+					p.enum = port.options.enum;
+				}
+			}
+
+			settings = [...settings, p];
+		}
+		return settings;
+	}
+
+	function settingChanged() {
+		console.log(portSettings);
+		// Write component metadata back to graph
+		let m = graph.getNode(selected).metadata;
+		m.portSettings = portSettings;
+		graph.setNodeMetadata(selected, m);
+
+		// Set initial packets in graph
+	}
+
+	onMount(() => {
+		// Try to load existing metadata - if not load default component metadata
+		let n = graph.getNode(selected);
+		if("portSettings" in n.metadata) {
+			portSettings = n.metadata.portSettings;
+		} else {
+			portSettings = getComponentDefaults();
 		}
 	});
 </script>
@@ -27,35 +74,53 @@
 <Modal title="Component Settings" confirm={false}>
 	<h3>Component Name</h3>
 	<Input placeholder ={"Label"} />
-
 	<br>
 
-	{#each ports as port }
+	{#each portSettings as p, i }
+		<!-- Mode Row -->
 		<div class="selection button">
-			<button class="button is-left" style="pointer-events:none">
-				<h3>{port.name}</h3>
+			<button class="button is-left">
+				<h3>{p.name}</h3>
 			</button>
 			<button on:click={() => {
-					// downloadHook(selection);
-				}} class="button thru">
+					portSettings[i].mode = 'thru';
+					settingChanged();
+				}} class="button thru btn-group" class:selected={p.mode === 'thru'}>
 				<span class="icon"><Icon data={faArrowCircleRight} /></span>
 			</button>
 			<button on:click={() => {
-					// deleteHook(selection);
-				}} class="button enum">
+					portSettings[i].mode = 'enum';
+					settingChanged();
+				}} class="button enum btn-group" class:selected={p.mode === 'enum'}>
 				<span class="icon"><Icon data={faCaretSquareDown} /></span>
 			</button>
 			<button on:click={() => {
-					// deleteHook(selection);
-				}} class="button const">
+					portSettings[i].mode = 'constant';
+					settingChanged();
+				}} class="button constant btn-group" class:selected={p.mode === 'constant'}>
 				<span class="icon"><Icon data={faCode} /></span>
 			</button>
 		</div>
+
+		<!-- Enum Menu -->
+		{#if p.mode === 'enum'}
+			<div>
+				<h3>Enum menu</h3>
+			</div>
+		{/if}
+
+		<!-- Code Editor -->
+		{#if p.mode === 'constant'}
+			<div>
+				<h3>Code Editor</h3>
+			</div>
+		{/if}
 	{/each}
 
 	<br><br>
 	<button on:click={() => {
-			console.log("HEY");
+			portSettings = getComponentDefaults();
+			settingChanged();
 		}} class="button mr-2 is-danger">
 		<span class="icon"><Icon data={faUndo} /></span>
 		<span>Restore Default Values</span>
@@ -93,12 +158,16 @@
 
 	.selection > button {
 		border-radius: 0px;
+		pointer-events: none;
 	}
 
 	/* Selector colouring */
 
-	.selection > .button:not(:first-child):not(:hover) {
-		border-radius: 0px;
+	.selection > .btn-group:not(.selected) {
+		pointer-events: auto;
+	}
+
+	.selection > .btn-group:not(.selected):not(:hover) {
 		@include theme.themed() {
 			filter: brightness(theme.t(theme.$filter-inactive)) saturate(30%);
 		}
@@ -116,7 +185,7 @@
 		}
 	}
 
-	.selection > .button.const {
+	.selection > .button.constant {
 		@include theme.themed() {
 			background-color: theme.t(theme.$background-warning);
 		}

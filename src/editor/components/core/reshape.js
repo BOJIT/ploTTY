@@ -14,7 +14,6 @@ export default {
 				addend: {
 					datatype: 'number',
 					required: true,
-					control: true,
 				},
 			},
 			outPorts: {
