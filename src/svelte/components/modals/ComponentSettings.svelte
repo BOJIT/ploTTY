@@ -54,13 +54,34 @@
 	}
 
 	function settingChanged() {
-		console.log(portSettings);
 		// Write component metadata back to graph
 		let m = graph.getNode(selected).metadata;
 		m.portSettings = portSettings;
 		graph.setNodeMetadata(selected, m);
 
 		// Set initial packets in graph
+		portSettings.forEach((p) => {
+			graph.removeInitial(selected, p.name);
+			switch (p.mode) {
+				case 'thru':
+					// No initial packet
+					break;
+				case 'enum':
+					if('enum' in p) {
+						graph.addInitial(p.enum[p.enumIdx], selected, p.name);
+					}
+					break;
+				case 'constant':
+					try {
+						let constant = JSON.parse(p.constant);
+						graph.addInitial(constant, selected, p.name);
+					} catch (error) {
+						// Simply don't update initial if invalid
+						graph.removeInitial(selected, p.name);
+					}
+					break;
+			}
+		});
 	}
 
 	onMount(() => {
