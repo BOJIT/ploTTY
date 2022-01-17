@@ -10,7 +10,6 @@
 
 	/* Svelte stores */
 	import { modal } from "./store/overlays";
-	import editor from "./store/editor";
 
 	/* Initialise local storage */
 	import storage from "./store/storage";

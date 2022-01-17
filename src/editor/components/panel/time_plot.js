@@ -1,20 +1,22 @@
+import panels from "src/svelte/store/panels";
+
 export default {
 	name: 'time plot',
 	category: 'panel',
+	panel: 'PlotterTime',
 	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
 			description: 'plots time data',
 			icon: 'line-chart',
 			inPorts: {
-				augend: {
-					datatype: 'number',
+				data: {
+					datatype: 'object',
 					required: true,
 				},
-				addend: {
-					datatype: 'number',
+				options: {
+					datatype: 'object',
 					required: true,
-					control: true,
 				},
 			},
 			outPorts: {},
@@ -25,12 +27,14 @@ export default {
 		c.category = 'panel';
 
 		/* Component processing function */
-		c.process((input, output) => {
-			if (!input.hasData('augend', 'addend')) { return; }
-			const [augend, addend] = input.getData('augend', 'addend');
-			output.sendDone({
-			sum: Number(augend) + Number(addend),
-			});
+		c.process((input) => {
+			if(input.hasData('data')) {
+				panels.panelUpdate({
+					id: c.nodeId,
+					port: 'data',
+					data: input.getData('data')
+				});
+			}
 		});
 
 		return c;

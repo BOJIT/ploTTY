@@ -65,6 +65,7 @@
 		Prism.highlightAll();
 
 		editor.addEventListener("input", function() {
+			// TODO Text editor cursor position resets after every edit
 			saveRangePosition();
 			Prism.highlightAll();
 

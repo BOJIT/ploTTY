@@ -25,6 +25,11 @@
 	import patches from "src/svelte/store/patches";
 	import editor from "src/svelte/store/editor";
 
+	/* Panel Management */
+	import panels from "src/svelte/store/panels";
+	import panelComponents from "src/svelte/components/panels";
+	import type { PanelHandle } from "src/svelte/store/panels";
+
 	/* Internal State */
 	let graph: Graph;
 	let API: any;
@@ -39,10 +44,8 @@
 	let network = null;
 	async function runNetwork() {
 		if(network === null) {
-			console.log("init network");
 			createNetwork(graph, {
-				componentLoader: library.loader,
-				subscribeGraph: false // TODO this API is deprecated
+				componentLoader: library.loader
 			}).then((n) => {
 				n.start();
 				network = n;
@@ -52,7 +55,6 @@
 
 	function stopNetwork() {
 		if(network !== null) {
-			console.log("stop network");
 			network.stop();
 			network = null;
 		}
@@ -70,6 +72,25 @@
 
 	/* Handle changes in the graph editor */
 	function graphChanged() {
+		// Update panel store
+		let panel_nodes: PanelHandle[] = [];
+		graph.nodes.forEach((n) => {
+			if($library[n.component].category === 'panel') {
+				panel_nodes.push({
+					id: n.id,
+					panel: panelComponents[$library[n.component].panel]
+				});
+			}
+		});
+		$panels = panel_nodes;
+
+		// Restart network if graph is changed while running
+		if($editor.running) {
+			stopNetwork();
+			runNetwork();
+		}
+
+		// Write graph changes back to store
 		let idx = $patches.findIndex((p) => p.name === $settings.currentPatch);
 		if(idx !== -1) {
 			$patches[idx].graph = graph.toJSON();
@@ -81,6 +102,7 @@
 		let idx = $patches.findIndex((p) => p.name === s.currentPatch);
 		graph_api.loadJSON($patches[idx].graph).then((g) => {
 			graph = g;
+			graphChanged();
 			API.clearHistory();
 			// TODO make recentreGraph smooth
 			window.setTimeout(() => API.recentreGraph(), 10);

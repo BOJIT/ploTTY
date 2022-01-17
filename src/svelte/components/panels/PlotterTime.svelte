@@ -1,5 +1,19 @@
+<script lang="ts">
+	import type { PanelData } from 'src/svelte/store/panels';
+
+	let q = ['default queue', 'second queue'];
+
+	export const updater = (p: PanelData) => {
+		console.log(p.data);
+	};
+</script>
+
 <div class="full">
-    <h1>Time Plotter</h1>
+	<h1>Time Plotter</h1>
+
+	{#each q as q_e}
+		<p>{q_e}</p>
+	{/each}
 </div>
 
 <style lang="scss">

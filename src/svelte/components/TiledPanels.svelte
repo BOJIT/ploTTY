@@ -1,8 +1,5 @@
 <script lang="ts">
 	/* Font Awesome */
-	import Icon from 'svelte-awesome';
-	import { faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
-
 	import panels from './panels';
 	import theme from 'src/svelte/store/theme';
 
@@ -23,11 +20,6 @@
 	<!-- TODO make panels tileable -->
 	<div class="plot-panel">
 		<div class="plot-header">
-			<button class="button">
-				<span class="icon">
-					<Icon data={faGripHorizontal} scale={1.2} />
-				</span>
-			</button>
 			<h2>{currentPanels[currentPanelIdx].title}</h2>
 			<div class="plot-tabs">
 				{#each currentPanels as panel, idx}
@@ -98,15 +90,6 @@
 		height: 100%;
 		width: 100%;
 		background-color: red;
-	}
-
-	.plot-header > .button {
-		height: 1rem;
-		width: 1rem;
-		padding: 0rem;
-		background: none;
-		border: none;
-		pointer-events: none;
 	}
 
 	.plot-tabs > .button {
