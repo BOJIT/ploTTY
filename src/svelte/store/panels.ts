@@ -25,7 +25,7 @@ function panelUpdate(data: PanelData) {
 	if(panel === undefined) {
 		console.error("PanelUpdate() packet could not be routed!");
 	} else {
-		if('instance' in panel) {
+		if(panel.instance !== undefined) {
 			panel.instance.update(data);
 		} else {
 			console.error('no instance');

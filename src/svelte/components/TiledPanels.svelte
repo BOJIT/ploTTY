@@ -14,6 +14,7 @@
 		inst.forEach((p, i) => {
 			if(p !== null) {
 				panels.update((s) => {
+					// TODO bug where instances aren't handled correctly
 					s[i].instance = p;
 					return s;
 				});
