@@ -78,7 +78,9 @@
 			if($library[n.component].category === 'panel') {
 				panel_nodes.push({
 					id: n.id,
-					panel: panelComponents[$library[n.component].panel]
+					panel: panelComponents[$library[n.component].panel],
+					title: n.component,
+					instance: undefined
 				});
 			}
 		});

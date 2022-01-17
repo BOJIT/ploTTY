@@ -59,11 +59,14 @@ export default {
 				if(input.getData('enable') === true) {
 					// Start timer
 					if(!c.timer) {
+						let count = 0;
 						c.timer = context;
 						c.timer.interval = setInterval(() => {
+							let countstring = "test packet: " + count;
 							output.send({
-								out: "test packet!"
+								out: countstring
 							});
+							count++;
 						}, 1000);
 					}
 				} else {

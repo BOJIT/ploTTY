@@ -15,22 +15,6 @@
 	import storage from "./store/storage";
 	storage.init();
 
-	/* List of current panels (global state) */
-	let panels = [
-		{
-			title: "First Terminal",
-			panel: "Terminal"
-		},
-		{
-			title: "Second Terminal",
-			panel: "Terminal"
-		},
-		{
-			title: "Time Plotter",
-			panel: "PlotterTime"
-		}
-	];
-
 	if(env.__MODE__ === "production") {
 		if ('serviceWorker' in navigator) {
 			// Use the window load event to keep the page load performant
@@ -46,8 +30,8 @@
 <!-- Top navbar -->
 <Navbar/>
 
-<!-- Main tabs + panel content -->
-<TiledPanels currentPanels={panels} />
+<!-- Tiled panels -->
+<TiledPanels/>
 
 <!-- Editor - overlays entire page -->
 <Editor/>

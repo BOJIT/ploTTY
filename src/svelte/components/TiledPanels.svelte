@@ -1,38 +1,66 @@
 <script lang="ts">
 	/* Font Awesome */
-	import panels from './panels';
+	import panels from 'src/svelte/store/panels';
 	import theme from 'src/svelte/store/theme';
-
-	/* Template for Panel Object */
-	type panel_t = {
-		title: string,
-		panel: string // Name of Svelte Panel component
-	}
-
-	/* Array of panel objects - see template above for structure */
-	export let currentPanels : panel_t[];
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	/* Keep track of current tab index */
 	let currentPanelIdx = 0;
+
+	/* Buffer store to prevent writing a null binding back to the main store */
+	const panel_instances = writable([]);
+	panel_instances.subscribe((inst) => {
+		inst.forEach((p, i) => {
+			if(p !== null) {
+				panels.update((s) => {
+					s[i].instance = p;
+					return s;
+				});
+			}
+		});
+	})
+
+	// TODO maybe move to key-based selection
+	panels.subscribe((p) => {
+		if($panels.length !== 0 && $panels.length <= currentPanelIdx) {
+			currentPanelIdx = p.length - 1;
+		}
+	});
+
+	onMount(() => {
+		if($panels.length !== 0 && $panels.length <= currentPanelIdx) {
+			currentPanelIdx = $panels.length - 1;
+		}
+	});
 </script>
 
 <main>
 	<!-- TODO make panels tileable -->
 	<div class="plot-panel">
-		<div class="plot-header">
-			<h2>{currentPanels[currentPanelIdx].title}</h2>
-			<div class="plot-tabs">
-				{#each currentPanels as panel, idx}
-					<button class="button" on:click|preventDefault={() => {
-						currentPanelIdx = idx;
-					}} class:selected={currentPanelIdx === idx}
-					style="background-color: {theme.colourmap($theme, idx)};"></button>
-				{/each}
+		{#if $panels.length === 0}
+			<div class="plot-no-panels">
+				<h2>No Active Panels</h2>
 			</div>
-		</div>
-		<div class="plot-content">
-			<svelte:component this={panels[currentPanels[currentPanelIdx].panel]} />
-		</div>
+		{:else}
+			<div class="plot-header">
+				<h2>{$panels[currentPanelIdx].title}</h2>
+				<div class="plot-tabs">
+					{#each $panels as _, idx}
+						<button class="button" on:click|preventDefault={() => {
+							currentPanelIdx = idx;
+						}} class:selected={currentPanelIdx === idx}
+						style="background-color: {theme.colourmap($theme, idx)};"></button>
+					{/each}
+				</div>
+			</div>
+			{#each $panels as _, idx}
+				<div class="plot-content" class:visible={idx === currentPanelIdx} >
+					<svelte:component this={$panels[idx].panel}
+						bind:this={$panel_instances[idx]}/>
+				</div>
+			{/each}
+		{/if}
 	</div>
 </main>
 
@@ -71,6 +99,21 @@
 		}
 	}
 
+	.plot-no-panels {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.plot-no-panels h2 {
+		font-size: 4rem;
+		@include theme.themed() {
+			color: theme.t(theme.$text-secondary);
+		}
+	}
+
 	.plot-header {
 		flex: 1 0 auto;
 		display: flex;
@@ -89,7 +132,7 @@
 	.plot-content {
 		height: 100%;
 		width: 100%;
-		background-color: red;
+		display: none;
 	}
 
 	.plot-tabs > .button {
@@ -111,5 +154,9 @@
 	.button:focus {
 		outline: none;
 		box-shadow: none;
+	}
+
+	.visible {
+		display: block;
 	}
 </style>
