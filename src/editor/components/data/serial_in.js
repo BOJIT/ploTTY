@@ -48,23 +48,39 @@ export default {
 			autoOrdering: false
 		});
 
-		// TODO what is component context?
+		const cleanup = () => {
+			clearInterval(c.timer.interval);
+			c.timer.deactivate();
+			c.timer = null;
+		}
 
 		c.process((input, output, context) => {
-
+			if (input.hasData('enable')) {
+				if(input.getData('enable') === true) {
+					// Start timer
+					if(!c.timer) {
+						c.timer = context;
+						c.timer.interval = setInterval(() => {
+							output.send({
+								out: "test packet!"
+							});
+						}, 1000);
+					}
+				} else {
+					// stop timer
+					if (!c.timer) {
+						output.done();
+						return;
+					}
+					cleanup();
+					output.done();
+				}
+			}
 		});
-
-
-		c.setUp = (callback) => {
-			c.timer = setInterval(() => {
-				console.log("Serial Out");
-			}, 2000);
-			callback();
-		}
 
 		c.tearDown = (callback) => {
 			if (c.timer) {
-				clearInterval(c.timer);
+				cleanup();
 			}
 			callback();
 		}

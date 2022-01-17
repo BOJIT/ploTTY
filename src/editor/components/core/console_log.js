@@ -16,7 +16,7 @@ export default {
 		});
 
 		/* Component processing function */
-		c.process((input) => {
+		c.process((input, output) => {
 			if (!input.hasData('in')) { return; }
 			const msg = input.getData('in');
 			console.log(msg);
