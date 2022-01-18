@@ -62,7 +62,7 @@ export default {
 						let count = 0;
 						c.timer = context;
 						c.timer.interval = setInterval(() => {
-							let countstring = "test packet: " + count;
+							let countstring = "test packet: " + count + "\n";
 							output.send({
 								out: countstring
 							});

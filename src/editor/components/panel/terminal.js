@@ -1,22 +1,21 @@
 import panels from "src/svelte/store/panels";
 
 export default {
-	name: 'time plot',
+	name: 'terminal',
 	category: 'panel',
-	panel: 'PlotterTime',
+	panel: 'Terminal',
 	getComponent: (Component) => {
 		/* Core component initialisation */
 		const c = new Component({
-			description: 'plots time data',
-			icon: 'line-chart',
+			description: 'outputs data to a terminal',
+			icon: 'terminal',
 			inPorts: {
 				data: {
-					datatype: 'object',
+					datatype: 'string',
 					required: true,
 				},
-				options: {
-					datatype: 'object',
-					required: true,
+				clear: {
+					datatype: 'bang'
 				},
 			},
 			outPorts: {},
