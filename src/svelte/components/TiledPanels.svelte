@@ -2,63 +2,51 @@
 	/* Font Awesome */
 	import panels from 'src/svelte/store/panels';
 	import theme from 'src/svelte/store/theme';
-	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	/* Keep track of current tab index */
-	let currentPanelIdx = 0;
+	/* Keep track of current tab */
+	let currentPanel = "";
 
 	/* Buffer store to prevent writing a null binding back to the main store */
-	const panel_instances = writable([]);
+	const panel_instances = writable({});
 	panel_instances.subscribe((inst) => {
-		inst.forEach((p, i) => {
+		for(const [id, p] of Object.entries(inst)) {
 			if(p !== null) {
-				panels.update((s) => {
-					// TODO bug where instances aren't handled correctly
-					s[i].instance = p;
-					return s;
-				});
+				$panels[id].instance = p;
 			}
-		});
+		}
 	})
 
-	// TODO maybe move to key-based selection
 	panels.subscribe((p) => {
-		if($panels.length !== 0 && $panels.length <= currentPanelIdx) {
-			currentPanelIdx = p.length - 1;
-		}
-	});
-
-	onMount(() => {
-		if($panels.length !== 0 && $panels.length <= currentPanelIdx) {
-			currentPanelIdx = $panels.length - 1;
-		}
+		/* For now just reset to first key when change occurs */
+		currentPanel = Object.keys(p)[0];
+		panel_instances.set({});
 	});
 </script>
 
 <main>
 	<!-- TODO make panels tileable -->
 	<div class="plot-panel">
-		{#if $panels.length === 0}
+		{#if $panels[currentPanel] === undefined}
 			<div class="plot-no-panels">
 				<h2>No Active Panels</h2>
 			</div>
 		{:else}
 			<div class="plot-header">
-				<h2>{$panels[currentPanelIdx].title}</h2>
+				<h2>{$panels[currentPanel].title}</h2>
 				<div class="plot-tabs">
-					{#each $panels as _, idx}
+					{#each Object.entries($panels) as [id], idx}
 						<button class="button" on:click|preventDefault={() => {
-							currentPanelIdx = idx;
-						}} class:selected={currentPanelIdx === idx}
+							currentPanel = id;
+						}} class:selected={currentPanel === id}
 						style="background-color: {theme.colourmap($theme, idx)};"></button>
 					{/each}
 				</div>
 			</div>
-			{#each $panels as _, idx}
-				<div class="plot-content" class:visible={idx === currentPanelIdx} >
-					<svelte:component this={$panels[idx].panel}
-						bind:this={$panel_instances[idx]}/>
+			{#each Object.entries($panels) as [id, panel]}
+				<div class="plot-content" class:visible={currentPanel === id} >
+					<svelte:component this={panel.panel}
+						bind:this={$panel_instances[id]}/>
 				</div>
 			{/each}
 		{/if}

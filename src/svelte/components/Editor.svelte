@@ -28,7 +28,6 @@
 	/* Panel Management */
 	import panels from "src/svelte/store/panels";
 	import panelComponents from "src/svelte/components/panels";
-	import type { PanelHandle } from "src/svelte/store/panels";
 
 	/* Internal State */
 	let graph: Graph;
@@ -73,18 +72,20 @@
 	/* Handle changes in the graph editor */
 	function graphChanged() {
 		// Update panel store
-		let panel_nodes: PanelHandle[] = [];
+		let panel_nodes = {};
+		$panels = panel_nodes;	// force re-render of components
 		graph.nodes.forEach((n) => {
 			if($library[n.component].category === 'panel') {
-				panel_nodes.push({
-					id: n.id,
+				panel_nodes[n.id] = {
 					panel: panelComponents[$library[n.component].panel],
 					title: n.component,
 					instance: undefined
-				});
+				};
 			}
 		});
-		$panels = panel_nodes;
+		setTimeout(() => {
+			$panels = panel_nodes;	// give chance for re-render to propogate
+		}, 1);
 
 		// Restart network if graph is changed while running
 		if($editor.running) {

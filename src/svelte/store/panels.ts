@@ -9,18 +9,17 @@ export type PanelData = {
 }
 
 export type PanelHandle = {
-	id: string,
 	panel: SvelteComponent,
 	title: string,
 	instance: undefined | any
 }
 
-const DEFAULT_PANELS: Array<PanelHandle> = [];
+const DEFAULT_PANELS: Object = {};
 
 const panel_store = writable(DEFAULT_PANELS);
 
 function panelUpdate(data: PanelData) {
-	let panel = get(panel_store).find((p) => p.id === data.id);
+	let panel = get(panel_store)[data.id];
 
 	if(panel === undefined) {
 		console.error("PanelUpdate() packet could not be routed!");
