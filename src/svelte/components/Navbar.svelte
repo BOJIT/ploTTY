@@ -77,7 +77,7 @@
 		<!-- File Controls -->
 		<button on:click={() => {
 				$modal = Modals.NewPatch;
-			}} class="button desktop is-medium is-clear">
+			}} class="button desktop is-medium is-clear" disabled={$editor.running}>
 			<span class="icon">
 				<Icon data={faFileAlt} scale={1.6} />
 			</span>
@@ -85,7 +85,7 @@
 
 		<button on:click={() => {
 				$modal = Modals.OpenPatch;
-			}} class="button desktop is-medium is-clear">
+			}} class="button desktop is-medium is-clear" disabled={$editor.running}>
 			<span class="icon">
 				<Icon data={faFolderOpen} scale={1.6} />
 			</span>
@@ -93,7 +93,7 @@
 
 		<button on:click={() => {
 				$modal = Modals.DuplicatePatch;
-			}} class="button desktop is-medium is-clear">
+			}} class="button desktop is-medium is-clear" disabled={$editor.running}>
 			<span class="icon">
 				<Icon data={faCopy} scale={1.6} />
 			</span>
@@ -104,7 +104,7 @@
 		<!-- Settings -->
 		<button on:click={() => {
 				$modal = Modals.Settings;
-			}} class="button desktop is-medium is-clear">
+			}} class="button desktop is-medium is-clear" disabled={$editor.running}>
 			<span class="icon">
 				<Icon data={faCog} scale={1.6} />
 			</span>
