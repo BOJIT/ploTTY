@@ -3,7 +3,7 @@
 	import Icon from 'svelte-awesome';
 	import { fly } from 'svelte/transition';
 
-	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faSave, faCopy, faCog, faBars, faChartLine} from '@fortawesome/free-solid-svg-icons';
+	import { faPlay, faStop, faEdit, faFileAlt, faFolderOpen, faCopy, faCog, faBars, faChartLine} from '@fortawesome/free-solid-svg-icons';
 
 	/* Images */
 	import imgLogo from 'src/assets/favicon/icon_x128.png';
