@@ -1,21 +1,27 @@
 <script lang="ts">
-    import RadioButtonGroup from "@bojit/svelte-components/smelte/components/RadioButton/RadioButtonGroup.svelte";
+    import Tabs from "@bojit/svelte-components/widgets/Tabs/Tabs.svelte";
+    import CodeEditor from "@bojit/svelte-components/widgets/CodeEditor/CodeEditor.svelte";
 
-    import theme from "@bojit/svelte-components/theme";
-    const mode = theme.Mode;
+    let codeBlock = "let x = {\n\t\n}";
 </script>
 
-<style>
-    h3 {
-        padding: 1rem;
-    }
-</style>
+<svelte:head>
+    <title>ploTTY</title>
+</svelte:head>
 
-<h3>Theme</h3>
-
-<RadioButtonGroup name='Theme' bind:selected={$mode}
-    items={[
-        { value: 'light', label: 'Light Mode' },
-        { value: 'dark', label: 'Dark Mode' },
-        { value: 'auto', label: 'Auto Mode'}
-    ]} />
+<Tabs
+    tabs={[
+        "Code Block",
+    ]}
+    components={[
+        CodeEditor,
+    ]}
+    componentProps={[
+        {},
+        {},
+        {
+            lineNumbers: true,
+            code: codeBlock
+        },
+    ]}
+/>
