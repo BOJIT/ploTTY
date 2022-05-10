@@ -5,7 +5,7 @@ import Terminal from './Terminal.svelte';
 
 /* Expose components as a single JS object */
 export default {
-	PlotterTime,
-	PlotterXY,
-	Terminal
+    PlotterTime,
+    PlotterXY,
+    Terminal
 }

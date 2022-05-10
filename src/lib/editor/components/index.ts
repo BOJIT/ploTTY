@@ -7,10 +7,10 @@ import Terminal from "./panel/terminal.js";
 import TimePlot from "./panel/time_plot.js";
 
 export default [
-	ConsoleLog,
-	Filter,
-	Reshape,
-	SerialIn,
-	Terminal,
-	TimePlot
+    ConsoleLog,
+    Filter,
+    Reshape,
+    SerialIn,
+    Terminal,
+    TimePlot
 ];
