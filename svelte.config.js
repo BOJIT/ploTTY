@@ -1,4 +1,5 @@
 import adapter from "@sveltejs/adapter-static";
+import commonjs from '@rollup/plugin-commonjs'
 import preprocess from "svelte-preprocess";
 import { mdsvex } from "mdsvex";
 
@@ -15,6 +16,11 @@ const config = {
         prerender: {
             default: true
         },
+        vite: {
+            plugins: [
+                commonjs()
+            ]
+        }
     },
 };
 

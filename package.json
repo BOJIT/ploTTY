@@ -25,6 +25,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@bojit/svelte-components": "^0.3.8"
+    "@bojit/svelte-components": "^0.3.8",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "noflo-svelte": "github:BOJIT/noflo-svelte#1.0.0"
   }
 }
