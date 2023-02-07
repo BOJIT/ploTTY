@@ -1,32 +1,27 @@
 {
-  "name": "plotty",
-  "private": true,
-  "version": "0.2.1",
-  "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "package": "svelte-kit package",
-    "preview": "svelte-kit preview",
-    "prepare": "svelte-kit sync",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
-  },
-  "devDependencies": {
-    "@sveltejs/adapter-static": "^1.0.0-next.29",
-    "@sveltejs/kit": "^1.0.0-next.311",
-    "mdsvex": "^0.10.5",
-    "svelte": "^3.46.4",
-    "svelte-check": "^2.2.6",
-    "svelte-loader": "^3.1.2",
-    "svelte-preprocess": "^4.10.1",
-    "svelte2tsx": "^0.5.5",
-    "tslib": "^2.3.1",
-    "typescript": "~4.6.2"
-  },
-  "type": "module",
-  "dependencies": {
-    "@bojit/svelte-components": "^0.3.8",
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "noflo-svelte": "github:BOJIT/noflo-svelte#1.0.0"
-  }
+	"name": "plotty",
+	"version": "0.3.0",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.0",
+		"@sveltejs/kit": "^1.5.0",
+		"mdsvex": "^0.10.6",
+		"svelte": "^3.54.0",
+		"svelte-check": "^3.0.1",
+		"tslib": "^2.4.1",
+		"typescript": "^4.9.3",
+		"vite": "^4.0.0"
+	},
+	"type": "module",
+	"dependencies": {
+		"@bojit/svelte-components": "^1.3.1"
+	}
 }

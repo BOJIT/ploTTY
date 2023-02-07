@@ -6,6 +6,8 @@ node_modules
 .env
 .env.*
 !.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
 
-.vscode/settings.json
+.vscode/svelte.code-snippets
 .vscode/javascript.code-snippets

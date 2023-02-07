@@ -1,27 +1,19 @@
-import adapter from "@sveltejs/adapter-static";
-import commonjs from '@rollup/plugin-commonjs'
-import preprocess from "svelte-preprocess";
+import adapter from '@sveltejs/adapter-static';
 import { mdsvex } from "mdsvex";
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     extensions: [".svelte", ".svelte.md"],
-    preprocess: [mdsvex({
+    preprocess: [
+        mdsvex({
             extensions: [".svelte.md"],
         }),
-        preprocess()
+        vitePreprocess(),
     ],
     kit: {
-        adapter: adapter(),
-        prerender: {
-            default: true
-        },
-        vite: {
-            plugins: [
-                commonjs()
-            ]
-        }
-    },
+        adapter: adapter()
+    }
 };
 
 export default config;
