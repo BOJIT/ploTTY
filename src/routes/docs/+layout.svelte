@@ -14,14 +14,15 @@
     import { goto } from "$app/navigation";
 
     import { Content, NavBar, type NavItem } from "@bojit/svelte-components/layout";
-    import Theme from "@bojit/svelte-components/theme";
 
-    import IconEyedrop from "@svicons/ionicons-outline/eyedrop.svelte";
-    import IconHome from "@svicons/ionicons-outline/home.svelte";
+    import {
+        Eyedrop,
+        Home,
+    } from "@svicons/ionicons-outline";
 
     import logo from "$lib/assets/img/Logo.png";
 
-    import themeOverlay from "$lib/stores/themeOverlay";
+    import { themeOverlay } from "$lib/stores/overlays";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -29,7 +30,8 @@
         {
             type: "button",
             color: "transparent",
-            icon: IconEyedrop,
+            icon: Eyedrop,
+            label: "Edit Theme",
             callback: () => {
                 $themeOverlay = true;
             }
@@ -37,7 +39,8 @@
         {
             type: "button",
             color: "transparent",
-            icon: IconHome,
+            icon: Home,
+            label: "Home",
             callback: () => {
                 goto('/');
             }

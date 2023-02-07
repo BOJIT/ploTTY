@@ -15,7 +15,7 @@
     import { palette } from "@bojit/svelte-components/theme";
     import { ThemeSelector } from "@bojit/svelte-components/widgets";
 
-    import themeOverlay from "$lib/stores/themeOverlay";
+    import { themeOverlay } from "$lib/stores/overlays";
 
     /*--------------------------------- Props --------------------------------*/
 

@@ -1,7 +1,7 @@
 /**
- * @file themeOverlay.ts
+ * @file runState.ts
  * @author James Bennion-Pedley
- * @brief Is theme selector showing?
+ * @brief Information on current plotter state
  * @date 07/02/2023
  *
  * @copyright Copyright (c) 2023
@@ -10,15 +10,16 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 
 /*--------------------------------- State ------------------------------------*/
 
-const initial: boolean = false;
-const store = writable(initial);
+const graphRunning: Writable<boolean> = writable(false);
 
 /*------------------------------- Functions ----------------------------------*/
 
 /*-------------------------------- Exports -----------------------------------*/
 
-export default store
+export {
+    graphRunning,
+}
