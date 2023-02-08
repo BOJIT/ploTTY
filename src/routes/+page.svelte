@@ -14,6 +14,8 @@
     import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
     import { Tabs } from "@bojit/svelte-components/widgets";
 
+    import { IconButton } from "@bojit/svelte-components/form";
+
     import {
         BarChart,
         Document,
@@ -28,30 +30,15 @@
 
     import logo from "$lib/assets/img/Logo.png";
 
+    import Editor from "$lib/components/Editor.svelte";
+
     import { editorOverlay } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
+    import KeyBindings from "$lib/components/KeyBindings.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
     let items: NavItem[] = [
-        {
-            type: "button",
-            color: $graphRunning ? "var(--color-error-700)" : "var(--color-success-700)",
-            label: $graphRunning ? "Stop [␣]" : "Start [␣]",
-            icon: $graphRunning ? Pause : Play,
-            callback: () => {
-                $graphRunning = !$graphRunning;
-            }
-        },
-        {
-            type: "button",
-            color: $editorOverlay ? "var(--color-primary-400)" : "var(--color-alert-400)",
-            label: $editorOverlay ? "Graph View [↹]" : "Editor View [↹]",
-            icon: $editorOverlay ? BarChart : GitBranch,
-            callback: () => {
-                $editorOverlay = !$editorOverlay;
-            }
-        },
         {
             type: "separator",
             visibility: "desktop",
@@ -123,16 +110,33 @@
     logoLink="https://github.com/BOJIT/ploTTY"
     themeOverride="dark"
     items={items}
-/>
+>
+    <div slot="nav-right">
+        <IconButton
+            icon={$graphRunning ? Pause : Play}
+            color={$graphRunning ? "var(--color-error-700)" : "var(--color-success-700)"}
+            size="1.75rem"
+            label={$graphRunning ? "Stop [␣]" : "Start [␣]"}
+            on:click={() => $graphRunning = !$graphRunning}
+        />
+        <IconButton
+            icon={$editorOverlay ? BarChart : GitBranch}
+            color={$editorOverlay ? "var(--color-primary-400)" : "var(--color-alert-400)"}
+            size="1.75rem"
+            label={$editorOverlay ? "Graph View [↹]" : "Editor View [↹]"}
+            on:click={() => $editorOverlay = !$editorOverlay}
+        />
+    </div>
+</NavBar>
 
 <!-- Panel Tabs -->
 <div class="pad">
     <Tabs tabs={tabs}/>
 </div>
 
-<!-- Editor overlay -->
-<!-- <Editor /> -->
+<Editor visible={$editorOverlay}/>
 
+<KeyBindings />
 
 <style>
     .pad {
