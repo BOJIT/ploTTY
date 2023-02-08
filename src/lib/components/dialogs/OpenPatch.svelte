@@ -23,7 +23,16 @@
 
     export let visible: boolean = true;
 
+    let selectorFilter: SelectorFilter;
+
     /*-------------------------------- Methods -------------------------------*/
+
+    $: if(visible) {
+        if(selectorFilter !== undefined) {
+            if(selectorFilter.focus !== undefined)
+               selectorFilter?.focus();
+        }
+    }
 
     /*------------------------------- Lifecycle ------------------------------*/
 
@@ -31,7 +40,7 @@
 
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
-    <SelectorFilter items={{
+    <SelectorFilter bind:this={selectorFilter} items={{
         "New File 1": {
             description: "Hello There"
         },
@@ -39,6 +48,13 @@
         },
         "TEST Myself": {
             description: "Hello There"
+        },
+        "Fudge Brownie": {
+            description: "Hello There"
+        },
+        "New Target": {
+            description: "Hello World",
+            icon: FolderOpen,
         },
     }}/>
 </BaseDialog>

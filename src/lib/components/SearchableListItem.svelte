@@ -19,6 +19,7 @@
     export let description: string | undefined = "";
     export let icon: SvelteComponent | undefined = undefined;
     export let highlight: string = "";
+    export let selected: boolean = false;
 
     let dispatch = createEventDispatcher();
 
@@ -38,7 +39,7 @@
 </script>
 
 
-<div class="container">
+<div class="container" class:selected>
     <div class="left">
         <svelte:component this={icon} height="2rem"/>
     </div>
@@ -71,7 +72,9 @@
         border-radius: 0.5rem;
         overflow: hidden;
         background-color: #f5f2f0;
+        border: 4px solid transparent;
         transition: background-color 0.2s;
+        transition: box-shadow 0.2s;
 
         display: flex;
         align-items: center;
@@ -87,6 +90,10 @@
 
     :global(.mode-dark) .container:hover {
         background-color: #3c3c3c;
+    }
+
+    .container.selected {
+        box-shadow: 0px 0px 4px #4195fc;
     }
 
     .left {

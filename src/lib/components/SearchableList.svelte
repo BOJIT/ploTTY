@@ -39,21 +39,43 @@
     export let label: string = "parameter";
     export let maxHeight: string = "30rem";
 
+    let field: HTMLElement;
     let searchString: Writable<string> = writable("");
+    let selectedIndex: number | null = null;
 
     const dispatch = createEventDispatcher();
 
     /*-------------------------------- Methods -------------------------------*/
 
+    export function focus() {
+        if(field === undefined)
+            return;
+
+        let input = field.querySelector('input');
+            input?.focus();
+    }
+
     function handleKeydown(event: KeyboardEvent) {
         // TODO: typing in box
 
-        // TODO move up and down
+        // Move selection up and down
+        if(event.key === 'ArrowDown') {
+            event.preventDefault();
+            if(selectedIndex === null)
+                selectedIndex = 0;
+            else if(selectedIndex < searchList(items, $searchString).length - 1)
+                selectedIndex++;
+        } else if(event.key === 'ArrowUp') {
+            event.preventDefault();
+            if(selectedIndex && (selectedIndex > 0))
+                selectedIndex--;
+        }
 
         // TODO enter dispatch
     }
 
     function searchList(dict: ListDict, search: string) {
+        // Sort alphabetically, return matching keys
         let keys =  Object.keys(dict).sort((a, b) => a.localeCompare(b))
         if(search !== "")
             keys = keys.filter((s) => s.toLowerCase().includes(search.toLowerCase()));
@@ -62,14 +84,16 @@
             e.key = k;
             return e;
         });
+
+        // See if selected entry needs updating
+        if(selectedIndex && (selectedIndex >= list.length))
+            selectedIndex = null;
+
+        if(list.length === 1)
+            selectedIndex = 0;
+
         return list;
     }
-
-    // function optionSelected(option: string) {
-    //     search = option;   // Fill box
-    //     focused = false;
-    //     dispatch('select', option);
-    // }
 
     /*------------------------------- Lifecycle ------------------------------*/
 </script>
@@ -78,16 +102,19 @@
 <svelte:window on:keydown={handleKeydown}/>
 
 <div class="container">
-    <form autocomplete="off">
+    <form autocomplete="off" bind:this={field} class="overflow">
         <TextField outlined prepend="search" bind:value={$searchString}
-            error={searchList(items, $searchString).length === 0 ? "Item Not Found" : false}/>
+            color="secondary"
+            error={searchList(items, $searchString).length === 0 ? "Item Not Found" : false}
+        />
     </form>
 
     <div class="overflow" data-simplebar style:max-height={maxHeight}>
         <div class="list">
             {#each searchList(items, $searchString) as l, i}
                 <SearchableListItem name={l.key} description={l.description}
-                icon={l.icon} highlight={$searchString}/>
+                icon={l.icon} highlight={$searchString}
+                selected={i === selectedIndex}/>
             {/each}
         </div>
     </div>
@@ -95,6 +122,12 @@
 
 
 <style>
+    .overflow {
+        padding-left: 4px;
+        padding-right: 4px;
+        padding-bottom: 4px;
+    }
+
     .list {
         display: flex;
         flex-direction: column;
