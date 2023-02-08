@@ -37,7 +37,7 @@
         return true;
     }
 
-    function createPatch() {
+    function newPatch() {
         if(nameValid() === false)
             return;
 
@@ -62,8 +62,8 @@
 </script>
 
 
-<BaseDialog title="New Patch" icon={Document} bind:visible on:enter={createPatch}>
-    <div bind:this={field} class="TEST">
+<BaseDialog title="New Patch" icon={Document} bind:visible on:enter={newPatch}>
+    <div bind:this={field}>
         <TextField label="Patch Name" bind:value={$name}
             error={nameValid($name) ? false : "Invalid Name"}/>
     </div>
@@ -71,7 +71,7 @@
     <div slot="actions" class="dialog-actions">
         <Button color="alert" text on:click={() => visible = false}>Cancel</Button>
         <Button outlined color="success" disabled={!nameValid($name)}
-        on:click={createPatch}>Create</Button>
+        on:click={newPatch}>Create</Button>
     </div>
 </BaseDialog>
 

@@ -70,6 +70,8 @@
         } else if((event.ctrlKey || event.metaKey) && (event.key === '\'')) {
             event.preventDefault();
             $settingsOverlay = true;
+        } else if((event.ctrlKey || event.metaKey) && (event.key === 's')) {
+            event.preventDefault(); // Saving should not do anything!
         } else {
             // Unhandled case
             console.log(event);
