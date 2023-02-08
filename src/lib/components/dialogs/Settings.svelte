@@ -11,13 +11,12 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
+    import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Tabs } from "@bojit/svelte-components/widgets";
 
     import {
         Settings,
     } from "@svicons/ionicons-outline";
-
-    import BaseDialog from "./BaseDialog.svelte";
 
     import Logo from "$lib/assets/img/BOJIT_Square.png";
 

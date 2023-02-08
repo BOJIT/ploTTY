@@ -13,13 +13,12 @@
 
     import { writable, type Writable } from "svelte/store";
 
+    import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Button, TextField } from "@bojit/svelte-components/smelte";
 
     import {
         Document,
     } from "@svicons/ionicons-outline";
-
-    import BaseDialog from "./BaseDialog.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 

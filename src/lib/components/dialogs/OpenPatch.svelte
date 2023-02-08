@@ -11,26 +11,25 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import SelectorFilter from "$lib/components/SearchableList.svelte";
+    import { SearchableList } from "@bojit/svelte-components/form";
+    import { BaseDialog } from "@bojit/svelte-components/layout";
 
     import {
         FolderOpen,
     } from "@svicons/ionicons-outline";
 
-    import BaseDialog from "./BaseDialog.svelte";
-
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = true;
 
-    let selectorFilter: SelectorFilter;
+    let searchableList: SearchableList;
 
     /*-------------------------------- Methods -------------------------------*/
 
     $: if(visible) {
-        if(selectorFilter) {
-            if(selectorFilter.focus)
-               selectorFilter?.focus();
+        if(searchableList) {
+            if(searchableList.focus)
+               searchableList?.focus();
         }
     }
 
@@ -40,7 +39,7 @@
 
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
-    <SelectorFilter bind:this={selectorFilter} items={{
+    <SearchableList bind:this={searchableList} items={{
         "New File 1": {
             description: "Hello There"
         },
