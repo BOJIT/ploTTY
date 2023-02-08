@@ -9,17 +9,32 @@
 -->
 
 <script lang='ts'>
+    /*-------------------------------- Imports -------------------------------*/
+
     import { createEventDispatcher, SvelteComponent } from "svelte";
 
-    import {
-        ChevronForward,
-    } from "@svicons/ionicons-outline";
+    /*--------------------------------- Props --------------------------------*/
 
     export let name: string = "Unknown";
-    export let description: string = "";
-    export let icon: SvelteComponent = ChevronForward;
+    export let description: string | undefined = "";
+    export let icon: SvelteComponent | undefined = undefined;
+    export let highlight: string = "";
 
     let dispatch = createEventDispatcher();
+
+    /*-------------------------------- Methods -------------------------------*/
+
+    function highlightedString(str: string, cmp: string) {
+        if(cmp === "")
+            return str;
+
+        const re = new RegExp(cmp, "gi");
+        const marked = str.replace(re, function(match) {
+            return '<span class="highlight">' + match + '</span>'
+        });
+
+        return marked;
+    }
 </script>
 
 
@@ -28,12 +43,13 @@
         <svelte:component this={icon} height="2rem"/>
     </div>
     <div class="text left">
-        <h5>{name}</h5>
-        {#if description !== ""}
+        <h5>{@html highlightedString(name, highlight)}</h5>
+        {#if description !== "" && description !== undefined}
             <h6>{description}</h6>
         {/if}
     </div>
 </div>
+
 
 <style>
     h5 {
@@ -80,5 +96,15 @@
     .text {
         flex-grow: 1;
         padding-left: 0rem;
+    }
+
+    h5 :global(.highlight) {
+        color: #524d0d;
+        background-color: #ffe676be;
+    }
+
+    :global(.mode-dark) h5 :global(.highlight) {
+        color: yellow;
+        background-color: #64540b49;
     }
 </style>

@@ -46,7 +46,11 @@
     /*-------------------------------- Methods -------------------------------*/
 
     function handleKeydown(event: KeyboardEvent) {
-        //
+        // TODO: typing in box
+
+        // TODO move up and down
+
+        // TODO enter dispatch
     }
 
     function searchList(dict: ListDict, search: string) {
@@ -82,7 +86,8 @@
     <div class="overflow" data-simplebar style:max-height={maxHeight}>
         <div class="list">
             {#each searchList(items, $searchString) as l, i}
-                <SearchableListItem name={l.key} description={l.description} icon={l.icon}/>
+                <SearchableListItem name={l.key} description={l.description}
+                icon={l.icon} highlight={$searchString}/>
             {/each}
         </div>
     </div>
