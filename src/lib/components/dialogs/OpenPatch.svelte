@@ -11,7 +11,7 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import { SelectorFilter } from "@bojit/svelte-components/form";
+    import SelectorFilter from "$lib/components/SelectorFilter.svelte";
 
     import {
         FolderOpen,
