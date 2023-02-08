@@ -16,6 +16,11 @@ import { writable, type Writable } from "svelte/store";
 
 const themeOverlay: Writable<boolean> = writable(false);
 const editorOverlay: Writable<boolean> = writable(false);
+const newPatchOverlay: Writable<boolean> = writable(false);
+const openPatchOverlay: Writable<boolean> = writable(false);
+const duplicatePatchOverlay: Writable<boolean> = writable(false);
+const settingsOverlay: Writable<boolean> = writable(false);
+const menuOverlay: Writable<boolean> = writable(false);
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -24,4 +29,9 @@ const editorOverlay: Writable<boolean> = writable(false);
 export {
     themeOverlay,
     editorOverlay,
+    newPatchOverlay,
+    openPatchOverlay,
+    duplicatePatchOverlay,
+    settingsOverlay,
+    menuOverlay,
 };

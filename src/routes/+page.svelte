@@ -30,11 +30,21 @@
 
     import logo from "$lib/assets/img/Logo.png";
 
-    import Editor from "$lib/components/Editor.svelte";
-
-    import { editorOverlay } from "$lib/stores/overlays";
+    import {
+        editorOverlay,
+        newPatchOverlay,
+        openPatchOverlay,
+        duplicatePatchOverlay,
+        settingsOverlay,
+    } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
+
+    import Editor from "$lib/components/Editor.svelte";
     import KeyBindings from "$lib/components/KeyBindings.svelte";
+    import NewPatch from "$lib/components/dialogs/NewPatch.svelte";
+    import OpenPatch from "$lib/components/dialogs/OpenPatch.svelte";
+    import DuplicatePatch from "$lib/components/dialogs/DuplicatePatch.svelte";
+    import SettingsDialog from "$lib/components/dialogs/Settings.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -47,22 +57,31 @@
             type: "button",
             color: "transparent",
             icon: Document,
-            label: "New Patch [⌘ + N]",
+            label: "New Patch [⇧ + N]",
             visibility: "desktop",
+            callback: () => {
+                $newPatchOverlay = true;
+            }
         },
         {
             type: "button",
             color: "transparent",
             icon: FolderOpen,
-            label: "Open Patch [⌘ + O]",
+            label: "Open Patch [⇧ + O]",
             visibility: "desktop",
+            callback: () => {
+                $openPatchOverlay = true;
+            }
         },
         {
             type: "button",
             color: "transparent",
             icon: Duplicate,
-            label: "Duplicate Patch",
+            label: "Duplicate Patch [⇧ + D]",
             visibility: "desktop",
+            callback: () => {
+                $duplicatePatchOverlay = true;
+            }
         },
         {
             type: "separator",
@@ -71,8 +90,11 @@
             type: "button",
             color: "transparent",
             icon: Settings,
-            label: "Config",
+            label: "[⌘ + ' ]",
             visibility: "desktop",
+            callback: () => {
+                $settingsOverlay = true;
+            }
         },
         {
             type: "button",
@@ -129,14 +151,23 @@
     </div>
 </NavBar>
 
+<!-- Dialogues -->
+<NewPatch bind:visible={$newPatchOverlay}/>
+<OpenPatch bind:visible={$openPatchOverlay}/>
+<DuplicatePatch bind:visible={$duplicatePatchOverlay}/>
+<SettingsDialog bind:visible={$settingsOverlay}/>
+
 <!-- Panel Tabs -->
 <div class="pad">
     <Tabs tabs={tabs}/>
 </div>
 
+<!-- GLobal Overlays -->
+
 <Editor visible={$editorOverlay}/>
 
 <KeyBindings />
+
 
 <style>
     .pad {
