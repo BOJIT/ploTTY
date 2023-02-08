@@ -27,6 +27,8 @@
      on:graphChange={graphChanged} library={[]} /> -->
 
      <h2>Editor Not Implemented!</h2>
+
+     <!-- TODO add bottom bar with filename + expand for debug -->
 </div>
 
 

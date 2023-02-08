@@ -11,7 +11,7 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import SelectorFilter from "$lib/components/SelectorFilter.svelte";
+    import SelectorFilter from "$lib/components/SearchableList.svelte";
 
     import {
         FolderOpen,
@@ -31,10 +31,16 @@
 
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
-    <SelectorFilter items={[
-        'test1',
-        'test2',
-    ]}/>
+    <SelectorFilter items={{
+        "New File 1": {
+            description: "Hello There"
+        },
+        "The Scream": {
+        },
+        "TEST Myself": {
+            description: "Hello There"
+        },
+    }}/>
 </BaseDialog>
 
 
