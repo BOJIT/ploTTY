@@ -29,6 +29,8 @@
         // modifier on its own does nothing
         if(event.key === 'Control')
             return;
+        if(event.key === 'Meta')
+            return;
         if(event.key === 'Shift')
             return;
         if(event.key === 'Enter')

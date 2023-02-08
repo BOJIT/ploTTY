@@ -13,6 +13,8 @@
 
     import { createEventDispatcher, SvelteComponent } from "svelte";
 
+    // import createRipple from "@bojit/svelte-components/smelte/components/Ripple/ripple.js";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let name: string = "Unknown";
@@ -22,6 +24,7 @@
     export let selected: boolean = false;
 
     let dispatch = createEventDispatcher();
+    // let ripple = createRipple('white');
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -39,7 +42,9 @@
 </script>
 
 
-<div class="container" class:selected>
+<div class="container overflow-hidden" class:selected on:click={() => {
+    dispatch('click');
+}} on:keypress>
     <div class="left">
         <svelte:component this={icon} height="2rem"/>
     </div>

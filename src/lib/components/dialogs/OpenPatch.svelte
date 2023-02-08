@@ -28,8 +28,8 @@
     /*-------------------------------- Methods -------------------------------*/
 
     $: if(visible) {
-        if(selectorFilter !== undefined) {
-            if(selectorFilter.focus !== undefined)
+        if(selectorFilter) {
+            if(selectorFilter.focus)
                selectorFilter?.focus();
         }
     }
@@ -49,6 +49,12 @@
         "TEST Myself": {
             description: "Hello There"
         },
+        "Misc Thing": {
+            description: "Hello There"
+        },
+        "Patch ME": {
+            description: "Hello There"
+        },
         "Fudge Brownie": {
             description: "Hello There"
         },
@@ -56,10 +62,11 @@
             description: "Hello World",
             icon: FolderOpen,
         },
+    }} on:select={(s) => {
+        console.log(s.detail);
+        setTimeout(() => {
+            visible = false;
+        }, 200);
     }}/>
 </BaseDialog>
 
-
-<style>
-
-</style>

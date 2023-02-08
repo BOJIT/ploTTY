@@ -36,10 +36,10 @@
     /*--------------------------------- Props --------------------------------*/
 
     export let items: ListDict = {};
-    export let label: string = "parameter";
     export let maxHeight: string = "30rem";
 
     let field: HTMLElement;
+    let list: HTMLElement;
     let searchString: Writable<string> = writable("");
     let selectedIndex: number | null = null;
 
@@ -55,23 +55,41 @@
             input?.focus();
     }
 
-    function handleKeydown(event: KeyboardEvent) {
-        // TODO: typing in box
-
-        // Move selection up and down
-        if(event.key === 'ArrowDown') {
-            event.preventDefault();
+    function moveIndex(dir: 'up' | 'down') {
+        if(dir === 'down') {
+            if(selectedIndex && (selectedIndex > 0))
+                selectedIndex--;
+        } else {
             if(selectedIndex === null)
                 selectedIndex = 0;
             else if(selectedIndex < searchList(items, $searchString).length - 1)
                 selectedIndex++;
-        } else if(event.key === 'ArrowUp') {
-            event.preventDefault();
-            if(selectedIndex && (selectedIndex > 0))
-                selectedIndex--;
         }
 
-        // TODO enter dispatch
+        // Ensure component is in view
+        if(selectedIndex !== null) {
+            const sel = list.children.item(selectedIndex);
+            sel?.scrollIntoView(dir === 'down');
+        }
+    }
+
+    function handleKeydown(event: KeyboardEvent) {
+        // Move selection up and down
+        if(event.key === 'ArrowDown') {
+            event.preventDefault();
+            moveIndex('up');
+        } else if(event.key === 'ArrowUp') {
+            event.preventDefault();
+            moveIndex('down');
+        }
+
+        // Refocus on enter, dispatch if selected
+        else if(event.key === 'Enter') {
+            if((selectedIndex !== null) && (selectedIndex < searchList(items, $searchString).length))
+                dispatch('select', searchList(items, $searchString)[selectedIndex].key);
+
+            setTimeout(focus, 100);
+        }
     }
 
     function searchList(dict: ListDict, search: string) {
@@ -110,11 +128,15 @@
     </form>
 
     <div class="overflow" data-simplebar style:max-height={maxHeight}>
-        <div class="list">
+        <div class="list" bind:this={list}>
             {#each searchList(items, $searchString) as l, i}
                 <SearchableListItem name={l.key} description={l.description}
-                icon={l.icon} highlight={$searchString}
-                selected={i === selectedIndex}/>
+                    icon={l.icon} highlight={$searchString}
+                    selected={i === selectedIndex}
+                    on:click={() => {
+                        dispatch('select', searchList(items, $searchString)[i].key);
+                    }}
+                />
             {/each}
         </div>
     </div>
