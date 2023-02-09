@@ -4,4 +4,4 @@
 
 - [ ] Make notification widget overflow safely
 
--
+- [ ] Add graph overlay menu

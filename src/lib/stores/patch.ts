@@ -139,8 +139,14 @@ function validName(name: string) : boolean {
 }
 
 async function remove(key: string) : Promise<boolean> {
+    const name = await localStore.getItem("_currentPatch") as string;
 
-    // Update keylist
+    if(name === key)
+        return false;   // Cannot delete the currently open patch
+
+    // Remove item and update keylist
+    await localStore.removeItem(key);
+    updateKeylist();
 
     return true;
 }
@@ -154,12 +160,8 @@ async function reset() : Promise<void> {
     }
     store.set(DEFAULT);
 
-    // Get key list
-    const keys = await localStore.keys();
-    let idx = keys.indexOf("_currentPatch");
-    if(idx != -1)
-        keys.splice(idx, 1);
-    patchlist.set(keys);
+    // Update keylist
+    updateKeylist();
 }
 
 /*-------------------------------- Exports -----------------------------------*/
