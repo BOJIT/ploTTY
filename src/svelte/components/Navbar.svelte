@@ -43,7 +43,7 @@
 <div class="nav is-primary" role="navigation" aria-label="main navigation">
 	<!-- Navbar Left-Hand Side -->
 	<div class="nav-left" style="margin-top: 6px">
-		<a href="https://github.com/BOJIT/ploTTY" target="_blank">
+		<a href="https://github.com/BOJIT/ploTTY" target="_blank" rel="noreferrer">
 			<img src="{imgLogo}" alt="ploTTY logo" style="max-height:3.3rem">
 		</a>
 	</div>

@@ -19,7 +19,7 @@
 	export let selectionHook: ((sel: string) => void) = () => {};
 	export let downloadHook: ((sel: string) => void) = () => {};
 	export let deleteHook: ((sel: string) => void) = () => {};
-	
+
 	/* Word Match Highlighting */
 	import Mark from 'mark.js/dist/mark.es6.min.js';
 	import { onMount } from 'svelte';
@@ -71,7 +71,7 @@
 		<span class="icon is-small is-left">
 			<Icon data={faSearch} />
 		</span>
-		<span on:click={clearSearch} class="icon is-small is-right">
+		<span on:click={clearSearch} on:keypress class="icon is-small is-right">
 			<Icon data={faTimes} />
 		</span>
 	</p>
@@ -181,7 +181,7 @@
 			color: theme.t(theme.$text-primary);
 		}
 	}
-	
+
 	.input:focus ~ .icon {
 		@include theme.themed() {
 			color: theme.t(theme.$text-primary);

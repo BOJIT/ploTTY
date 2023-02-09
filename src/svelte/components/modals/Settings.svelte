@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Icon from 'svelte-awesome';
 	import { faAdjust, faFileExport, faFileImport, faMoon, faSun, faTrash } from '@fortawesome/free-solid-svg-icons';
-	
+
 	import imgBojit from 'src/assets/img/bojit_logo_square.png';
-	
+
 	import Modal from "./Modal.svelte";
 	import Modals from '../modals';
 	import Tabs from "src/svelte/components/Tabs.svelte";
@@ -54,7 +54,7 @@
 				<span>Export</span>
 			</button>
 			<button on:click={() => {
-					$modal = { 
+					$modal = {
 						component: Modals.Confirm,
 						props: {
 							title: "Reset to Factory Defaults",
@@ -105,7 +105,7 @@
 		<!-- Components -->
 		<div class="my-2 tab" style="visibility: {(tabs[index] === 'Components') ? 'visible' : 'hidden' }">
 			<br>
-			<Selector placeholder={"User Components"} selections={$components.map((c) => c.name)} 
+			<Selector placeholder={"User Components"} selections={$components.map((c) => c.name)}
 				downloadVisible={true} downloadHook={(sel) => {
 					let target = $components.filter((c) => c.name === sel)[0];
 					storage.downloadFile(target.program, target.filename);
@@ -123,7 +123,7 @@
 				<span>Upload</span>
 			</button>
 			<button on:click={() => {
-					$modal = { 
+					$modal = {
 						component: Modals.Confirm,
 						props: {
 							title: "Remove all User Components",
@@ -159,7 +159,7 @@
 			<Selector placeholder={"Logs"} selections={logs} height="7rem" />
 			<br>
 			<button on:click={() => {
-					$modal = { 
+					$modal = {
 						component: Modals.Confirm,
 						props: {
 							title: "Delete all Logs",
@@ -193,13 +193,13 @@
 			<h2>About</h2>
 			<p>
 				<b>ploTTY</b> is a serial monitor/plotting application maintained
-				by <a href="https://github.com/BOJIT" target="_blank">James Bennion-Pedley</a>.
+				by <a href="https://github.com/BOJIT" target="_blank" rel="noreferrer">James Bennion-Pedley</a>.
 			</p>
 			<hr>
-			<h3>Current Release: <a href="https://github.com/BOJIT/ploTTY/releases/tag/{env.__GIT_TAG__}" target="_blank">{env.__GIT_TAG__}</a></h3>
+			<h3>Current Release: <a href="https://github.com/BOJIT/ploTTY/releases/tag/{env.__GIT_TAG__}" target="_blank"  rel="noreferrer">{env.__GIT_TAG__}</a></h3>
 			<p>If you have feature requests/issues with this tool let me know on GitHub!</p>
 			<hr>
-			<a class="centre-child" href="https://bojit.org/" target="_blank">
+			<a class="centre-child" href="https://bojit.org/" target="_blank"  rel="noreferrer">
 				<img src="{imgBojit}" alt="BOJIT logo" style="max-height:3.3rem">
 			</a>
 		</div>

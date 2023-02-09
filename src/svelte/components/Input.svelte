@@ -10,7 +10,7 @@
 	export let isInvalid: boolean = false;
 	export let input = "";
 
-	function invalidString(txt) { 
+	function invalidString(txt) {
 		var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 		if (format.test(txt)) {
 			return true;
@@ -47,7 +47,7 @@
 		<span class="icon is-small is-left">
 			<Icon data={faFile} />
 		</span>
-		<span on:click={clearInput} class="icon is-small is-right">
+		<span on:click={clearInput} on:keypress class="icon is-small is-right">
 			<Icon data={faTimes} />
 		</span>
 	</p>
@@ -88,13 +88,13 @@
 			color: theme.t(theme.$text-primary);
 		}
 	}
-	
+
 	.input.is-danger {
 		@include theme.themed() {
 			color: theme.t(theme.$background-error);
 		}
 	}
-	
+
 	.input:focus ~ .icon {
 		@include theme.themed() {
 			color: theme.t(theme.$text-primary);

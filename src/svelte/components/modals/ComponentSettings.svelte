@@ -136,7 +136,7 @@
 			<div class="enum-container">
 				{#if "enum" in p}
 					{#each p.enum as e, j}
-						<div class="enum-entry" on:click={() => {
+						<div class="enum-entry" on:keypress on:click={() => {
 							portSettings[i].enumIdx = j;
 							settingChanged();
 						}} class:enum-selected={j === p.enumIdx}>
