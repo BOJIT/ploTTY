@@ -1,8 +1,12 @@
 # TODO list
 
-- [ ] Add optional button slot for searchable lists
+- [-] Add optional button slot for searchable lists
 
-- [ ] Make notification widget overflow safely
+- [-] Make notification widget overflow safely
+
+- [ ] Add patch import/export
+
+- [ ] Add button with icon to `svelte-components`
 
 - [ ] Add graph overlay menu
 

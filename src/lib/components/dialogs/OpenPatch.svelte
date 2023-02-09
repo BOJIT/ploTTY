@@ -14,10 +14,14 @@
     import { message } from "@bojit/svelte-components/core";
     import { SearchableList } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
+    import { Button } from "@bojit/svelte-components/smelte";
 
     import {
+        CloudDownload,
+        CloudUpload,
         Document,
         FolderOpen,
+        Trash,
     } from "@svicons/ionicons-outline";
 
     // Stores
@@ -28,6 +32,7 @@
         graphRunning,
     } from "$lib/stores/runState";
     import patch, { patchlist } from "$lib/stores/patch";
+    import { key } from "localforage";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -59,6 +64,7 @@
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
     <SearchableList bind:this={searchableList} items={listTransform($patchlist)}
+        buttons={[CloudDownload, Trash]}
         on:select={(s) => {
             setTimeout(async () => {
                 $graphRunning = false;  // Stop curent network
@@ -78,6 +84,39 @@
                 visible = false;
             }, 200);
         }}
+        on:button={async (e) => {
+            if(e.detail.index === 0) {
+                // Download
+            } else if(e.detail.index === 1) {
+                // Delete
+                if(e.detail.key === $patch.key) {
+                    // visible = false;
+                    message.push({
+                        type: 'error',
+                        title: 'File Error',
+                        message: 'Cannot delete active patch!',
+                        timeout: 5,
+                    });
+                    return;
+                }
+
+                await patch.remove(e.detail.key);
+            }
+
+        }}
     />
+
+    <br>
+    <Button><div class="iconButton"><CloudUpload height="1.5rem"/>Upload</div></Button>
 </BaseDialog>
 
+
+<style>
+    .iconButton {
+        display: flex;
+        gap: 0.7rem;
+        padding: 0.2rem;
+        margin-left: -0.4rem;
+        align-items: center;
+    }
+</style>
