@@ -11,8 +11,7 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import { onMount } from "svelte";
-
+    import { message } from "@bojit/svelte-components/core";
     import { SearchableList } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
 
@@ -21,6 +20,13 @@
         FolderOpen,
     } from "@svicons/ionicons-outline";
 
+    // Stores
+    import {
+        editorOverlay,
+    } from "$lib/stores/overlays";
+    import {
+        graphRunning,
+    } from "$lib/stores/runState";
     import patch, { patchlist } from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
@@ -48,21 +54,27 @@
                searchableList?.focus();
         }
     }
-
-    patch.subscribe((p) => {
-        console.log(p);
-    });
 </script>
 
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
     <SearchableList bind:this={searchableList} items={listTransform($patchlist)}
         on:select={(s) => {
-            console.log(s.detail);
             setTimeout(async () => {
+                $graphRunning = false;  // Stop curent network
+
                 if(await patch.open(s.detail) === false) {
-                    console.log("ERROR");
+                    message.push({
+                        type: 'error',
+                        title: 'File Error',
+                        message: 'Could not open file!',
+                        timeout: 5,
+                    });
+
+                    return;
                 }
+
+                $editorOverlay = true;
                 visible = false;
             }, 200);
         }}

@@ -11,6 +11,8 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
+    import patch from "$lib/stores/patch";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let visible = false;
@@ -26,7 +28,7 @@
     <!-- <TheGraph theme={$Theme} bind:graph={graph} bind:API={API} bind:state={state}
      on:graphChange={graphChanged} library={[]} /> -->
 
-     <h2>Editor Not Implemented!</h2>
+     <h2>{$patch.key}</h2>
 
      <!-- TODO add bottom bar with filename + expand for debug -->
 </div>

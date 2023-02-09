@@ -13,12 +13,22 @@
 
     import { writable, type Writable } from "svelte/store";
 
+    import { message } from "@bojit/svelte-components/core";
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Button, TextField } from "@bojit/svelte-components/smelte";
 
     import {
         Document,
     } from "@svicons/ionicons-outline";
+
+    // Stores
+    import {
+        editorOverlay,
+    } from "$lib/stores/overlays";
+    import {
+        graphRunning,
+    } from "$lib/stores/runState";
+    import patch from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -29,18 +39,26 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
-    function nameValid() {
-        if($name === "")
-            return false;
-
-        return true;
-    }
-
-    function newPatch() {
-        if(nameValid() === false)
+    async function newPatch() {
+        if(patch.validName($name) === false)
             return;
 
-        console.log("Patch Created!");
+        // Create a new file
+        if(await patch.create($name) === false) {
+            message.push({
+                type: 'error',
+                title: 'File Error',
+                message: 'Could not create file!',
+                timeout: 5,
+            });
+
+            return;
+        }
+
+        // Stop editor, open file, then switch to graph view
+        $graphRunning = false;
+        await patch.open($name);
+        $editorOverlay = true;
 
         // If success
         visible = false;
@@ -64,12 +82,12 @@
 <BaseDialog title="New Patch" icon={Document} bind:visible on:enter={newPatch}>
     <div bind:this={field}>
         <TextField label="Patch Name" bind:value={$name}
-            error={nameValid($name) ? false : "Invalid Name"}/>
+            error={patch.validName($name) ? false : "Invalid Name"}/>
     </div>
 
     <div slot="actions" class="dialog-actions">
         <Button color="alert" text on:click={() => visible = false}>Cancel</Button>
-        <Button outlined color="success" disabled={!nameValid($name)}
+        <Button outlined color="success" disabled={!patch.validName($name)}
         on:click={newPatch}>Create</Button>
     </div>
 </BaseDialog>

@@ -10,7 +10,7 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 
 import localForage from "localforage";
 
@@ -52,6 +52,16 @@ const localStore: LocalForage = localForage.createInstance({
     name: "patches"
 });
 
+/*-------------------------------- Helpers -----------------------------------*/
+
+async function updateKeylist() {
+    const keys = await localStore.keys();
+    let idx = keys.indexOf("_currentPatch");
+    if(idx != -1)
+        keys.splice(idx, 1);
+    patchlist.set(keys);
+}
+
 /*------------------------------- Functions ----------------------------------*/
 
 async function init() : Promise<Writable<Patch>> {
@@ -78,12 +88,8 @@ async function init() : Promise<Writable<Patch>> {
         store.set(DEFAULT);
     }
 
-    // Get key list
-    const keys = await localStore.keys();
-    let idx = keys.indexOf("_currentPatch");
-    if(idx != -1)
-        keys.splice(idx, 1);
-    patchlist.set(keys);
+    // Update key list
+    await updateKeylist();
 
     // Subscribe for store updates
     store.subscribe(async (val: Patch) => {
@@ -109,18 +115,30 @@ async function open(key: string) : Promise<boolean> {
     return true;
 }
 
-async function create(key: string) : Promise<boolean>{
+async function create(key: string, patch: Patch = DEFAULT) : Promise<boolean> {
+    if(!validName(key))
+        return false;
 
-    // Update keylist
+    // Add entry and update keylist
+    patch.key = key;    // Ensure consistency
+    await localStore.setItem(key, patch);
+    await updateKeylist();
 
     return true;
 }
 
 function validName(name: string) : boolean {
+    if(name === "")
+        return false;
+
+    const list = get(patchlist);
+    if(list.includes(name))
+        return false;
+
     return true;
 }
 
-async function remove(key:string) : Promise<boolean> {
+async function remove(key: string) : Promise<boolean> {
 
     // Update keylist
 
