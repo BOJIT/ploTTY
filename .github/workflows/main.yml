@@ -5,12 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Build web assets and deploy to GitHub pages
     steps:
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16.13.0'
+          node-version: '16.16.0'
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -22,14 +22,14 @@ jobs:
             ${{ runner.os }}-
 
       - name: Checkout main branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: main
           path: main
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: gh-pages
           path: gh-pages
