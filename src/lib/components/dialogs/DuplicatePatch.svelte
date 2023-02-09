@@ -13,6 +13,7 @@
 
     import { writable, type Writable } from "svelte/store";
 
+    import { message } from "@bojit/svelte-components/core";
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Button, TextField } from "@bojit/svelte-components/smelte";
 
@@ -20,6 +21,13 @@
         Duplicate,
     } from "@svicons/ionicons-outline";
 
+    // Stores
+    import {
+        editorOverlay,
+    } from "$lib/stores/overlays";
+    import {
+        graphRunning,
+    } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
@@ -31,11 +39,26 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
-    function duplicatePatch() {
+    async function duplicatePatch() {
         if(patch.validName($name) === false)
             return;
 
-        console.log("Patch Duplicated!");
+        // Create a new file
+        if(await patch.create($name, $patch) === false) {
+            message.push({
+                type: 'error',
+                title: 'File Error',
+                message: 'Could not create file!',
+                timeout: 5,
+            });
+
+            return;
+        }
+
+        // Stop editor, open file, then switch to graph view
+        $graphRunning = false;
+        await patch.open($name);
+        $editorOverlay = true;
 
         // If success
         visible = false;

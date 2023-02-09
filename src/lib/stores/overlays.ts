@@ -15,7 +15,7 @@ import { writable, type Writable } from "svelte/store";
 /*--------------------------------- State ------------------------------------*/
 
 const themeOverlay: Writable<boolean> = writable(false);
-const editorOverlay: Writable<boolean> = writable(false);
+const editorOverlay: Writable<boolean> = writable(true);
 const newPatchOverlay: Writable<boolean> = writable(false);
 const openPatchOverlay: Writable<boolean> = writable(false);
 const duplicatePatchOverlay: Writable<boolean> = writable(false);
