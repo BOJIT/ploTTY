@@ -9,3 +9,5 @@
 - [ ] Port 'Graph' element to Svelte properly
 
 - [ ] Update tabs based on number of 'panel' nodes
+
+- [ ] Add Burger menu for mobile devices
