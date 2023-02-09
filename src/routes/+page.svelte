@@ -11,10 +11,13 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
-    import { Tabs } from "@bojit/svelte-components/widgets";
+    import { onMount } from "svelte";
 
     import { IconButton } from "@bojit/svelte-components/form";
+    import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
+    import theme from "@bojit/svelte-components/theme";
+    import { Tabs } from "@bojit/svelte-components/widgets";
+
 
     import {
         BarChart,
@@ -30,6 +33,7 @@
 
     import logo from "$lib/assets/img/Logo.png";
 
+    // Stores
     import {
         editorOverlay,
         newPatchOverlay,
@@ -38,7 +42,9 @@
         settingsOverlay,
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
+    import settings from "$lib/stores/settings";
 
+    // Components
     import Editor from "$lib/components/Editor.svelte";
     import KeyBindings from "$lib/components/KeyBindings.svelte";
     import NewPatch from "$lib/components/dialogs/NewPatch.svelte";
@@ -117,6 +123,15 @@
 
     /*------------------------------- Lifecycle ------------------------------*/
 
+    onMount(async () => {
+        // Initialise local storage databases
+        await settings.init();
+
+        // Update settings store when theme changes
+        theme.Mode.subscribe((t) => {
+            $settings.theme = t;
+        });
+    });
 </script>
 
 
