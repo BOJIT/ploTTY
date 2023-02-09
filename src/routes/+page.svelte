@@ -15,7 +15,7 @@
 
     import { IconButton } from "@bojit/svelte-components/form";
     import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
-    import theme from "@bojit/svelte-components/theme";
+    import { mode as themeMode } from "@bojit/svelte-components/theme";
     import { Tabs } from "@bojit/svelte-components/widgets";
 
 
@@ -42,6 +42,7 @@
         settingsOverlay,
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
+    import patch from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
 
     // Components
@@ -126,9 +127,11 @@
     onMount(async () => {
         // Initialise local storage databases
         await settings.init();
+        await patch.init();
 
         // Update settings store when theme changes
-        theme.Mode.subscribe((t) => {
+        $themeMode = $settings.theme;
+        themeMode.subscribe((t) => {
             $settings.theme = t;
         });
     });

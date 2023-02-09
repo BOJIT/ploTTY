@@ -11,12 +11,17 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
+    import { onMount } from "svelte";
+
     import { SearchableList } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
 
     import {
+        Document,
         FolderOpen,
     } from "@svicons/ionicons-outline";
+
+    import patch, { patchlist } from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -26,6 +31,17 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
+    function listTransform(list: string[]) {
+        const dict: any = {};
+        list.forEach((l) => {
+            dict[l] = { icon: Document };
+        });
+
+        return dict;
+    }
+
+    /*------------------------------- Lifecycle ------------------------------*/
+
     $: if(visible) {
         if(searchableList) {
             if(searchableList.focus)
@@ -33,39 +49,23 @@
         }
     }
 
-    /*------------------------------- Lifecycle ------------------------------*/
-
+    patch.subscribe((p) => {
+        console.log(p);
+    });
 </script>
 
 
 <BaseDialog title="Open Patch" icon={FolderOpen} bind:visible>
-    <SearchableList bind:this={searchableList} items={{
-        "New File 1": {
-            description: "Hello There"
-        },
-        "The Scream": {
-        },
-        "TEST Myself": {
-            description: "Hello There"
-        },
-        "Misc Thing": {
-            description: "Hello There"
-        },
-        "Patch ME": {
-            description: "Hello There"
-        },
-        "Fudge Brownie": {
-            description: "Hello There"
-        },
-        "New Target": {
-            description: "Hello World",
-            icon: FolderOpen,
-        },
-    }} on:select={(s) => {
-        console.log(s.detail);
-        setTimeout(() => {
-            visible = false;
-        }, 200);
-    }}/>
+    <SearchableList bind:this={searchableList} items={listTransform($patchlist)}
+        on:select={(s) => {
+            console.log(s.detail);
+            setTimeout(async () => {
+                if(await patch.open(s.detail) === false) {
+                    console.log("ERROR");
+                }
+                visible = false;
+            }, 200);
+        }}
+    />
 </BaseDialog>
 
