@@ -28,6 +28,7 @@ function download(blob: Blob, filename: string) : void {
 
 function upload(callback: ((files: File[]) => void), ext: string, multiple?: boolean) : void {
     const i = document.createElement('input');
+
     i.type = "file";
     i.accept = ext;
     if(multiple) {
@@ -41,7 +42,7 @@ function upload(callback: ((files: File[]) => void), ext: string, multiple?: boo
     document.body.onfocus = (() => {
         document.body.onfocus = null;
         window.setTimeout(() => {
-            if(i.files.length == 0) {
+            if(i.files && i.files.length == 0) {
                 callback([]);   // Pass no files to callback
                 i.remove();
             }
@@ -50,6 +51,9 @@ function upload(callback: ((files: File[]) => void), ext: string, multiple?: boo
 
     /* File upload handler */
     i.addEventListener('change', () => {
+        if(i.files === null)
+            return;
+
         callback(Array.from(i.files));
         i.remove();
     });

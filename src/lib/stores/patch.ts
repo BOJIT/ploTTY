@@ -177,8 +177,17 @@ async function upload(files: File[]) : Promise<void> {
 
 }
 
-async function download(key: string) : Promise<File> {
-    return undefined;
+async function download(key: string) : Promise<Blob | null> {
+    const patch = await localStore.getItem(key) as Patch;
+
+    if(patch === null)
+        return null;
+
+    // Add export date
+    patch.metadata.exportDate = new Date().toISOString();
+
+    const file = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
+    return file;
 }
 
 /*-------------------------------- Exports -----------------------------------*/

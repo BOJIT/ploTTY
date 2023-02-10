@@ -32,6 +32,9 @@
     } from "$lib/stores/runState";
     import patch, { patchlist } from "$lib/stores/patch";
 
+    // Utils
+    import file from "$lib/utils/file";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = true;
@@ -85,6 +88,11 @@
         on:button={async (e) => {
             if(e.detail.index === 0) {
                 // Download
+                let p = await patch.download(e.detail.key);
+                if(p === null)
+                    return;
+
+                file.download(p, `${e.detail.key}.plotty.json`);
 
             } else if(e.detail.index === 1) {
                 // Delete
