@@ -10,7 +10,9 @@
 
 - [-] Notification: enable closing + draw above dialogue
 
-- [ ] Add graph overlay menu
+- [-] Add graph overlay menu
+
+- [ ] Add patch name to panel
 
 - [ ] Port 'Graph' element to Svelte properly
 

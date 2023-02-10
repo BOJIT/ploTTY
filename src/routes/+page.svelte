@@ -186,9 +186,30 @@
 
 <KeyBindings />
 
+{#if import.meta.env.VITE_SHOW_UNSTABLE === 'true'}
+    <div class="beta">
+        <h6>This is a beta release! Beware of breaking changes!</h6>
+    </div>
+{/if}
 
 <style>
     .pad {
         padding: 0.2rem;
+    }
+
+    .beta {
+        position: fixed;
+        text-align: center;
+        bottom: 0px;
+        width: 100%;
+        z-index: 1000;
+        padding: 1rem;
+        color: black;
+        background-color: rgba(204, 204, 127, 0.623);
+    }
+
+    :global(.mode-dark) .beta {
+        color: white;
+        background-color: rgba(94, 94, 27, 0.425);
     }
 </style>

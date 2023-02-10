@@ -29,6 +29,11 @@
 
     /* Check browser is supported */
     async function loadCheck(resolve, reject) {
+        // If in development deployment, bypass checks
+        console.log(import.meta.env.VITE_BROWSER_CHECK);
+        if(import.meta.env.VITE_BROWSER_CHECK === 'false')
+            resolve();
+
         // Check browser compatibility
         if('serial' in navigator) {
             resolve();
