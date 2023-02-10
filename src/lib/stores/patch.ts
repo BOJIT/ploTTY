@@ -23,7 +23,6 @@ import file from "$lib/utils/file";
 
 type Metadata = {
     version: string,
-    versionHash: string,
     exportDate: string,
 }
 
@@ -43,8 +42,7 @@ type PatchLibrary = {
 const DEFAULT: Patch = {
     key: "Example Patch",
     metadata: {
-        version: import.meta.env.VITE_GIT_VERSION,
-        versionHash: import.meta.env.VITE_GIT_HASH,
+        version: import.meta.env.VITE_GIT_HASH,
     },
     graph: new Graph().toJSON(),
 }

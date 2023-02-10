@@ -7,7 +7,6 @@ import { defineConfig } from 'vite';
 export default ({ mode }) => {
     // Get repo metadata
     process.env.VITE_GIT_HASH = git.short("./", 7);
-    process.env.VITE_GIT_VERSION = git.tag(true);
 
     return defineConfig({
         plugins: [sveltekit()],

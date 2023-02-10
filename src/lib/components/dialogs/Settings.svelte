@@ -115,7 +115,7 @@
             </p>
             <hr>
             <p>Current Release: <a href={"https://github.com/BOJIT/ploTTY/commit/" + import.meta.env.VITE_GIT_HASH} target="_blank" rel="noreferrer">
-                {import.meta.env.VITE_GIT_VERSION}
+                {import.meta.env.VITE_GIT_HASH}
             </a></p>
             <p>
                 If you have an issue or feature request let me know on <a href="https://github.com/BOJIT/ploTTY/" target="_blank" rel="noreferrer">GitHub</a>!
