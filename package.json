@@ -24,6 +24,9 @@
 	"type": "module",
 	"dependencies": {
 		"@bojit/svelte-components": "^1.4.4",
+		"@fontsource/gloria-hallelujah": "^4.5.9",
+		"@fontsource/nunito": "^4.5.12",
+		"@fontsource/syne-mono": "^4.5.8",
 		"events": "^3.3.0",
 		"fbp-graph": "^0.7.0",
 		"localforage": "^1.10.0",

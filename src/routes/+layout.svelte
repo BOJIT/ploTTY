@@ -11,6 +11,12 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
+    // Uncomment if using quirky palette!
+    // import "@fontsource/gloria-hallelujah"
+    // import "@fontsource/nunito"
+    // import "@fontsource/syne-mono"
+
+
     import { App, Notification } from "@bojit/svelte-components/core";
     import { palette } from "@bojit/svelte-components/theme";
     import { ThemeSelector } from "@bojit/svelte-components/widgets";
