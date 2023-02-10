@@ -12,9 +12,8 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { message } from "@bojit/svelte-components/core";
-    import { SearchableList } from "@bojit/svelte-components/form";
+    import { SearchableList, TextIconButton } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
-    import { Button } from "@bojit/svelte-components/smelte";
 
     import {
         CloudDownload,
@@ -32,7 +31,6 @@
         graphRunning,
     } from "$lib/stores/runState";
     import patch, { patchlist } from "$lib/stores/patch";
-    import { key } from "localforage";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -109,16 +107,10 @@
     />
 
     <br>
-    <Button><div class="iconButton"><CloudUpload height="1.5rem"/>Upload</div></Button>
+    <div style="padding-left: 0.3rem">
+        <TextIconButton icon={CloudUpload} label="Upload" outlined color="white" shape="rounded"
+        on:click={() => {
+            console.log("Upload");
+        }}/>
+    </div>
 </BaseDialog>
-
-
-<style>
-    .iconButton {
-        display: flex;
-        gap: 0.7rem;
-        padding: 0.2rem;
-        margin-left: -0.4rem;
-        align-items: center;
-    }
-</style>

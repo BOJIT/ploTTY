@@ -23,7 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@bojit/svelte-components": "^1.4.1",
+		"@bojit/svelte-components": "^1.4.2",
 		"events": "^3.3.0",
 		"fbp-graph": "^0.7.0",
 		"localforage": "^1.10.0",

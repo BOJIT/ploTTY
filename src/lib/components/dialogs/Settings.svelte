@@ -11,6 +11,7 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
+    import { SearchableList } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Tabs } from "@bojit/svelte-components/widgets";
 
@@ -71,32 +72,42 @@
 <svelte:window on:keydown={handleKeydown}/>
 
 <BaseDialog title="Settings" icon={Settings} bind:visible>
-    <Tabs tabs={tabs} bind:index/>
-
-    {#if index === 0}
-        <h2>Global</h2>
-    {:else if index === 1}
-        <h2>Components</h2>
-    {:else if index === 2}
-        <h2>Logs</h2>
-    {:else if index === 3}
-        <h5>About This App</h5>
-        <p>
-            ploTTY is a serial monitor/plotting application maintained
-            by <a href="https://bojit.org/">James Bennion-Pedley</a>.
-        </p>
-        <hr>
-        <p>Current Release: <a href={"https://github.com/BOJIT/ploTTY/commit/" + import.meta.env.VITE_GIT_HASH} target="_blank" rel="noreferrer">
-            {import.meta.env.VITE_GIT_VERSION}
-        </a></p>
-        <p>
-            If you have an issue or feature request let me know on <a href="https://github.com/BOJIT/ploTTY/" target="_blank" rel="noreferrer">GitHub</a>!
-        </p>
-        <hr>
-        <div class="center">
-            <img src={Logo} alt="BOJIT Logo"/>
+    <Tabs tabs={tabs} bind:index>
+        <!-- Global -->
+        <div class="tab">
+            <h2>Global</h2>
         </div>
-    {/if}
+
+        <!-- Component Library -->
+        <div class="tab">
+            <SearchableList items={{}}/>
+        </div>
+
+        <!-- Logs -->
+        <div class="tab">
+            <SearchableList items={{}}/>
+        </div>
+
+        <!-- About -->
+        <div class="tab">
+            <h5>About This App</h5>
+            <p>
+                ploTTY is a serial monitor/plotting application maintained
+                by <a href="https://bojit.org/">James Bennion-Pedley</a>.
+            </p>
+            <hr>
+            <p>Current Release: <a href={"https://github.com/BOJIT/ploTTY/commit/" + import.meta.env.VITE_GIT_HASH} target="_blank" rel="noreferrer">
+                {import.meta.env.VITE_GIT_VERSION}
+            </a></p>
+            <p>
+                If you have an issue or feature request let me know on <a href="https://github.com/BOJIT/ploTTY/" target="_blank" rel="noreferrer">GitHub</a>!
+            </p>
+            <hr>
+            <div class="center">
+                <img src={Logo} alt="BOJIT Logo"/>
+            </div>
+        </div>
+    </Tabs>
 </BaseDialog>
 
 
