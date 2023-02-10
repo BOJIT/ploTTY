@@ -12,7 +12,7 @@
 
 - [-] Add graph overlay menu
 
-- [ ] Add patch name to panel
+- [-] Add patch name to panel
 
 - [ ] Port 'Graph' element to Svelte properly
 

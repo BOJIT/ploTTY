@@ -15,7 +15,7 @@
     // import "@fontsource/gloria-hallelujah"
     // import "@fontsource/nunito"
     // import "@fontsource/syne-mono"
-
+    import "@fontsource/jetbrains-mono";    // TODO migrate this to editor
 
     import { App, Notification } from "@bojit/svelte-components/core";
     import { palette } from "@bojit/svelte-components/theme";
@@ -30,7 +30,6 @@
     /* Check browser is supported */
     async function loadCheck(resolve, reject) {
         // If in development deployment, bypass checks
-        console.log(import.meta.env.VITE_BROWSER_CHECK);
         if(import.meta.env.VITE_BROWSER_CHECK === 'false')
             resolve();
 

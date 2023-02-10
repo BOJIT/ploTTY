@@ -49,9 +49,11 @@
     <!-- <TheGraph theme={$Theme} bind:graph={graph} bind:API={API} bind:state={state}
      on:graphChange={graphChanged} library={[]} /> -->
 
-     <h2>{$patch.key}</h2>
-
      <!-- TODO add bottom bar with filename + expand for debug -->
+</div>
+
+<div class="statusbar" class:visible style:color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}>
+    <h5>{$patch.key}<span class="statuspath">{$componentSelectedOverlay ? "/-> " : ""}</span></h5>
 </div>
 
 {#if $extendedSettingsOverlay}
@@ -107,7 +109,7 @@
     .editor {
         height: 100%;
         width: 100%;
-        position: absolute;
+        position: fixed;
         z-index: 10;
 
         visibility: hidden;
@@ -116,11 +118,38 @@
         background-color: rgba(0, 0, 0, 0.281);
     }
 
+    .statusbar {
+        position: fixed;
+        z-index: 20;
+        bottom: 2rem;
+        left: 2rem;
+
+        width: 30rem;
+        height: 3.9rem;
+        border-radius: 20vmin;
+
+        visibility: hidden;
+        pointer-events: none;
+
+        background-color: rgba(100, 112, 180, 0.527);
+        border: 1px solid whitesmoke;
+
+        display: flex;
+        align-items: center;
+        padding-left: 1.5rem;
+        padding-left: 1.5rem;
+    }
+
+    :global(.mode-dark) .statusbar {
+        background-color: rgba(99, 99, 99, 0.432);
+        border: 1px solid whitesmoke;
+    }
+
     .controls {
         position: fixed;
         bottom: 2rem;
         right: 2rem;
-        z-index: 20 ;
+        z-index: 20;
         visibility: hidden;
         pointer-events: none;
 
@@ -139,9 +168,31 @@
         pointer-events: auto;
     }
 
-    /* TEMP */
-    h2 {
+    .statusbar h5 {
+        overflow: hidden;
+        max-width: 30ch;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: "JetBrains Mono";
         text-align: center;
-        margin-top: 10rem;
+        color: white;
+    }
+
+    .statusbar .statuspath {
+        color: yellow;
+    }
+
+    @media screen and (max-width: 940px) {
+        .statusbar {
+            width: calc(100vw - 4rem);
+        }
+
+        .statusbar h5 {
+            max-width: calc(100vw - 6rem);
+        }
+
+        .controls {
+            bottom: 6.9rem;
+        }
     }
 </style>
