@@ -90,14 +90,15 @@
             } else if(e.detail.index === 1) {
                 // Delete
                 if(e.detail.key === $patch.key) {
-                    // visible = false;
-                    message.push({
-                        type: 'error',
-                        title: 'File Error',
-                        message: 'Cannot delete active patch!',
-                        timeout: 5,
-                    });
-                    return;
+                    $graphRunning = false;  // Stop curent network
+
+                    if(!($patchlist.includes("Example Patch"))) {
+                        // Create default patch
+                        await patch.create("Example Patch");
+                    }
+
+                    await patch.open("Example Patch");
+                    $editorOverlay = true;
                 }
 
                 await patch.remove(e.detail.key);
