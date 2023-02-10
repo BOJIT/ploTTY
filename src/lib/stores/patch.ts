@@ -14,8 +14,8 @@ import { get, writable, type Writable } from "svelte/store";
 
 import localForage from "localforage";
 
-import { Graph } from "fbp-graph";
-import type { GraphJson } from "fbp-graph/lib/Types";
+import { Graph } from "$lib/middlewares/fbp-graph";
+import type { GraphJson } from "$lib/middlewares/fbp-graph/Types";
 
 import file from "$lib/utils/file";
 
