@@ -86,9 +86,11 @@
             by <a href="https://bojit.org/">James Bennion-Pedley</a>.
         </p>
         <hr>
-        <p>Current Release: <a href="https://example.org">4.0.0</a></p>
+        <p>Current Release: <a href={"https://github.com/BOJIT/ploTTY/commit/" + import.meta.env.VITE_GIT_HASH} target="_blank" rel="noreferrer">
+            {import.meta.env.VITE_GIT_VERSION}
+        </a></p>
         <p>
-            If you have an issue or feature request let me know on <a href="https://github.com/BOJIT/ploTTY/">GitHub</a>!
+            If you have an issue or feature request let me know on <a href="https://github.com/BOJIT/ploTTY/" target="_blank" rel="noreferrer">GitHub</a>!
         </p>
         <hr>
         <div class="center">

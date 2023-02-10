@@ -87,6 +87,7 @@
         on:button={async (e) => {
             if(e.detail.index === 0) {
                 // Download
+
             } else if(e.detail.index === 1) {
                 // Delete
                 if(e.detail.key === $patch.key) {

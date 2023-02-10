@@ -19,9 +19,15 @@ import type { GraphJson } from "fbp-graph/lib/Types";
 
 /*--------------------------------- Types ------------------------------------*/
 
+type Metadata = {
+    version: string,
+    versionHash: string,
+    exportDate: string,
+}
+
 type Patch = {
     key: string    // Duplicate of library key (useful for comprehensions)
-    metadata: any
+    metadata: Metadata
     graph: GraphJson
 };
 
@@ -34,7 +40,10 @@ type PatchLibrary = {
 
 const DEFAULT: Patch = {
     key: "Example Patch",
-    metadata: {},
+    metadata: {
+        version: import.meta.env.VITE_GIT_VERSION,
+        versionHash: import.meta.env.VITE_GIT_HASH,
+    },
     graph: new Graph().toJSON(),
 }
 
@@ -164,6 +173,14 @@ async function reset() : Promise<void> {
     updateKeylist();
 }
 
+async function upload(files: File[]) : Promise<void> {
+
+}
+
+async function download(key: string) : Promise<File> {
+    return undefined;
+}
+
 /*-------------------------------- Exports -----------------------------------*/
 
 export { patchlist };
@@ -179,4 +196,6 @@ export default {
     validName,
     remove,
     reset,
+    upload,
+    download,
 }
