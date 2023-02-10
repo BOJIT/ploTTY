@@ -92,7 +92,7 @@
                 if(p === null)
                     return;
 
-                file.download(p, `${e.detail.key}.plotty.json`);
+                file.download(p, `${file.validName(e.detail.key)}.plotty.json`);
 
             } else if(e.detail.index === 1) {
                 // Delete
@@ -118,7 +118,25 @@
     <div style="padding-left: 0.3rem">
         <TextIconButton icon={CloudUpload} label="Upload" outlined color="white" shape="rounded"
         on:click={() => {
-            console.log("Upload");
+            file.upload(async (f) => {
+                const status = await patch.upload(f);
+                if(status === null) {
+                    message.push({
+                        type: 'error',
+                        title: 'Upload Error!',
+                        message: 'At least one uploaded file is corrupt!',
+                        timeout: 5,
+                    });
+                } else if(status === false) {
+                    message.push({
+                        type: 'warning',
+                        title: 'Duplicate Name!',
+                        message: 'At least one file was renamed on upload.',
+                        timeout: 5,
+
+                    });
+                }
+            }, ".plotty.json", true);
         }}/>
     </div>
 </BaseDialog>

@@ -4,9 +4,11 @@
 
 - [-] Make notification widget overflow safely
 
-- [ ] Add patch import/export
+- [-] Add patch import/export
 
-- [ ] Add button with icon to `svelte-components`
+- [-] Add button with icon to `svelte-components`
+
+- [-] Notification: enable closing + draw above dialogue
 
 - [ ] Add graph overlay menu
 

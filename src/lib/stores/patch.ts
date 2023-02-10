@@ -17,6 +17,8 @@ import localForage from "localforage";
 import { Graph } from "fbp-graph";
 import type { GraphJson } from "fbp-graph/lib/Types";
 
+import file from "$lib/utils/file";
+
 /*--------------------------------- Types ------------------------------------*/
 
 type Metadata = {
@@ -155,7 +157,7 @@ async function remove(key: string) : Promise<boolean> {
 
     // Remove item and update keylist
     await localStore.removeItem(key);
-    updateKeylist();
+    await updateKeylist();
 
     return true;
 }
@@ -170,11 +172,34 @@ async function reset() : Promise<void> {
     store.set(DEFAULT);
 
     // Update keylist
-    updateKeylist();
+    await updateKeylist();
 }
 
-async function upload(files: File[]) : Promise<void> {
+async function upload(files: File[]) : Promise<boolean | null> {
+    if(files.length === 0)
+        return true;    // Nothing to be done!
 
+    let status: boolean | null = true;
+    for(let i = 0; i < files.length; i++) {
+        let patch = JSON.parse(await file.read(files[i]) as string) as Patch;
+
+        // Check if file is corrupt
+        if(patch.key === undefined) {
+            status = null; // Something failed
+        } else {
+            // Will this override an existing patch?
+            if(await localStore.getItem(patch.key) !== null) {
+                patch.key = file.incrementName(patch.key, get(patchlist));
+                status = false;
+            }
+
+            // Add files individually and update patchlist
+            await create(patch.key, patch);
+            await updateKeylist();
+        }
+    }
+
+    return status;
 }
 
 async function download(key: string) : Promise<Blob | null> {
@@ -186,8 +211,8 @@ async function download(key: string) : Promise<Blob | null> {
     // Add export date
     patch.metadata.exportDate = new Date().toISOString();
 
-    const file = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
-    return file;
+    const f = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
+    return f;
 }
 
 /*-------------------------------- Exports -----------------------------------*/

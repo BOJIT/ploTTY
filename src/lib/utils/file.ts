@@ -14,6 +14,42 @@
 
 /*------------------------------- Functions ----------------------------------*/
 
+function read(file: File) : Promise<unknown> {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsText(file);
+    })
+}
+
+function validName(str: string) : string {
+    return (str.replace(/[\/|\\:*?"<>]/g, " "));
+}
+
+function incrementName(name: string, list: string[]) : string {
+    let inc = 1;
+    let regex = /\((.*?)\)/;
+    console.log(list.some((t: any) => (t === name)));
+
+    while(list.some((t: any) => (t === name))) {
+        /* Add numbered increment to patch name */
+        let ext = regex.exec(name);
+        if(ext && name.endsWith(ext[0])) {
+            inc = parseInt(ext[1]) + 1;
+            name = name.slice(0, -(ext[0].length + 1))
+        }
+        name = name + " (" + inc + ")";
+    }
+
+    return name;
+}
+
 function download(blob: Blob, filename: string) : void {
     /* Create hidden download link and programatically click */
     const url = URL.createObjectURL(blob);
@@ -64,4 +100,7 @@ function upload(callback: ((files: File[]) => void), ext: string, multiple?: boo
 export default {
     upload,
     download,
+    read,
+    validName,
+    incrementName,
 };
