@@ -11,13 +11,19 @@
 <script lang='ts'>
     /*-------------------------------- Imports -------------------------------*/
 
-    import { SearchableList } from "@bojit/svelte-components/form";
+    import { SearchableList , TextIconButton } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
+    import theme from "@bojit/svelte-components/theme";
     import { Tabs } from "@bojit/svelte-components/widgets";
 
     import {
+        Brush,
         Settings,
     } from "@svicons/ionicons-outline";
+
+    import {
+        themeOverlay,
+    } from "$lib/stores/overlays";
 
     import Logo from "$lib/assets/img/BOJIT_Square.png";
 
@@ -72,19 +78,31 @@
 <svelte:window on:keydown={handleKeydown}/>
 
 <BaseDialog title="Settings" icon={Settings} bind:visible>
-    <Tabs tabs={tabs} bind:index>
+    <Tabs tabs={tabs} bind:index fade>
         <!-- Global -->
         <div class="tab">
-            <h2>Global</h2>
+            <h5>Global Settings</h5>
+            <hr>
+            <div class="center">
+                <TextIconButton icon={Brush} label="Edit Theme" outlined shape="circle"
+                    color={$theme === 'light' ? 'black' : 'white'}
+                    on:click={() => {
+                        $themeOverlay = true;
+                    }}
+                />
+            </div>
+            <hr>
         </div>
 
         <!-- Component Library -->
         <div class="tab">
+            <h5>Component Library</h5>
             <SearchableList items={{}}/>
         </div>
 
         <!-- Logs -->
         <div class="tab">
+            <h5>Logs</h5>
             <SearchableList items={{}}/>
         </div>
 
@@ -142,5 +160,10 @@
     img {
         max-width: 5rem;
         padding-top: 1rem;
+    }
+
+    hr {
+        margin-top: 0.4rem;
+        margin-bottom: 0.4rem;
     }
 </style>

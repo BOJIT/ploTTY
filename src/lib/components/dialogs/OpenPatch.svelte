@@ -13,6 +13,7 @@
 
     import { message } from "@bojit/svelte-components/core";
     import { SearchableList, TextIconButton } from "@bojit/svelte-components/form";
+    import theme from "@bojit/svelte-components/theme";
     import { BaseDialog } from "@bojit/svelte-components/layout";
 
     import {
@@ -116,7 +117,8 @@
 
     <br>
     <div style="padding-left: 0.3rem">
-        <TextIconButton icon={CloudUpload} label="Upload" outlined color="white" shape="rounded"
+        <TextIconButton icon={CloudUpload} label="Upload" outlined shape="rounded"
+        color={$theme === 'light' ? 'black' : 'white'}
         on:click={() => {
             file.upload(async (f) => {
                 const status = await patch.upload(f);
