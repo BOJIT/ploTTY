@@ -14,8 +14,7 @@ import { get, writable, type Writable } from "svelte/store";
 
 import localForage from "localforage";
 
-import { Graph } from "$lib/middlewares/fbp-graph";
-import type { GraphJson } from "$lib/middlewares/fbp-graph/Types";
+import { FbpGraph, type FbpGraphJson } from "@bojit/noflo-svelte";
 
 import file from "$lib/utils/file";
 
@@ -29,7 +28,7 @@ type Metadata = {
 type Patch = {
     key: string    // Duplicate of library key (useful for comprehensions)
     metadata: Metadata
-    graph: GraphJson
+    graph: FbpGraphJson
 };
 
 type PatchLibrary = {
@@ -44,7 +43,7 @@ const DEFAULT: Patch = {
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
     },
-    graph: new Graph().toJSON(),
+    graph: new FbpGraph.Graph().toJSON(),
 }
 
 const DEFAULT_LOCALSTORE: PatchLibrary = {
