@@ -3,14 +3,14 @@ import ConsoleLog from "./core/console_log.js";
 import Filter from "./core/filter.js";
 import Reshape from "./core/reshape.js";
 import SerialIn from "./data/serial_in.js";
-import Terminal from "./panel/terminal.js";
-import TimePlot from "./panel/time_plot.js";
+// import Terminal from "./panel/terminal.js";
+// import TimePlot from "./panel/time_plot.js";
 
 export default [
     ConsoleLog,
     Filter,
     Reshape,
     SerialIn,
-    Terminal,
-    TimePlot
+    // Terminal,
+    // TimePlot
 ];

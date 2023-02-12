@@ -23,7 +23,7 @@ import file from "$lib/utils/file";
 
 type Metadata = {
     version: string,
-    exportDate: string,
+    exportDate?: string,
 }
 
 type Patch = {

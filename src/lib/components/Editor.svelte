@@ -13,6 +13,11 @@
 
     import { fly } from 'svelte/transition';
 
+    import Noflo, { type NofloState } from "@bojit/noflo-svelte";
+
+    // TEMP library
+    import library from "$lib/editor/components";
+
     import { IconButton } from "@bojit/svelte-components/form";
     import theme from "@bojit/svelte-components/theme";
 
@@ -38,7 +43,14 @@
 
     export let visible = false;
 
+    let noflo: Noflo;
+    let state: NofloState;
+
     /*-------------------------------- Methods -------------------------------*/
+
+    function graphChanged() {
+
+    };
 
     /*------------------------------- Lifecycle ------------------------------*/
 
@@ -46,10 +58,8 @@
 
 
 <div class="editor" class:visible>
-    <!-- <TheGraph theme={$Theme} bind:graph={graph} bind:API={API} bind:state={state}
-     on:graphChange={graphChanged} library={[]} /> -->
-
-     <!-- TODO add bottom bar with filename + expand for debug -->
+    <!-- <Noflo theme={$theme} bind:this={noflo} bind:graph={$patch.graph} bind:state={state}
+     on:graphChange={graphChanged} library={library} /> -->
 </div>
 
 <div class="statusbar" class:visible style:color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}>

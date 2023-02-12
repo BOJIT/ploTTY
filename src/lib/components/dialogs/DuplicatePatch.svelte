@@ -69,7 +69,7 @@
     $: if(field) {
         let input = field.querySelector('input');
         if(visible) {
-            $name = "New Patch";
+            $name = "Duplicate Patch";
             input?.focus();
             setTimeout(() => {
                 input?.select();
