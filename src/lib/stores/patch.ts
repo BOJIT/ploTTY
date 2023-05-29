@@ -14,7 +14,7 @@ import { get, writable, type Writable } from "svelte/store";
 
 import localForage from "localforage";
 
-import { FbpGraph, type FbpGraphJson } from "@bojit/noflo-svelte";
+// import { FbpGraph, type FbpGraphJson } from "@bojit/noflo-svelte";
 
 import file from "$lib/utils/file";
 
@@ -28,12 +28,12 @@ type Metadata = {
 type Patch = {
     key: string    // Duplicate of library key (useful for comprehensions)
     metadata: Metadata
-    graph: FbpGraphJson
+    // graph: FbpGraphJson
 };
 
 type PatchLibrary = {
     "_currentPatch": string,
-    [key:string]: Patch | string,
+    [key: string]: Patch | string,
 }
 
 /*--------------------------------- State ------------------------------------*/
@@ -43,7 +43,7 @@ const DEFAULT: Patch = {
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
     },
-    graph: new FbpGraph.Graph().toJSON(),
+    // graph: new FbpGraph.Graph().toJSON(),
 }
 
 const DEFAULT_LOCALSTORE: PatchLibrary = {
@@ -65,21 +65,21 @@ const localStore: LocalForage = localForage.createInstance({
 async function updateKeylist() {
     const keys = await localStore.keys();
     let idx = keys.indexOf("_currentPatch");
-    if(idx != -1)
+    if (idx != -1)
         keys.splice(idx, 1);
     patchlist.set(keys);
 }
 
 /*------------------------------- Functions ----------------------------------*/
 
-async function init() : Promise<Writable<Patch>> {
+async function init(): Promise<Writable<Patch>> {
     // Does local store exist?
     const name = await localStore.getItem("_currentPatch") as string;
 
-    if(name !== null) {
+    if (name !== null) {
         // Get current patch and set store
         const patch = await localStore.getItem(name) as Patch;
-        if(patch !== null) {
+        if (patch !== null) {
             patch.key = name;   // Convenience
             store.set(patch);
         } else {
@@ -108,11 +108,11 @@ async function init() : Promise<Writable<Patch>> {
     return store;
 }
 
-async function open(key: string) : Promise<boolean> {
+async function open(key: string): Promise<boolean> {
     // Is the file in the database?
     const patch = await localStore.getItem(key) as Patch;
 
-    if(patch === null)
+    if (patch === null)
         return false;   // File not found!
 
     // Set current patch key, THEN update store
@@ -123,8 +123,8 @@ async function open(key: string) : Promise<boolean> {
     return true;
 }
 
-async function create(key: string, patch: Patch = DEFAULT) : Promise<boolean> {
-    if(!validName(key))
+async function create(key: string, patch: Patch = DEFAULT): Promise<boolean> {
+    if (!validName(key))
         return false;
 
     // Add entry and update keylist
@@ -135,21 +135,21 @@ async function create(key: string, patch: Patch = DEFAULT) : Promise<boolean> {
     return true;
 }
 
-function validName(name: string) : boolean {
-    if(name === "")
+function validName(name: string): boolean {
+    if (name === "")
         return false;
 
     const list = get(patchlist);
-    if(list.includes(name))
+    if (list.includes(name))
         return false;
 
     return true;
 }
 
-async function remove(key: string) : Promise<boolean> {
+async function remove(key: string): Promise<boolean> {
     const name = await localStore.getItem("_currentPatch") as string;
 
-    if(name === key)
+    if (name === key)
         return false;   // Cannot delete the currently open patch
 
     // Remove item and update keylist
@@ -159,7 +159,7 @@ async function remove(key: string) : Promise<boolean> {
     return true;
 }
 
-async function reset() : Promise<void> {
+async function reset(): Promise<void> {
     await localStore.clear();
 
     // Create default storage
@@ -172,20 +172,20 @@ async function reset() : Promise<void> {
     await updateKeylist();
 }
 
-async function upload(files: File[]) : Promise<boolean | null> {
-    if(files.length === 0)
+async function upload(files: File[]): Promise<boolean | null> {
+    if (files.length === 0)
         return true;    // Nothing to be done!
 
     let status: boolean | null = true;
-    for(let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         let patch = JSON.parse(await file.read(files[i]) as string) as Patch;
 
         // Check if file is corrupt
-        if(patch.key === undefined) {
+        if (patch.key === undefined) {
             status = null; // Something failed
         } else {
             // Will this override an existing patch?
-            if(await localStore.getItem(patch.key) !== null) {
+            if (await localStore.getItem(patch.key) !== null) {
                 patch.key = file.incrementName(patch.key, get(patchlist));
                 status = false;
             }
@@ -199,16 +199,16 @@ async function upload(files: File[]) : Promise<boolean | null> {
     return status;
 }
 
-async function download(key: string) : Promise<Blob | null> {
+async function download(key: string): Promise<Blob | null> {
     const patch = await localStore.getItem(key) as Patch;
 
-    if(patch === null)
+    if (patch === null)
         return null;
 
     // Add export date
     patch.metadata.exportDate = new Date().toISOString();
 
-    const f = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
+    const f = new Blob([JSON.stringify(patch)], { type: 'application/json' });
     return f;
 }
 

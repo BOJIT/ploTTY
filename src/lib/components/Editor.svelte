@@ -8,12 +8,10 @@
  *
 -->
 
-<script lang='ts'>
+<script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { fly } from 'svelte/transition';
-
-    import Noflo, { type NofloState } from "@bojit/noflo-svelte";
+    import { fly } from "svelte/transition";
 
     // TEMP library
     import library from "$lib/editor/components";
@@ -33,82 +31,157 @@
         Trash,
     } from "@svicons/ionicons-outline";
 
+    import { Node, Svelvet, Minimap, Background } from "svelvet";
+
     import {
         componentSelectedOverlay,
         extendedSettingsOverlay,
     } from "$lib/stores/overlays";
     import patch from "$lib/stores/patch";
 
+    import EditorNode from "$lib/components/EditorNode.svelte";
+
     /*--------------------------------- Props --------------------------------*/
 
-    export let visible = false;
+    export let visible: boolean = false;
 
-    let noflo: Noflo;
-    let state: NofloState;
+    let fitGraph: boolean = false;
 
     /*-------------------------------- Methods -------------------------------*/
 
-    function graphChanged() {
-
-    };
+    function graphChanged() {}
 
     /*------------------------------- Lifecycle ------------------------------*/
-
 </script>
 
-
 <div class="editor" class:visible>
+    <Svelvet
+        id="node-editor"
+        theme={$theme}
+        editable
+        fitView={fitGraph ? "resize" : false}
+    >
+        <Minimap
+            width={100}
+            corner="NE"
+            mapColor={$theme === "light"
+                ? "rgb(180, 180, 180)"
+                : "rgb(60, 60, 60)"}
+            slot="minimap"
+        />
+        <Background gridWidth={40} dotSize={1} slot="background" />
+
+        <EditorNode />
+        <Node label="Default Node" />
+        <Node label="Default TEST" />
+    </Svelvet>
     <!-- <Noflo theme={$theme} bind:this={noflo} bind:graph={$patch.graph} bind:state={state}
      on:graphChange={graphChanged} library={library} /> -->
 </div>
 
-<div class="statusbar" class:visible style:color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}>
-    <h5>{$patch.key}<span class="statuspath">{$componentSelectedOverlay ? "/-> " : ""}</span></h5>
+<div
+    class="statusbar"
+    class:visible
+    style:color={$theme === "light"
+        ? "var(--color-secondary-400)"
+        : "var(--color-gray-800)"}
+>
+    <h5>
+        {$patch.key}<span class="statuspath"
+            >{$componentSelectedOverlay ? "/-> " : ""}</span
+        >
+    </h5>
 </div>
 
 {#if $extendedSettingsOverlay}
-    <div class="controls extended" class:visible transition:fly|local="{{ x:100 }}">
-        <IconButton icon={Close} shape="circle"
-            color={$theme === 'light' ? "var(--color-error-300)" : "var(--color-error-500)"}
+    <div
+        class="controls extended"
+        class:visible
+        transition:fly|local={{ x: 100 }}
+    >
+        <IconButton
+            icon={Close}
+            shape="circle"
+            color={$theme === "light"
+                ? "var(--color-error-300)"
+                : "var(--color-error-500)"}
         />
-        <IconButton icon={ColorWand} shape="circle"
-            color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+        <IconButton
+            icon={ColorWand}
+            shape="circle"
+            color={$theme === "light"
+                ? "var(--color-secondary-400)"
+                : "var(--color-gray-800)"}
         />
-        <IconButton icon={ArrowUndo} shape="circle"
-        color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+        <IconButton
+            icon={ArrowUndo}
+            shape="circle"
+            color={$theme === "light"
+                ? "var(--color-secondary-400)"
+                : "var(--color-gray-800)"}
         />
-        <IconButton icon={ArrowRedo} shape="circle"
-            color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+        <IconButton
+            icon={ArrowRedo}
+            shape="circle"
+            color={$theme === "light"
+                ? "var(--color-secondary-400)"
+                : "var(--color-gray-800)"}
         />
     </div>
 {/if}
 
 <div class="controls" class:visible>
     {#if $componentSelectedOverlay}
-        <div transition:fly="{{ y:100 }}">
-            <IconButton icon={Settings} shape="circle"
-                color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+        <div transition:fly={{ y: 100 }}>
+            <IconButton
+                icon={Settings}
+                shape="circle"
+                color={$theme === "light"
+                    ? "var(--color-secondary-400)"
+                    : "var(--color-gray-800)"}
             />
         </div>
 
-        <div transition:fly="{{ y:100 }}">
-            <IconButton icon={Trash} shape="circle"
-                color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+        <div transition:fly={{ y: 100 }}>
+            <IconButton
+                icon={Trash}
+                shape="circle"
+                color={$theme === "light"
+                    ? "var(--color-secondary-400)"
+                    : "var(--color-gray-800)"}
             />
         </div>
     {/if}
 
-    <IconButton icon={Add} shape="circle"
-        color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+    <IconButton
+        icon={Add}
+        shape="circle"
+        color={$theme === "light"
+            ? "var(--color-secondary-400)"
+            : "var(--color-gray-800)"}
         on:click={() => {
             $componentSelectedOverlay = !$componentSelectedOverlay;
         }}
     />
-    <IconButton icon={Scan} shape="circle"
-        color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+    <IconButton
+        icon={Scan}
+        shape="circle"
+        color={$theme === "light"
+            ? "var(--color-secondary-400)"
+            : "var(--color-gray-800)"}
+        on:click={() => {
+            fitGraph = true;
+            setTimeout(() => {
+                fitGraph = false;
+            }, 10);
+        }}
     />
-    <IconButton icon={EllipsisHorizontal} shape="circle"
-        color={$theme === 'light' ? "var(--color-secondary-400)" : "var(--color-gray-800)"}
+    <IconButton
+        icon={EllipsisHorizontal}
+        shape="circle"
+        color={$theme === "light"
+            ? "var(--color-secondary-400)"
+            : "var(--color-gray-800)"}
         on:click={() => {
             $extendedSettingsOverlay = !$extendedSettingsOverlay;
         }}
@@ -117,9 +190,11 @@
 
 <style>
     .editor {
-        height: 100%;
-        width: 100%;
-        position: fixed;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
         z-index: 10;
 
         visibility: hidden;
@@ -204,5 +279,14 @@
         .controls {
             bottom: 6.9rem;
         }
+    }
+
+    /* Svelvet Theme Overrides */
+    :global(:root[svelvet-theme="light"]) {
+        --default-background-color: rgba(191, 191, 191, 0.4) !important;
+    }
+
+    :global(:root[svelvet-theme="dark"]) {
+        --default-background-color: rgba(38, 38, 38, 0.4) !important;
     }
 </style>

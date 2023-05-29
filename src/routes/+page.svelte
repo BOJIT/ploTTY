@@ -8,7 +8,7 @@
  *
 -->
 
-<script lang='ts'>
+<script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
     import { onMount } from "svelte";
@@ -17,7 +17,6 @@
     import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
     import { mode as themeMode } from "@bojit/svelte-components/theme";
     import { Tabs } from "@bojit/svelte-components/widgets";
-
 
     import {
         BarChart,
@@ -29,7 +28,7 @@
         Pause,
         Play,
         Settings,
-     } from "@svicons/ionicons-outline";
+    } from "@svicons/ionicons-outline";
 
     import logo from "$lib/assets/img/Logo.png";
 
@@ -68,7 +67,7 @@
             visibility: "desktop",
             callback: () => {
                 $newPatchOverlay = true;
-            }
+            },
         },
         {
             type: "button",
@@ -78,7 +77,7 @@
             visibility: "desktop",
             callback: () => {
                 $openPatchOverlay = true;
-            }
+            },
         },
         {
             type: "button",
@@ -88,7 +87,7 @@
             visibility: "desktop",
             callback: () => {
                 $duplicatePatchOverlay = true;
-            }
+            },
         },
         {
             type: "separator",
@@ -101,7 +100,7 @@
             visibility: "desktop",
             callback: () => {
                 $settingsOverlay = true;
-            }
+            },
         },
         {
             type: "button",
@@ -137,56 +136,59 @@
     });
 </script>
 
-
 <svelte:head>
     <title>ploTTY</title>
 </svelte:head>
 
-
 <!-- Main Navigation -->
 <NavBar
     title="ploTTY"
-    logo={logo}
+    {logo}
     logoLink="https://github.com/BOJIT/ploTTY"
     themeOverride="dark"
-    items={items}
+    {items}
 >
     <div slot="nav-right">
         <IconButton
             icon={$graphRunning ? Pause : Play}
-            color={$graphRunning ? "var(--color-error-700)" : "var(--color-success-700)"}
+            color={$graphRunning
+                ? "var(--color-error-700)"
+                : "var(--color-success-700)"}
             size="1.75rem"
             label={$graphRunning ? "Stop [␣]" : "Start [␣]"}
-            on:click={() => $graphRunning = !$graphRunning}
+            on:click={() => ($graphRunning = !$graphRunning)}
         />
         <IconButton
             icon={$editorOverlay ? BarChart : GitBranch}
-            color={$editorOverlay ? "var(--color-primary-400)" : "var(--color-alert-400)"}
+            color={$editorOverlay
+                ? "var(--color-primary-400)"
+                : "var(--color-alert-400)"}
             size="1.75rem"
             label={$editorOverlay ? "Graph View [↹]" : "Editor View [↹]"}
-            on:click={() => $editorOverlay = !$editorOverlay}
+            on:click={() => ($editorOverlay = !$editorOverlay)}
         />
     </div>
 </NavBar>
 
 <!-- Dialogues -->
-<NewPatch bind:visible={$newPatchOverlay}/>
-<OpenPatch bind:visible={$openPatchOverlay}/>
-<DuplicatePatch bind:visible={$duplicatePatchOverlay}/>
-<SettingsDialog bind:visible={$settingsOverlay}/>
+<NewPatch bind:visible={$newPatchOverlay} />
+<OpenPatch bind:visible={$openPatchOverlay} />
+<DuplicatePatch bind:visible={$duplicatePatchOverlay} />
+<SettingsDialog bind:visible={$settingsOverlay} />
 
-<!-- Panel Tabs -->
-<div class="pad">
-    <Tabs tabs={tabs}/>
+<!-- Primary User Interface -->
+<div class="interface">
+    <div class="pad">
+        <Tabs {tabs} />
+    </div>
+
+    <Editor visible={$editorOverlay} />
 </div>
 
 <!-- GLobal Overlays -->
-
-<Editor visible={$editorOverlay}/>
-
 <KeyBindings />
 
-{#if import.meta.env.VITE_SHOW_UNSTABLE === 'true'}
+{#if import.meta.env.VITE_SHOW_UNSTABLE === "true"}
     <div class="beta">
         <h6>This is a beta release! Beware of breaking changes!</h6>
     </div>
@@ -195,6 +197,12 @@
 <style>
     .pad {
         padding: 0.2rem;
+    }
+
+    .interface {
+        position: relative;
+        width: 100%;
+        flex-grow: 2;
     }
 
     .beta {
