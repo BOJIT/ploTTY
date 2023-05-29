@@ -11,17 +11,24 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import type { SvelteComponent } from "svelte";
+
     import { Node, Anchor } from "svelvet";
 
-    import { ThumbsUp as DefaultIcon } from "@svicons/ionicons-outline";
+    import { ExtensionPuzzle as DefaultIcon } from "@svicons/ionicons-outline";
 
     /*--------------------------------- Props --------------------------------*/
+
+    export let icon: SvelteComponent = DefaultIcon;
+
+    export let inports: string[] = [];
+    export let outports: string[] = [];
 
     /*-------------------------------- Methods -------------------------------*/
 
     function handleClick(e: CustomEvent) {
         const { detail } = e;
-        detail.node.set.bgColor("red");
+        console.log(e);
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -30,19 +37,23 @@
 <div />
 
 <Node let:grabHandle let:selected on:nodeClicked={handleClick}>
-    <Anchor />
     <div use:grabHandle class:selected class="editor-node">
-        <div class="editor-node-ring">
-            <div class="editor-node-icon">
-                <svelte:component
-                    this={DefaultIcon}
-                    height="85px"
-                    color="#c8ced0"
-                />
+        <div class="slab">
+            <div class="icon">
+                <svelte:component this={icon} height="70px" color="#c8ced0" />
             </div>
         </div>
+        <div class="ports inports">
+            {#each inports as ip}
+                <Anchor input />
+            {/each}
+        </div>
+        <div class="ports outports">
+            {#each outports as op}
+                <Anchor output />
+            {/each}
+        </div>
     </div>
-    <Anchor />
 </Node>
 
 <style>
@@ -62,10 +73,9 @@
         overscroll-behavior: auto;
         align-items: center;
         text-align: center;
-        pointer-events: auto; /* this is needed for pointer events to work since we disable them in graphview */
     }
 
-    .editor-node-ring {
+    .slab {
         grid-row: 1;
         grid-column: 1;
 
@@ -75,7 +85,7 @@
         position: relative;
     }
 
-    .editor-node-icon {
+    .icon {
         position: absolute;
         top: 2px;
         left: 2px;
@@ -89,5 +99,26 @@
 
         display: grid;
         place-items: center;
+    }
+
+    .ports {
+        grid-row: 1;
+        grid-column: 1;
+        z-index: 1;
+
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .inports {
+        justify-self: start;
+        left: -13px;
+    }
+
+    .outports {
+        justify-self: end;
+        right: -13px;
     }
 </style>

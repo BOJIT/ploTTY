@@ -71,9 +71,9 @@
         />
         <Background gridWidth={40} dotSize={1} slot="background" />
 
-        <EditorNode />
-        <Node label="Default Node" />
-        <Node label="Default TEST" />
+        <EditorNode inports={["test", "tag", "t"]} outports={["test"]} />
+        <EditorNode inports={["test"]} outports={["test"]} icon={Trash} />
+        <EditorNode inports={["test", "tag"]} outports={["test"]} icon={Add} />
     </Svelvet>
     <!-- <Noflo theme={$theme} bind:this={noflo} bind:graph={$patch.graph} bind:state={state}
      on:graphChange={graphChanged} library={library} /> -->

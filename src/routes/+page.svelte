@@ -51,6 +51,7 @@
     import OpenPatch from "$lib/components/dialogs/OpenPatch.svelte";
     import DuplicatePatch from "$lib/components/dialogs/DuplicatePatch.svelte";
     import SettingsDialog from "$lib/components/dialogs/Settings.svelte";
+    import Widget from "$lib/components/Widget.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -182,6 +183,9 @@
         <Tabs {tabs} />
     </div>
 
+    <!-- Placeholder TEMPORARY -->
+    <Widget />
+
     <Editor visible={$editorOverlay} />
 </div>
 
@@ -211,9 +215,14 @@
         bottom: 0px;
         width: 100%;
         z-index: 1000;
-        padding: 1rem;
+        padding: 0.2rem;
         color: black;
+
         background-color: rgba(204, 204, 127, 0.623);
+    }
+
+    .beta h6 {
+        font-size: 0.8rem;
     }
 
     :global(.mode-dark) .beta {
