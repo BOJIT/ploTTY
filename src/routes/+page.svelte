@@ -171,12 +171,6 @@
     </div>
 </NavBar>
 
-<!-- Dialogues -->
-<NewPatch bind:visible={$newPatchOverlay} />
-<OpenPatch bind:visible={$openPatchOverlay} />
-<DuplicatePatch bind:visible={$duplicatePatchOverlay} />
-<SettingsDialog bind:visible={$settingsOverlay} />
-
 <!-- Primary User Interface -->
 <div class="interface">
     <div class="pad">
@@ -191,22 +185,35 @@
 
 <!-- GLobal Overlays -->
 <KeyBindings />
+<NewPatch bind:visible={$newPatchOverlay} />
+<OpenPatch bind:visible={$openPatchOverlay} />
+<DuplicatePatch bind:visible={$duplicatePatchOverlay} />
+<SettingsDialog bind:visible={$settingsOverlay} />
 
 {#if import.meta.env.VITE_SHOW_UNSTABLE === "true"}
+    <!-- Beta Banner -->
     <div class="beta">
         <h6>This is a beta release! Beware of breaking changes!</h6>
     </div>
 {/if}
 
 <style>
-    .pad {
-        padding: 0.2rem;
+    :global(.app) {
+        max-height: 100vh !important;
     }
 
     .interface {
         position: relative;
         width: 100%;
         flex-grow: 2;
+
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .pad {
+        padding: 0.2rem;
     }
 
     .beta {

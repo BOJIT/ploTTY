@@ -13,3 +13,4 @@ vite.config.ts.timestamp-*
 
 .vscode/svelte.code-snippets
 .vscode/javascript.code-snippets
+.vscode/settings.json

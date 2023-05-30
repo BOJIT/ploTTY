@@ -283,10 +283,16 @@
 
     /* Svelvet Theme Overrides */
     :global(:root[svelvet-theme="light"]) {
-        --default-background-color: rgba(191, 191, 191, 0.4) !important;
+        --default-background-color: rgba(255, 255, 255, 0.6) !important;
+        --anchor-border-color: #444444;
+        --anchor-connected-border: #444444;
+        --anchor-hovering-border: #444444;
     }
 
     :global(:root[svelvet-theme="dark"]) {
-        --default-background-color: rgba(38, 38, 38, 0.4) !important;
+        --default-background-color: rgba(26, 26, 26, 0.6) !important;
+        --anchor-border-color: #444444;
+        --anchor-connected-border: #444444;
+        --anchor-hovering-border: #444444;
     }
 </style>

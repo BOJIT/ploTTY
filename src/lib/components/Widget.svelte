@@ -20,7 +20,15 @@
     /*------------------------------- Lifecycle ------------------------------*/
 </script>
 
-<Plotter demo numLines={10} />
+<div class="widget">
+    <Plotter demo numLines={10} />
+</div>
 
 <style>
+    .widget {
+        flex-grow: 2;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+    }
 </style>
