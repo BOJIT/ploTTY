@@ -1,5 +1,5 @@
 <!--
- * @file EditorNode.svelte
+ * @file SvelvetNode.svelte
  * @author James Bennion-Pedley
  * @brief Brief summary here
  * @date 29/05/2023
@@ -19,6 +19,13 @@
 
     /*--------------------------------- Props --------------------------------*/
 
+    export let id: string;
+    export let position:
+        | {
+              x: number;
+              y: number;
+          }
+        | undefined;
     export let icon: SvelteComponent = DefaultIcon;
 
     export let inports: string[] = [];
@@ -37,13 +44,15 @@
 <div />
 
 <Node
+    bind:id
+    bind:position
     let:grabHandle
     let:selected
     on:nodeClicked={handleClick}
     width={100}
     height={100}
 >
-    <div use:grabHandle class:selected class="editor-node">
+    <div use:grabHandle class:selected class="node">
         <div class="slab">
             <div class="icon">
                 <svelte:component this={icon} height="70px" color="#c8ced0" />
@@ -63,7 +72,7 @@
 </Node>
 
 <style>
-    .editor-node {
+    .node {
         border-radius: 20px;
         border: 5px solid #444444;
 

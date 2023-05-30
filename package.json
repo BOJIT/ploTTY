@@ -29,6 +29,7 @@
         "@fontsource/jetbrains-mono": "^4.5.12",
         "@fontsource/nunito": "^4.5.12",
         "@fontsource/syne-mono": "^4.5.8",
+        "events": "^3.3.0",
         "localforage": "^1.10.0",
         "svelvet": "^7.0.48"
     }

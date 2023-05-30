@@ -14,7 +14,8 @@ import { get, writable, type Writable } from "svelte/store";
 
 import localForage from "localforage";
 
-// import { FbpGraph, type FbpGraphJson } from "@bojit/noflo-svelte";
+import NofloGraph from "$lib/middlewares/fbp-graph";
+import type { GraphJson as NofloGraphJson } from "$lib/middlewares/fbp-graph/Types";
 
 import file from "$lib/utils/file";
 
@@ -28,7 +29,7 @@ type Metadata = {
 type Patch = {
     key: string    // Duplicate of library key (useful for comprehensions)
     metadata: Metadata
-    // graph: FbpGraphJson
+    graph: NofloGraphJson
 };
 
 type PatchLibrary = {
@@ -43,7 +44,7 @@ const DEFAULT: Patch = {
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
     },
-    // graph: new FbpGraph.Graph().toJSON(),
+    graph: new NofloGraph.Graph().toJSON(),
 }
 
 const DEFAULT_LOCALSTORE: PatchLibrary = {
@@ -103,6 +104,8 @@ async function init(): Promise<Writable<Patch>> {
     store.subscribe(async (val: Patch) => {
         const name = await localStore.getItem("_currentPatch") as string;
         await localStore.setItem(name, val);
+
+        // TODO timeout every 5 seconds to prevent too many writes to disk!
     });
 
     return store;
@@ -215,6 +218,8 @@ async function download(key: string): Promise<Blob | null> {
 /*-------------------------------- Exports -----------------------------------*/
 
 export { patchlist };
+
+export type { Patch };
 
 export default {
     subscribe: store.subscribe,

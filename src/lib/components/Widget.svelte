@@ -21,7 +21,7 @@
 </script>
 
 <div class="widget">
-    <Plotter demo numLines={10} />
+    <Plotter demo numLines={10} wide />
 </div>
 
 <style>

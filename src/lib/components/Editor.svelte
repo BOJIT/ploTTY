@@ -12,9 +12,7 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { fly } from "svelte/transition";
-
-    // TEMP library
-    import library from "$lib/editor/components";
+    import type { Writable } from "svelte/store";
 
     import { IconButton } from "@bojit/svelte-components/form";
     import theme from "@bojit/svelte-components/theme";
@@ -31,7 +29,9 @@
         Trash,
     } from "@svicons/ionicons-outline";
 
-    import { Node, Svelvet, Minimap, Background } from "svelvet";
+    import NofloGraph from "$lib/middlewares/fbp-graph";
+    import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
+    import type { GraphJson as NofloGraphJsonType } from "$lib/middlewares/fbp-graph/Types";
 
     import {
         componentSelectedOverlay,
@@ -39,46 +39,41 @@
     } from "$lib/stores/overlays";
     import patch from "$lib/stores/patch";
 
-    import EditorNode from "$lib/components/EditorNode.svelte";
+    import { clickOutside } from "$lib/utils/clickoutside";
+
+    // TEMP library
+    import library from "$lib/editor/components";
+
+    import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = false;
 
-    let fitGraph: boolean = false;
-
     const accentColour: string = "rgba(131, 137, 172, 0.527)";
+
+    let editor: SvelvetEditor;
+    let graph: NofloGraphType;
 
     /*-------------------------------- Methods -------------------------------*/
 
-    function graphChanged() {}
-
     /*------------------------------- Lifecycle ------------------------------*/
+
+    patch.subscribe(async (p) => {
+        // Deserialise graph
+        graph = await NofloGraph.loadJSON(p.graph);
+    });
 </script>
 
 <div class="editor" class:visible>
-    <Svelvet
-        id="node-editor"
+    <SvelvetEditor
+        bind:this={editor}
+        bind:graph
         theme={$theme}
-        editable
-        fitView={fitGraph ? "resize" : false}
-    >
-        <Minimap
-            width={100}
-            corner="NE"
-            mapColor={$theme === "light"
-                ? "rgb(180, 180, 180)"
-                : "rgb(80, 80, 80)"}
-            slot="minimap"
-        />
-        <Background gridWidth={40} dotSize={1} slot="background" />
-
-        <EditorNode inports={["test", "tag", "t"]} outports={["test"]} />
-        <EditorNode inports={["test"]} outports={["test"]} icon={Trash} />
-        <EditorNode inports={["test", "tag"]} outports={["test"]} icon={Add} />
-    </Svelvet>
-    <!-- <Noflo theme={$theme} bind:this={noflo} bind:graph={$patch.graph} bind:state={state}
-     on:graphChange={graphChanged} library={library} /> -->
+        on:change={() => {
+            console.log(graph.nodes);
+        }}
+    />
 </div>
 
 <div
@@ -100,6 +95,12 @@
         class="controls extended"
         class:visible
         transition:fly|local={{ x: 100 }}
+        use:clickOutside
+        on:click_outside={() => {
+            setTimeout(() => {
+                $extendedSettingsOverlay = false;
+            }, 10);
+        }}
     >
         <IconButton
             icon={Close}
@@ -107,6 +108,9 @@
             color={$theme === "light"
                 ? "var(--color-error-300)"
                 : "var(--color-error-500)"}
+            on:click={() => {
+                editor.resetGraph();
+            }}
         />
         <IconButton
             icon={ColorWand}
@@ -154,7 +158,7 @@
         shape="circle"
         color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
-            $componentSelectedOverlay = !$componentSelectedOverlay;
+            editor.addNode("test");
         }}
     />
     <IconButton
@@ -162,10 +166,7 @@
         shape="circle"
         color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
-            fitGraph = true;
-            setTimeout(() => {
-                fitGraph = false;
-            }, 10);
+            editor.fitGraph();
         }}
     />
     <IconButton
@@ -173,7 +174,7 @@
         shape="circle"
         color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
-            $extendedSettingsOverlay = !$extendedSettingsOverlay;
+            if (!$extendedSettingsOverlay) $extendedSettingsOverlay = true;
         }}
     />
 </div>
@@ -269,22 +270,5 @@
         .controls {
             bottom: 6.9rem;
         }
-    }
-
-    /* Svelvet Theme Overrides */
-    :global(:root[svelvet-theme="light"]) {
-        --default-background-color: rgba(255, 255, 255, 0.6) !important;
-        --anchor-border-color: #444444;
-        --anchor-connected-border: #444444;
-        --anchor-hovering-border: #444444;
-        --shadow-color: 0 0 0;
-    }
-
-    :global(:root[svelvet-theme="dark"]) {
-        --default-background-color: rgba(26, 26, 26, 0.6) !important;
-        --anchor-border-color: #444444;
-        --anchor-connected-border: #444444;
-        --anchor-hovering-border: #444444;
-        --shadow-color: 0 0 0;
     }
 </style>
