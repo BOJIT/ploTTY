@@ -36,7 +36,13 @@
 
 <div />
 
-<Node let:grabHandle let:selected on:nodeClicked={handleClick}>
+<Node
+    let:grabHandle
+    let:selected
+    on:nodeClicked={handleClick}
+    width={100}
+    height={100}
+>
     <div use:grabHandle class:selected class="editor-node">
         <div class="slab">
             <div class="icon">

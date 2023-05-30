@@ -47,6 +47,8 @@
 
     let fitGraph: boolean = false;
 
+    const accentColour: string = "rgba(131, 137, 172, 0.527)";
+
     /*-------------------------------- Methods -------------------------------*/
 
     function graphChanged() {}
@@ -66,7 +68,7 @@
             corner="NE"
             mapColor={$theme === "light"
                 ? "rgb(180, 180, 180)"
-                : "rgb(60, 60, 60)"}
+                : "rgb(80, 80, 80)"}
             slot="minimap"
         />
         <Background gridWidth={40} dotSize={1} slot="background" />
@@ -109,23 +111,17 @@
         <IconButton
             icon={ColorWand}
             shape="circle"
-            color={$theme === "light"
-                ? "var(--color-secondary-400)"
-                : "var(--color-gray-800)"}
+            color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         />
         <IconButton
             icon={ArrowUndo}
             shape="circle"
-            color={$theme === "light"
-                ? "var(--color-secondary-400)"
-                : "var(--color-gray-800)"}
+            color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         />
         <IconButton
             icon={ArrowRedo}
             shape="circle"
-            color={$theme === "light"
-                ? "var(--color-secondary-400)"
-                : "var(--color-gray-800)"}
+            color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         />
     </div>
 {/if}
@@ -137,7 +133,7 @@
                 icon={Settings}
                 shape="circle"
                 color={$theme === "light"
-                    ? "var(--color-secondary-400)"
+                    ? accentColour
                     : "var(--color-gray-800)"}
             />
         </div>
@@ -147,7 +143,7 @@
                 icon={Trash}
                 shape="circle"
                 color={$theme === "light"
-                    ? "var(--color-secondary-400)"
+                    ? accentColour
                     : "var(--color-gray-800)"}
             />
         </div>
@@ -156,9 +152,7 @@
     <IconButton
         icon={Add}
         shape="circle"
-        color={$theme === "light"
-            ? "var(--color-secondary-400)"
-            : "var(--color-gray-800)"}
+        color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
             $componentSelectedOverlay = !$componentSelectedOverlay;
         }}
@@ -166,9 +160,7 @@
     <IconButton
         icon={Scan}
         shape="circle"
-        color={$theme === "light"
-            ? "var(--color-secondary-400)"
-            : "var(--color-gray-800)"}
+        color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
             fitGraph = true;
             setTimeout(() => {
@@ -179,9 +171,7 @@
     <IconButton
         icon={EllipsisHorizontal}
         shape="circle"
-        color={$theme === "light"
-            ? "var(--color-secondary-400)"
-            : "var(--color-gray-800)"}
+        color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
             $extendedSettingsOverlay = !$extendedSettingsOverlay;
         }}
@@ -216,7 +206,7 @@
         visibility: hidden;
         pointer-events: none;
 
-        background-color: rgba(100, 112, 180, 0.527);
+        background-color: rgba(131, 137, 172, 0.527);
         border: 1px solid whitesmoke;
 
         display: flex;
@@ -287,6 +277,7 @@
         --anchor-border-color: #444444;
         --anchor-connected-border: #444444;
         --anchor-hovering-border: #444444;
+        --shadow-color: 0 0 0;
     }
 
     :global(:root[svelvet-theme="dark"]) {
@@ -294,5 +285,6 @@
         --anchor-border-color: #444444;
         --anchor-connected-border: #444444;
         --anchor-hovering-border: #444444;
+        --shadow-color: 0 0 0;
     }
 </style>
