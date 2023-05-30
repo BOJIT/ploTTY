@@ -92,8 +92,9 @@
         dispatch("change");
     }
 
-    // On change ensure that endTransaction hook is set
+    // Reset any state that needs an explicit update
     $: {
+        nodes = graph.nodes;
         graph.removeAllListeners();
         graph.on("endTransaction", endTransaction);
     }

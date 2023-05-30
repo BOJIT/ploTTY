@@ -71,7 +71,10 @@
         bind:graph
         theme={$theme}
         on:change={() => {
-            console.log(graph.nodes);
+            console.log(graph.nodes); // TODO remove
+
+            // Serialise graph
+            $patch.graph = graph.toJSON();
         }}
     />
 </div>
