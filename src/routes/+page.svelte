@@ -1,7 +1,7 @@
 <!--
  * @file +page.svelte
  * @author James Bennion-Pedley
- * @brief Brief summary here
+ * @brief Main UI
  * @date 07/02/2023
  *
  * @copyright Copyright (c) 2023
