@@ -15,7 +15,7 @@
     // import "@fontsource/gloria-hallelujah"
     // import "@fontsource/nunito"
     // import "@fontsource/syne-mono"
-    import "@fontsource/jetbrains-mono"; // TODO migrate this to editor
+    import "@fontsource/jetbrains-mono";
 
     import { App, Notification } from "@bojit/svelte-components/core";
     import { palette } from "@bojit/svelte-components/theme";

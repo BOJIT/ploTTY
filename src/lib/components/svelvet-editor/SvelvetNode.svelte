@@ -11,6 +11,8 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import { createEventDispatcher, afterUpdate } from "svelte";
+
     import type { SvelteComponent } from "svelte";
 
     import { Node, Anchor } from "svelvet";
@@ -27,18 +29,24 @@
           }
         | undefined;
     export let icon: SvelteComponent = DefaultIcon;
+    export let label: string = "Default Node";
 
     export let inports: string[] = [];
     export let outports: string[] = [];
 
+    const dispatch = createEventDispatcher();
+
     /*-------------------------------- Methods -------------------------------*/
 
     function handleClick(e: CustomEvent) {
-        const { detail } = e;
-        console.log(e);
+        dispatch("change");
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
+
+    afterUpdate(() => {
+        // console.log(nodeSelected);
+    });
 </script>
 
 <div />
@@ -55,7 +63,11 @@
     <div use:grabHandle class:selected class="node">
         <div class="slab">
             <div class="icon">
-                <svelte:component this={icon} height="70px" color="#c8ced0" />
+                <svelte:component
+                    this={icon}
+                    height="70px"
+                    color={selected ? "#5e6a6e" : "#c8ced0"}
+                />
             </div>
         </div>
         <div class="ports inports">
@@ -69,6 +81,9 @@
             {/each}
         </div>
     </div>
+    {#if label !== ""}
+        <div class="label">{label}</div>
+    {/if}
 </Node>
 
 <style>
@@ -90,6 +105,10 @@
         text-align: center;
     }
 
+    .node:hover {
+        border: 5px solid #555555;
+    }
+
     .slab {
         grid-row: 1;
         grid-column: 1;
@@ -105,15 +124,18 @@
         top: 2px;
         left: 2px;
 
-        background-color: #d9e1e3;
-
         width: calc(100% - 4px);
         height: calc(100% - 4px);
         border-radius: 13px;
-        background-color: #d8e0e2f7;
+        background-color: rgba(230, 238, 240, 0.94);
+        transition: background-color 0.5s ease;
 
         display: grid;
         place-items: center;
+    }
+
+    .icon :global(svg) {
+        transition: color 0.5s ease;
     }
 
     .ports {
@@ -135,5 +157,25 @@
     .outports {
         justify-self: end;
         right: -13px;
+    }
+
+    .label {
+        background-color: rgba(100, 100, 100, 0.2);
+        padding-top: 2px;
+        padding-bottom: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 3vmin;
+
+        font-size: 10px;
+        font-family: "JetBrains Mono";
+        white-space: nowrap;
+
+        position: absolute;
+        bottom: -30px;
+    }
+
+    :global(.selected .icon) {
+        background-color: #d8e0e2ff;
     }
 </style>

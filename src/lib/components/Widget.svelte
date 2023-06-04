@@ -13,6 +13,8 @@
 
     import { Plotter } from "@bojit/svelte-components/widgets";
 
+    import { graphRunning } from "$lib/stores/runState";
+
     /*--------------------------------- Props --------------------------------*/
 
     /*-------------------------------- Methods -------------------------------*/
@@ -21,7 +23,7 @@
 </script>
 
 <div class="widget">
-    <Plotter demo numLines={10} wide />
+    <Plotter numLines={10} wide demo={$graphRunning} />
 </div>
 
 <style>

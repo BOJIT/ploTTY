@@ -111,12 +111,16 @@
         mapColor={theme === "light" ? "rgb(180, 180, 180)" : "rgb(80, 80, 80)"}
         slot="minimap"
     />
-    <Background gridWidth={40} dotSize={1} slot="background" />
+    <Background gridWidth={40} dotSize={1} slot="background" majorGrid={5} />
 
     {#each nodes as n}
         <SvelvetNode
             id={n.id}
             bind:position={n.metadata.position}
+            on:change={() => {
+                // HACK: force store to update. TODO subscribe to store.
+                n.metadata.position = n.metadata.position;
+            }}
             inports={["test", "tag", "t"]}
             outports={["test"]}
         />
