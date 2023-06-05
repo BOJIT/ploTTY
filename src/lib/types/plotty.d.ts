@@ -37,15 +37,16 @@ type Metadata = {
 
 /*--------------------------------- Types ------------------------------------*/
 
+// TODO work out how to strongly type this
 interface PlottyWidget extends SvelteComponent {
-    reset(): Function,
-    update(): Function,
-    generate(): Function,
+    // reset(): Function,
+    // update(): Function,
+    // generate(): Function,
 }
 
 type PlottyComponent = {
     name: string,       // Name of component (part AFTER trailing slash)
-    category?: string,  // Name of category (part BEFORE trailing slash)
+    category?: string,  // Name of category (part BEFORE trailing slash). Defaults to library name
     ui?: {
         icon?: typeof SvelteComponent,  // @svicons/*
         colour?: CSSColorString, // If unset, uses default component colours

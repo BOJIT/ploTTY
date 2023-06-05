@@ -17,7 +17,7 @@ import { Filter } from "@svicons/ionicons-outline";
 
 const c: PlottyComponent = {
     name: "filter",
-    category: 'data',
+    category: 'core',
     ui: {
         icon: Filter,
     },

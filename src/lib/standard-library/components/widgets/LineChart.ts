@@ -1,7 +1,7 @@
 /**
- * @file console_log.ts
+ * @file LineChart.ts
  * @author James Bennion-Pedley
- * @brief Component to log messages to the DeveloperTools console
+ * @brief Component to plot 2d line charts (WebGL accelerated)
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,27 +11,29 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Open } from "@svicons/ionicons-outline";
+import { Analytics } from "@svicons/ionicons-outline";
+
+import LineChart from "./LineChart.svelte";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "console log",
-    category: 'core',
+    name: "line chart",
+    category: 'widgets',
+    widget: LineChart,
     ui: {
-        icon: Open,
-        colour: '#FF7777',
+        icon: Analytics,
     },
     inputs: {
-        enable: {
+        data: {
             default: {},
         },
+        labels: {
+            datatype: 'string',
+        }
     },
     process: (input, output) => {
-        if (!input.hasData('in')) { return; }
-        const msg = input.getData('in');
-        console.log(msg);
-        output.done();
+
     },
 };
 
