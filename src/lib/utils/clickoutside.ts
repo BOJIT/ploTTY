@@ -17,7 +17,7 @@ import type { Action } from "svelte/types/runtime/action";
 /** Dispatch event on click outside of node */
 export const clickOutside: Action<HTMLElement, undefined> = (node) => {
 
-    const handleClick = event => {
+    const handleClick = (event: any) => {
         if (node && !node.contains(event.target) && !event.defaultPrevented) {
             node.dispatchEvent(
                 new CustomEvent('click_outside', node)

@@ -30,7 +30,7 @@ type Patch = {
     key: string    // Duplicate of library key (useful for comprehensions)
     metadata: Metadata
     graph: NofloGraphJson
-};
+}
 
 type PatchLibrary = {
     "_currentPatch": string,

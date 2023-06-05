@@ -14,7 +14,7 @@
 
 - [-] Add patch name to panel
 
-- [ ] Port 'Graph' element to Svelte properly
+- [-] Port 'Graph' element to Svelte properly
 
 - [ ] Update tabs based on number of 'panel' nodes
 

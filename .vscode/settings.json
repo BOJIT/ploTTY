@@ -6,11 +6,18 @@
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.renderWhitespace": "all",
-    "editor.rulers": [80],
+    "editor.rulers": [
+        80
+    ],
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
     "git.enabled": false,
-    "[svelte]": {"editor.defaultFormatter": "svelte.svelte-vscode"},
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
     "workbench.colorTheme": "midnight blue",
     "workbench.iconTheme": "vscode-icons",
     "workbench.tree.indent": 16,

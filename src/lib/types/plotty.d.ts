@@ -10,8 +10,59 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-/*--------------------------------- State ------------------------------------*/
+import type { SvelteComponent } from "svelte";
 
-/*------------------------------- Functions ----------------------------------*/
+import type { CSSColorString } from "svelvet";
+import type { GraphJson } from "$lib/middlewares/fbp-graph/Graph"
+import type { ProcessingFunction } from "noflo/lib/Component";
+
+/*------------------------------ Partial Types -------------------------------*/
+
+type Port = {
+    datatype?: string | number | object,    // If not set, assume 'any'
+    enumeration?: string[] | number[],
+}
+
+type Ports = {
+    [key: string]: Port,
+}
+
+type Metadata = {
+    version: string,
+    exportDate?: string,
+}
+
+/*--------------------------------- Types ------------------------------------*/
+
+interface PlottyWidget extends SvelteComponent {
+    reset(): Function,
+    update(): Function,
+    generate(): Function,
+}
+
+type PlottyComponent = {
+    name: string,       // Name of component (part AFTER trailing slash)
+    category?: string,  // Name of category (part BEFORE trailing slash)
+    ui?: {
+        icon?: SvelteComponent,  // @svicons/*
+        colour?: CSSColorString, // If unset, uses default component colours
+    },
+    widget?: PlottyWidget,  // Widget for graph outputs
+    inputs?: Ports,         // Object containing input 'anchors'
+    outputs?: Ports,        // Object containing output 'anchors'
+    process: ProcessingFunction,    // The primary component logic
+}
+
+type PlottyPatch = {
+    key: string         // Duplicate of library key (useful for comprehensions)
+    metadata: Metadata  // Patch metadata
+    graph: GraphJson    // Graph itself
+}
 
 /*-------------------------------- Exports -----------------------------------*/
+
+export type {
+    PlottyWidget,
+    PlottyComponent,
+    PlottyPatch,
+};

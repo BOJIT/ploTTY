@@ -7,7 +7,6 @@
 // definition changes.
 /* eslint-env browser, node */
 import { EventEmitter } from 'events';
-import clone from './utils/clone';
 import type {
     JournalMetadata,
     GraphOptions,
@@ -132,7 +131,7 @@ class Graph extends EventEmitter {
     // This method allows changing properties of the graph.
     setProperties(properties: PropertyMap): Graph {
         this.checkTransactionStart();
-        const before = clone(this.properties);
+        const before = structuredClone(this.properties);
         Object.keys(properties).forEach((item) => {
             const val = properties[item];
             this.properties[item] = val;
@@ -203,7 +202,7 @@ class Graph extends EventEmitter {
         if (!this.inports[portName].metadata) {
             this.inports[portName].metadata = {};
         }
-        const before = clone(this.inports[portName].metadata);
+        const before = structuredClone(this.inports[portName].metadata);
         Object.keys(metadata).forEach((item) => {
             const val = metadata[item];
             const existingMeta = this.inports[portName].metadata;
@@ -279,7 +278,7 @@ class Graph extends EventEmitter {
         }
 
         this.checkTransactionStart();
-        const before = clone(this.outports[portName].metadata);
+        const before = structuredClone(this.outports[portName].metadata);
         if (!this.outports[portName].metadata) {
             this.outports[portName].metadata = {};
         }
@@ -349,7 +348,7 @@ class Graph extends EventEmitter {
         this.groups.forEach((group) => {
             if (!group) { return; }
             if (group.name !== groupName) { return; }
-            const before = clone(group.metadata);
+            const before = structuredClone(group.metadata);
             Object.keys(metadata).forEach((item) => {
                 const val = metadata[item];
                 const g = group;
@@ -539,7 +538,7 @@ class Graph extends EventEmitter {
         if (!node.metadata) {
             node.metadata = {};
         }
-        const before = clone(node.metadata);
+        const before = structuredClone(node.metadata);
 
         Object.keys(metadata).forEach((item) => {
             if (!node.metadata) {
@@ -733,7 +732,7 @@ class Graph extends EventEmitter {
 
         this.checkTransactionStart();
         if (!edge.metadata) { edge.metadata = {}; }
-        const before = clone(edge.metadata);
+        const before = structuredClone(edge.metadata);
 
         Object.keys(metadata).forEach((item) => {
             const val = metadata[item];
@@ -1031,7 +1030,7 @@ function loadJSON(passedDefinition: string | GraphJson, callback?: GraphLoadingC
         if (typeof passedDefinition === 'string') {
             definition = JSON.parse(passedDefinition);
         } else {
-            definition = clone(passedDefinition);
+            definition = structuredClone(passedDefinition);
         }
 
         if (!definition.properties) { definition.properties = {}; }
