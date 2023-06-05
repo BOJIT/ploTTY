@@ -42,7 +42,7 @@
     import { clickOutside } from "$lib/utils/clickoutside";
 
     // TEMP library
-    import library from "$lib/editor/components";
+    import library from "$lib/standard-library/components";
 
     import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
 

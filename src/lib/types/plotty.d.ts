@@ -18,9 +18,12 @@ import type { ProcessingFunction } from "noflo/lib/Component";
 
 /*------------------------------ Partial Types -------------------------------*/
 
+type Datatype = 'string' | 'number' | 'boolean' | 'object' | 'signal'
+
 type Port = {
-    datatype?: string | number | object,    // If not set, assume 'any'
-    enumeration?: string[] | number[],
+    datatype?: Datatype,    // If not set, assume 'any'
+    enumeration?: string[] | number[] | boolean[],  // Array of pre-determined values
+    default?: string | number | boolean | {},    // Default value (should be in enumeration)
 }
 
 type Ports = {
@@ -44,13 +47,14 @@ type PlottyComponent = {
     name: string,       // Name of component (part AFTER trailing slash)
     category?: string,  // Name of category (part BEFORE trailing slash)
     ui?: {
-        icon?: SvelteComponent,  // @svicons/*
+        icon?: typeof SvelteComponent,  // @svicons/*
         colour?: CSSColorString, // If unset, uses default component colours
     },
     widget?: PlottyWidget,  // Widget for graph outputs
     inputs?: Ports,         // Object containing input 'anchors'
     outputs?: Ports,        // Object containing output 'anchors'
-    process: ProcessingFunction,    // The primary component logic
+    process: ProcessingFunction,        // The primary component logic
+    teardown?: Promise<void> | void,    // Optional function called on halting of graph
 }
 
 type PlottyPatch = {
