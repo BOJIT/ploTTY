@@ -39,6 +39,9 @@
     let height = 100;
     const anchorSpacing = 15 + 12; // 15px Gap + 12px width
 
+    // TODO get zoom level from Svelvet library
+    let zoom = 5;
+
     /*-------------------------------- Methods -------------------------------*/
 
     function handleClick(e: CustomEvent) {
@@ -76,12 +79,18 @@
         </div>
         <div class="ports inports">
             {#each inports as ip}
-                <Anchor input />
+                <div class="port-annotation" class:visible={zoom > 2}>
+                    <Anchor input />
+                    <p class="left">{ip}</p>
+                </div>
             {/each}
         </div>
         <div class="ports outports">
             {#each outports as op}
-                <Anchor output />
+                <div class="port-annotation" class:visible={zoom > 2}>
+                    <Anchor output />
+                    <p class="right">{op}</p>
+                </div>
             {/each}
         </div>
     </div>
@@ -160,6 +169,36 @@
     .outports {
         justify-self: end;
         right: -13px;
+    }
+
+    .port-annotation {
+        position: relative;
+    }
+
+    .port-annotation p {
+        position: absolute;
+        top: -2px;
+
+        font-size: 4px;
+        font-family: "JetBrains Mono";
+        color: black;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .port-annotation.visible p {
+        opacity: 1;
+    }
+
+    .port-annotation .left {
+        text-align: left;
+        left: 17px;
+    }
+
+    .port-annotation .right {
+        text-align: right;
+        right: 17px;
     }
 
     .label {

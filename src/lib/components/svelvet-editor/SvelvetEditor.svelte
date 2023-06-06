@@ -119,8 +119,8 @@
                 // HACK: force store to update. TODO subscribe to store.
                 n.metadata.position = n.metadata.position;
             }}
-            inports={["test", "tag", "25w"]}
-            outports={["test"]}
+            inports={["data", "enable", "config"]}
+            outports={["out", "sync"]}
         />
     {/each}
 </Svelvet>
