@@ -1,7 +1,7 @@
 <!--
  * @file SvelvetNode.svelte
  * @author James Bennion-Pedley
- * @brief Brief summary here
+ * @brief UI rendering of a node
  * @date 29/05/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,7 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { createEventDispatcher, afterUpdate } from "svelte";
+    import { createEventDispatcher } from "svelte";
 
     import type { SvelteComponent } from "svelte";
 
@@ -36,6 +36,9 @@
 
     const dispatch = createEventDispatcher();
 
+    let height = 100;
+    const anchorSpacing = 15 + 12; // 15px Gap + 12px width
+
     /*-------------------------------- Methods -------------------------------*/
 
     function handleClick(e: CustomEvent) {
@@ -44,9 +47,10 @@
 
     /*------------------------------- Lifecycle ------------------------------*/
 
-    afterUpdate(() => {
-        // console.log(nodeSelected);
-    });
+    $: {
+        const extraHeight = Math.max(inports.length, outports.length) - 3;
+        height = extraHeight > 0 ? 100 + anchorSpacing * extraHeight : 100;
+    }
 </script>
 
 <div />
@@ -58,9 +62,9 @@
     let:selected
     on:nodeClicked={handleClick}
     width={100}
-    height={100}
+    {height}
 >
-    <div use:grabHandle class:selected class="node">
+    <div use:grabHandle class:selected class="node" style="height: {height}px">
         <div class="slab">
             <div class="icon">
                 <svelte:component
@@ -91,7 +95,6 @@
         border-radius: 20px;
         border: 5px solid #444444;
 
-        height: 100px;
         width: 100px;
 
         position: absolute;

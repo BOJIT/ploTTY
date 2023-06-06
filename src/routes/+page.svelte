@@ -131,8 +131,6 @@
         await components.init();
         await patch.init();
 
-        console.log($components);
-
         // Update settings store when theme changes
         $themeMode = $settings.theme;
         themeMode.subscribe((t) => {

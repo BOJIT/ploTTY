@@ -23,8 +23,6 @@
         type Graph as SvelvetGraph,
     } from "svelvet";
 
-    import { Add, Trash } from "@svicons/ionicons-outline"; // TODO delete!!!
-
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import SvelvetNode from "$lib/components/svelvet-editor/SvelvetNode.svelte";
 
@@ -121,7 +119,7 @@
                 // HACK: force store to update. TODO subscribe to store.
                 n.metadata.position = n.metadata.position;
             }}
-            inports={["test", "tag", "t"]}
+            inports={["test", "tag", "25w"]}
             outports={["test"]}
         />
     {/each}
