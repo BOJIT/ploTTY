@@ -33,6 +33,7 @@ type Ports = {
 type Metadata = {
     version: string,
     exportDate?: string,
+    dependencies?: PlottyLibraryManifest[],
 }
 
 /*--------------------------------- Types ------------------------------------*/
@@ -62,6 +63,12 @@ type PlottyPatch = {
     key: string         // Duplicate of library key (useful for comprehensions)
     metadata: Metadata  // Patch metadata
     graph: GraphJson    // Graph itself
+}
+
+type PlottyLibraryManifest = {
+    name: string        // Part of name shown before the category
+    version: string     // Release of the library
+    url?: string        // Allow new versions to be automatically fetched
 }
 
 /*-------------------------------- Exports -----------------------------------*/

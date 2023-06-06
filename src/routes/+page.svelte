@@ -41,6 +41,7 @@
         settingsOverlay,
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
+    import components from "$lib/stores/components";
     import patch from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
 
@@ -127,7 +128,10 @@
     onMount(async () => {
         // Initialise local storage databases
         await settings.init();
+        await components.init();
         await patch.init();
+
+        console.log($components);
 
         // Update settings store when theme changes
         $themeMode = $settings.theme;

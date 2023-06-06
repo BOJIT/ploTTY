@@ -12,34 +12,23 @@
 
 import { get, writable, type Writable } from "svelte/store";
 
+import type { PlottyPatch } from "$lib/types/plotty";
+
 import localForage from "localforage";
 
 import NofloGraph from "$lib/middlewares/fbp-graph";
-import type { GraphJson as NofloGraphJson } from "$lib/middlewares/fbp-graph/Types";
-
 import file from "$lib/utils/file";
 
 /*--------------------------------- Types ------------------------------------*/
 
-type Metadata = {
-    version: string,
-    exportDate?: string,
-}
-
-type Patch = {
-    key: string    // Duplicate of library key (useful for comprehensions)
-    metadata: Metadata
-    graph: NofloGraphJson
-}
-
 type PatchLibrary = {
     "_currentPatch": string,
-    [key: string]: Patch | string,
+    [key: string]: PlottyPatch | string,
 }
 
 /*--------------------------------- State ------------------------------------*/
 
-const DEFAULT: Patch = {
+const DEFAULT: PlottyPatch = {
     key: "Example Patch",
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
@@ -55,7 +44,7 @@ const DEFAULT_LOCALSTORE: PatchLibrary = {
 };
 
 
-let store: Writable<Patch> = writable(DEFAULT);
+let store: Writable<PlottyPatch> = writable(DEFAULT);
 let patchlist: Writable<string[]> = writable([]);
 const localStore: LocalForage = localForage.createInstance({
     name: "patches"
@@ -73,13 +62,13 @@ async function updateKeylist() {
 
 /*------------------------------- Functions ----------------------------------*/
 
-async function init(): Promise<Writable<Patch>> {
+async function init(): Promise<Writable<PlottyPatch>> {
     // Does local store exist?
     const name = await localStore.getItem("_currentPatch") as string;
 
     if (name !== null) {
         // Get current patch and set store
-        const patch = await localStore.getItem(name) as Patch;
+        const patch = await localStore.getItem(name) as PlottyPatch;
         if (patch !== null) {
             patch.key = name;   // Convenience
             store.set(patch);
@@ -101,7 +90,7 @@ async function init(): Promise<Writable<Patch>> {
     await updateKeylist();
 
     // Subscribe for store updates
-    store.subscribe(async (val: Patch) => {
+    store.subscribe(async (val: PlottyPatch) => {
         const name = await localStore.getItem("_currentPatch") as string;
         await localStore.setItem(name, val);
 
@@ -113,7 +102,7 @@ async function init(): Promise<Writable<Patch>> {
 
 async function open(key: string): Promise<boolean> {
     // Is the file in the database?
-    const patch = await localStore.getItem(key) as Patch;
+    const patch = await localStore.getItem(key) as PlottyPatch;
 
     if (patch === null)
         return false;   // File not found!
@@ -126,7 +115,7 @@ async function open(key: string): Promise<boolean> {
     return true;
 }
 
-async function create(key: string, patch: Patch = DEFAULT): Promise<boolean> {
+async function create(key: string, patch: PlottyPatch = DEFAULT): Promise<boolean> {
     if (!validName(key))
         return false;
 
@@ -181,7 +170,7 @@ async function upload(files: File[]): Promise<boolean | null> {
 
     let status: boolean | null = true;
     for (let i = 0; i < files.length; i++) {
-        let patch = JSON.parse(await file.read(files[i]) as string) as Patch;
+        let patch = JSON.parse(await file.read(files[i]) as string) as PlottyPatch;
 
         // Check if file is corrupt
         if (patch.key === undefined) {
@@ -203,7 +192,7 @@ async function upload(files: File[]): Promise<boolean | null> {
 }
 
 async function download(key: string): Promise<Blob | null> {
-    const patch = await localStore.getItem(key) as Patch;
+    const patch = await localStore.getItem(key) as PlottyPatch;
 
     if (patch === null)
         return null;
@@ -218,8 +207,6 @@ async function download(key: string): Promise<Blob | null> {
 /*-------------------------------- Exports -----------------------------------*/
 
 export { patchlist };
-
-export type { Patch };
 
 export default {
     subscribe: store.subscribe,

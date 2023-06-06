@@ -12,7 +12,6 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { fly } from "svelte/transition";
-    import type { Writable } from "svelte/store";
 
     import { IconButton } from "@bojit/svelte-components/form";
     import theme from "@bojit/svelte-components/theme";
@@ -31,7 +30,6 @@
 
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
-    import type { GraphJson as NofloGraphJsonType } from "$lib/middlewares/fbp-graph/Types";
 
     import {
         componentSelectedOverlay,
@@ -40,9 +38,6 @@
     import patch from "$lib/stores/patch";
 
     import { clickOutside } from "$lib/utils/clickoutside";
-
-    // TEMP library
-    import library from "$lib/standard-library/components";
 
     import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
 
