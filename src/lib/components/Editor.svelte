@@ -186,10 +186,14 @@
         right: 0;
         z-index: 10;
 
-        visibility: hidden;
+        display: none;
         pointer-events: none;
 
         background-color: rgba(0, 0, 0, 0.281);
+    }
+
+    .editor.visible {
+        display: block;
     }
 
     .statusbar {
