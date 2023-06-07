@@ -109,7 +109,13 @@
         mapColor={theme === "light" ? "rgb(180, 180, 180)" : "rgb(80, 80, 80)"}
         slot="minimap"
     />
-    <Background gridWidth={40} dotSize={1} slot="background" majorGrid={5} />
+    <Background
+        gridWidth={40}
+        dotSize={1}
+        slot="background"
+        majorGrid={4}
+        minOpacity={0.2}
+    />
 
     {#each nodes as n}
         <SvelvetNode

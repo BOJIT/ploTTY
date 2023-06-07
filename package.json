@@ -32,6 +32,6 @@
         "events": "^3.3.0",
         "localforage": "^1.10.0",
         "noflo": "^1.4.3",
-        "svelvet": "^8.0.0"
+        "svelvet": "^8.0.2"
     }
 }
