@@ -31,10 +31,8 @@
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
-    import {
-        componentSelectedOverlay,
-        extendedSettingsOverlay,
-    } from "$lib/stores/overlays";
+    import { extendedSettingsOverlay } from "$lib/stores/overlays";
+    import { nodeSelected } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     import { clickOutside } from "$lib/utils/clickoutside";
@@ -82,9 +80,9 @@
         : "var(--color-gray-800)"}
 >
     <h5>
-        {$patch.key}<span class="statuspath"
-            >{$componentSelectedOverlay ? "/-> " : ""}</span
-        >
+        {$patch.key}<span class="statuspath">
+            {$nodeSelected !== "" ? `/${$nodeSelected}` : ""}
+        </span>
     </h5>
 </div>
 
@@ -129,7 +127,7 @@
 {/if}
 
 <div class="controls" class:visible>
-    {#if $componentSelectedOverlay}
+    {#if $nodeSelected !== ""}
         <div transition:fly={{ y: 100 }}>
             <IconButton
                 icon={Settings}
@@ -147,6 +145,10 @@
                 color={$theme === "light"
                     ? accentColour
                     : "var(--color-gray-800)"}
+                on:click={() => {
+                    editor.removeNode($nodeSelected);
+                    $nodeSelected = "";
+                }}
             />
         </div>
     {/if}

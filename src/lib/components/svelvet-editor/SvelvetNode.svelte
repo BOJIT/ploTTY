@@ -19,6 +19,10 @@
 
     import { ExtensionPuzzle as DefaultIcon } from "@svicons/ionicons-outline";
 
+    import { nodeSelected } from "$lib/stores/runState";
+
+    import SvelvetLetHook from "./SvelvetLetHook.svelte";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let id: string;
@@ -33,6 +37,8 @@
 
     export let inports: string[] = [];
     export let outports: string[] = [];
+
+    let thisSelected: boolean = false;
 
     const dispatch = createEventDispatcher();
 
@@ -53,6 +59,14 @@
     $: {
         const extraHeight = Math.max(inports.length, outports.length) - 3;
         height = extraHeight > 0 ? 100 + anchorSpacing * extraHeight : 100;
+
+        if (thisSelected) {
+            setTimeout(() => {
+                $nodeSelected = id;
+            }, 10); // Ensures that another node's deselection always fires last
+        } else {
+            $nodeSelected = "";
+        }
     }
 </script>
 
@@ -97,6 +111,8 @@
     {#if label !== ""}
         <div class="label">{label}</div>
     {/if}
+
+    <SvelvetLetHook input={selected} bind:output={thisSelected} />
 </Node>
 
 <style>

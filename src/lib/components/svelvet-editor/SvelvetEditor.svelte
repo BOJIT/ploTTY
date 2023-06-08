@@ -43,6 +43,7 @@
     }
 
     export function addNode(type: string) {
+        // TODO make this ID a more sensible name
         /* Generate random ID then check that it is unique for the graph */
         let id = Math.round(Math.random() * 100000).toString(36);
         while (graph.nodes.some((node) => node.id === id)) {
@@ -71,6 +72,11 @@
         };
 
         graph.addNode(id, type, metadata);
+    }
+
+    export function removeNode(id: string) {
+        console.log(id);
+        graph.removeNode(id);
     }
 
     export function resetGraph() {
@@ -114,7 +120,7 @@
         dotSize={1}
         slot="background"
         majorGrid={4}
-        minOpacity={0.2}
+        minOpacity={0.1}
     />
 
     {#each nodes as n}
