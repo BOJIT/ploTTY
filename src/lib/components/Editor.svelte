@@ -106,6 +106,7 @@
                 : "var(--color-error-500)"}
             on:click={() => {
                 editor.resetGraph();
+                $nodeSelected = "";
             }}
         />
         <IconButton
