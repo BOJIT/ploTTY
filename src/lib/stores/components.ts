@@ -63,6 +63,12 @@ async function init(): Promise<Writable<ComponentLibrary>> {
     return store;
 }
 
+async function reset(): Promise<void> {
+    await localStore.clear();
+    store.set({});          // Reset all stores
+    addComponents(StandardLibrary);
+}
+
 /*-------------------------------- Exports -----------------------------------*/
 
 export default {
@@ -70,4 +76,5 @@ export default {
     set: store.set,
     update: store.update,
     init,
+    reset,
 }
