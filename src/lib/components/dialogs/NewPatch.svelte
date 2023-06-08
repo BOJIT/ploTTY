@@ -8,7 +8,7 @@
  *
 -->
 
-<script lang='ts'>
+<script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
     import { writable, type Writable } from "svelte/store";
@@ -17,17 +17,11 @@
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { Button, TextField } from "@bojit/svelte-components/smelte";
 
-    import {
-        Document,
-    } from "@svicons/ionicons-outline";
+    import { Document } from "@svicons/ionicons-outline";
 
     // Stores
-    import {
-        editorOverlay,
-    } from "$lib/stores/overlays";
-    import {
-        graphRunning,
-    } from "$lib/stores/runState";
+    import { editorOverlay } from "$lib/stores/overlays";
+    import { graphRunning } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
@@ -40,15 +34,14 @@
     /*-------------------------------- Methods -------------------------------*/
 
     async function newPatch() {
-        if(patch.validName($name) === false)
-            return;
+        if (patch.validName($name) === false) return;
 
         // Create a new file
-        if(await patch.create($name) === false) {
+        if ((await patch.create($name)) === false) {
             message.push({
-                type: 'error',
-                title: 'File Error',
-                message: 'Could not create file!',
+                type: "error",
+                title: "File Error",
+                message: "Could not create file!",
                 timeout: 5,
             });
 
@@ -66,33 +59,40 @@
 
     /*------------------------------- Lifecycle ------------------------------*/
 
-    $: if(field) {
-        let input = field.querySelector('input');
-        if(visible) {
+    $: if (field) {
+        let input = field.querySelector("input");
+        if (visible) {
             $name = "New Patch";
             input?.focus();
             setTimeout(() => {
                 input?.select();
-            }, 100)
+            }, 100);
         }
     }
 </script>
 
-
 <BaseDialog title="New Patch" icon={Document} bind:visible on:enter={newPatch}>
     <div bind:this={field}>
-        <TextField label="Patch Name" bind:value={$name}
-            error={patch.validName($name) ? false : "Invalid Name"}/>
+        <TextField
+            label="Patch Name"
+            bind:value={$name}
+            error={patch.validName($name) ? false : "Invalid Name"}
+            color="secondary"
+        />
     </div>
 
     <div slot="actions" class="dialog-actions">
-        <Button color="alert" text on:click={() => visible = false}>Cancel</Button>
-        <Button outlined color="success" disabled={!patch.validName($name)}
-        on:click={newPatch}>Create</Button>
+        <Button color="alert" text on:click={() => (visible = false)}
+            >Cancel</Button
+        >
+        <Button
+            outlined
+            color="success"
+            disabled={!patch.validName($name)}
+            on:click={newPatch}>Create</Button
+        >
     </div>
 </BaseDialog>
 
-
 <style>
-
 </style>
