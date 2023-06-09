@@ -20,7 +20,7 @@ import StandardLibrary from "$lib/standard-library/components";
 
 /*--------------------------------- Types ------------------------------------*/
 
-type ComponentLibrary = {
+export type ComponentLibrary = {
     [key: string]: PlottyComponent,
 }
 

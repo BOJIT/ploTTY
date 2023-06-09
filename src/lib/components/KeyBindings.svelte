@@ -8,7 +8,7 @@
  *
 -->
 
-<script lang='ts'>
+<script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
     import {
@@ -18,6 +18,7 @@
         openPatchOverlay,
         duplicatePatchOverlay,
         settingsOverlay,
+        addComponentOverlay,
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
 
@@ -27,52 +28,44 @@
 
     function handleKeydown(event: KeyboardEvent) {
         // modifier on its own does nothing
-        if(event.key === 'Control')
-            return;
-        if(event.key === 'Meta')
-            return;
-        if(event.key === 'Shift')
-            return;
-        if(event.key === 'Enter')
-            return;
+        if (event.key === "Control") return;
+        if (event.key === "Meta") return;
+        if (event.key === "Shift") return;
+        if (event.key === "Enter") return;
 
         // Are we in reserved dialogues?
-        if($themeOverlay === true)
-            return;
+        if ($themeOverlay === true) return;
 
-        if($newPatchOverlay === true)
-            return;
+        if ($newPatchOverlay === true) return;
 
-        if($openPatchOverlay === true)
-            return;
+        if ($openPatchOverlay === true) return;
 
-        if($duplicatePatchOverlay === true)
-            return;
+        if ($duplicatePatchOverlay === true) return;
 
-        if($settingsOverlay === true)
-            return;
+        if ($settingsOverlay === true) return;
 
+        if ($addComponentOverlay === true) return;
 
         // Global controls
-        if(event.key === 'Tab') {
+        if (event.key === "Tab") {
             event.preventDefault();
             $editorOverlay = !$editorOverlay;
-        } else if(event.key === ' ') {
+        } else if (event.key === " ") {
             event.preventDefault();
             $graphRunning = !$graphRunning;
-        } else if(event.shiftKey && (event.key === 'N')) {
+        } else if (event.shiftKey && event.key === "N") {
             event.preventDefault();
             $newPatchOverlay = true;
-        } else if(event.shiftKey && (event.key === 'O')) {
+        } else if (event.shiftKey && event.key === "O") {
             event.preventDefault();
             $openPatchOverlay = true;
-        } else if(event.shiftKey && (event.key === 'D')) {
+        } else if (event.shiftKey && event.key === "D") {
             event.preventDefault();
             $duplicatePatchOverlay = true;
-        } else if((event.ctrlKey || event.metaKey) && (event.key === '\'')) {
+        } else if ((event.ctrlKey || event.metaKey) && event.key === "'") {
             event.preventDefault();
             $settingsOverlay = true;
-        } else if((event.ctrlKey || event.metaKey) && (event.key === 's')) {
+        } else if ((event.ctrlKey || event.metaKey) && event.key === "s") {
             event.preventDefault(); // Saving should not do anything!
         } else {
             // Unhandled case
@@ -81,8 +74,6 @@
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
-
 </script>
 
-
-<svelte:window on:keydown={handleKeydown}/>
+<svelte:window on:keydown={handleKeydown} />

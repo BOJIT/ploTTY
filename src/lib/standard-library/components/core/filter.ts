@@ -11,7 +11,7 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Filter } from "@svicons/ionicons-outline";
+import { Funnel } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
@@ -19,7 +19,7 @@ const c: PlottyComponent = {
     name: "filter",
     category: 'core',
     ui: {
-        icon: Filter,
+        icon: Funnel,
     },
     inputs: {
         data: {

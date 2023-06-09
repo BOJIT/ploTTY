@@ -22,6 +22,7 @@ const duplicatePatchOverlay: Writable<boolean> = writable(false);
 const settingsOverlay: Writable<boolean> = writable(false);
 const menuOverlay: Writable<boolean> = writable(false);
 const extendedSettingsOverlay: Writable<boolean> = writable(false);
+const addComponentOverlay: Writable<boolean> = writable(false);
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -36,4 +37,5 @@ export {
     settingsOverlay,
     menuOverlay,
     extendedSettingsOverlay,
+    addComponentOverlay,
 };

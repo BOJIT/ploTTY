@@ -31,13 +31,17 @@
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
-    import { extendedSettingsOverlay } from "$lib/stores/overlays";
+    import {
+        extendedSettingsOverlay,
+        addComponentOverlay,
+    } from "$lib/stores/overlays";
     import { nodeSelected } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     import { clickOutside } from "$lib/utils/clickoutside";
 
     import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
+    import AddComponent from "$lib/components/dialogs/AddComponent.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -159,7 +163,7 @@
         shape="circle"
         color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
-            editor.addNode("test");
+            $addComponentOverlay = true;
         }}
     />
     <IconButton
@@ -179,6 +183,14 @@
         }}
     />
 </div>
+
+<!-- Editor Overlays -->
+<AddComponent
+    bind:visible={$addComponentOverlay}
+    on:add={(e) => {
+        editor.addNode(e.detail);
+    }}
+/>
 
 <style>
     .editor {
