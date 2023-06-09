@@ -26,6 +26,8 @@
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import SvelvetNode from "$lib/components/svelvet-editor/SvelvetNode.svelte";
 
+    import components from "$lib/stores/components";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let theme: ThemeMode = "light";
@@ -64,7 +66,8 @@
 
         /* Add UI-related metadata */
         const metadata = {
-            label: type,
+            label: type, // TODO make ID more friendly
+            type: type,
             position: {
                 x: window.innerWidth / 2 + increment,
                 y: window.innerHeight / 2 + increment,
@@ -75,7 +78,6 @@
     }
 
     export function removeNode(id: string) {
-        console.log(id);
         graph.removeNode(id);
     }
 
@@ -126,6 +128,8 @@
     {#each nodes as n}
         <SvelvetNode
             id={n.id}
+            label={n.metadata.label}
+            icon={$components[n.metadata.type]?.ui?.icon}
             bind:position={n.metadata.position}
             on:change={() => {
                 // HACK: force store to update. TODO subscribe to store.
