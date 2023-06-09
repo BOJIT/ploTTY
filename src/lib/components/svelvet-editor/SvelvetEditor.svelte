@@ -67,7 +67,6 @@
         /* Add UI-related metadata */
         const metadata = {
             label: type, // TODO make ID more friendly
-            type: type,
             position: {
                 x: window.innerWidth / 2 + increment,
                 y: window.innerHeight / 2 + increment,
@@ -126,18 +125,26 @@
     />
 
     {#each nodes as n}
-        <SvelvetNode
-            id={n.id}
-            label={n.metadata.label}
-            icon={$components[n.metadata.type]?.ui?.icon}
-            bind:position={n.metadata.position}
-            on:change={() => {
-                // HACK: force store to update. TODO subscribe to store.
-                n.metadata.position = n.metadata.position;
-            }}
-            inports={["data", "enable", "config"]}
-            outports={["out", "sync"]}
-        />
+        {#if $components[n.component] !== undefined}
+            <SvelvetNode
+                id={n.id}
+                label={n.metadata.label}
+                icon={$components[n.component].ui?.icon}
+                bind:position={n.metadata.position}
+                on:change={() => {
+                    // HACK: force store to update. TODO subscribe to store.
+                    n.metadata.position = n.metadata.position;
+                }}
+                inports={$components[n.component].inputs !== undefined
+                    ? Object.keys($components[n.component].inputs)
+                    : []}
+                outports={$components[n.component].outputs !== undefined
+                    ? Object.keys($components[n.component].outputs)
+                    : []}
+            />
+        {:else}
+            <h1>TODO HANDLE ERROR</h1>
+        {/if}
     {/each}
 </Svelvet>
 

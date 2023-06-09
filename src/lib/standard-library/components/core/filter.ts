@@ -29,6 +29,9 @@ const c: PlottyComponent = {
             default: {},
         }
     },
+    outputs: {
+        out: {},
+    },
     process: (input, output) => {
 
     },

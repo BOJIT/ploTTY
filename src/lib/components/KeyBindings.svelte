@@ -53,6 +53,10 @@
         } else if (event.key === " ") {
             event.preventDefault();
             $graphRunning = !$graphRunning;
+        } else if (event.key === "a") {
+            setTimeout(() => {
+                $addComponentOverlay = true;
+            }, 10);
         } else if (event.shiftKey && event.key === "N") {
             event.preventDefault();
             $newPatchOverlay = true;
