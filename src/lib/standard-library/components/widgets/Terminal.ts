@@ -18,7 +18,7 @@ import Terminal from "./Terminal.svelte";
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "line chart",
+    name: "terminal",
     category: 'widgets',
     widget: Terminal,
     ui: {
