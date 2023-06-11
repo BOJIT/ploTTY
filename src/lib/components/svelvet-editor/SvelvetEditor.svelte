@@ -45,11 +45,13 @@
     }
 
     export function addNode(type: string) {
-        // TODO make this ID a more sensible name
-        /* Generate random ID then check that it is unique for the graph */
-        let id = Math.round(Math.random() * 100000).toString(36);
+        /* Generate node ID - this is a sanitised string with increasing index */
+        const root = type.split("/").pop()?.replace(/\s/g, "-"); // Start as node identifier
+        let id: string = root;
+        let suffix = 1;
         while (graph.nodes.some((node) => node.id === id)) {
-            id = Math.round(Math.random() * 100000).toString(36);
+            id = `${root}${suffix}`;
+            suffix += 1;
         }
 
         /* Place in stack if place is taken */
@@ -66,7 +68,6 @@
 
         /* Add UI-related metadata */
         const metadata = {
-            label: type, // TODO make ID more friendly
             position: {
                 x: window.innerWidth / 2 + increment,
                 y: window.innerHeight / 2 + increment,
@@ -128,7 +129,7 @@
         {#if $components[n.component] !== undefined}
             <SvelvetNode
                 id={n.id}
-                label={n.metadata.label}
+                label={n.metadata.label ? n.metadata.label : n.component}
                 icon={$components[n.component].ui?.icon}
                 bind:position={n.metadata.position}
                 on:change={() => {

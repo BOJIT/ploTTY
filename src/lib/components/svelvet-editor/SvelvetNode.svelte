@@ -32,7 +32,7 @@
               y: number;
           }
         | undefined;
-    export let icon: SvelteComponent = DefaultIcon;
+    export let icon: typeof SvelteComponent = DefaultIcon;
     export let label: string = "Default Node";
 
     export let inports: string[] = [];

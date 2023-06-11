@@ -71,10 +71,22 @@ type PlottyLibraryManifest = {
     url?: string        // Allow new versions to be automatically fetched
 }
 
+type PlottyComponentMetadata = {
+    position: {
+        x: number,
+        y: number,
+    },
+    label?: string  // If unset, component type is used
+    portConfig?: {
+        [key: string]: any,
+    },
+}
+
 /*-------------------------------- Exports -----------------------------------*/
 
 export type {
     PlottyWidget,
     PlottyComponent,
+    PlottyComponentMetadata,
     PlottyPatch,
 };

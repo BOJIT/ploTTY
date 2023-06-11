@@ -18,20 +18,20 @@
 
     import { nodeSelected } from "$lib/stores/runState";
 
+    import patch from "$lib/stores/patch";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = true;
 
-    let label: string;
+    let label: string = "";
 
     /*-------------------------------- Methods -------------------------------*/
 
     /*------------------------------- Lifecycle ------------------------------*/
 
-    $: console.log(label);
-
     nodeSelected.subscribe((n) => {
-        if (label !== "") label = n;
+        label = n;
     });
 </script>
 
