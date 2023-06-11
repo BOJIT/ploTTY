@@ -19,8 +19,10 @@
         duplicatePatchOverlay,
         settingsOverlay,
         addComponentOverlay,
+        componenSettingsOverlay,
     } from "$lib/stores/overlays";
-    import { graphRunning } from "$lib/stores/runState";
+
+    import { graphRunning, nodeSelected } from "$lib/stores/runState";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -46,6 +48,8 @@
 
         if ($addComponentOverlay === true) return;
 
+        if ($componenSettingsOverlay === true) return;
+
         // Global controls
         if (event.key === "Tab") {
             event.preventDefault();
@@ -56,7 +60,11 @@
         } else if (event.key === "a") {
             setTimeout(() => {
                 $addComponentOverlay = true;
-            }, 10);
+            }, 100);
+        } else if (event.key === "p" && $nodeSelected !== "") {
+            setTimeout(() => {
+                $componenSettingsOverlay = true;
+            }, 100);
         } else if (event.shiftKey && event.key === "N") {
             event.preventDefault();
             $newPatchOverlay = true;

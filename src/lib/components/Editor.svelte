@@ -34,6 +34,7 @@
     import {
         extendedSettingsOverlay,
         addComponentOverlay,
+        componenSettingsOverlay,
     } from "$lib/stores/overlays";
     import { nodeSelected } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
@@ -42,6 +43,7 @@
 
     import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
     import AddComponent from "$lib/components/dialogs/AddComponent.svelte";
+    import ComponentSettings from "$lib/components/dialogs/ComponentSettings.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -140,6 +142,9 @@
                 color={$theme === "light"
                     ? accentColour
                     : "var(--color-gray-800)"}
+                on:click={() => {
+                    $componenSettingsOverlay = true;
+                }}
             />
         </div>
 
@@ -191,6 +196,7 @@
         editor.addNode(e.detail);
     }}
 />
+<ComponentSettings bind:visible={$componenSettingsOverlay} />
 
 <style>
     .editor {
