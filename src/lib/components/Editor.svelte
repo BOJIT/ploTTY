@@ -56,6 +56,17 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
+    function handleKeydown(event: KeyboardEvent) {
+        // Only handle editor-specific events here
+        if ($nodeSelected !== "" && $componenSettingsOverlay === false) {
+            if (event.key === "Backspace") {
+                event.preventDefault();
+                editor.removeNode($nodeSelected); // Delete shortcut
+                $nodeSelected = "";
+            }
+        }
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     patch.subscribe(async (p) => {
@@ -63,6 +74,8 @@
         graph = await NofloGraph.loadJSON(p.graph);
     });
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <div class="editor" class:visible>
     <SvelvetEditor
