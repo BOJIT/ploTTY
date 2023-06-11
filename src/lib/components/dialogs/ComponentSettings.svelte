@@ -11,6 +11,8 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
+
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { TextField } from "@bojit/svelte-components/smelte";
 
@@ -18,7 +20,7 @@
 
     import { nodeSelected } from "$lib/stores/runState";
 
-    import patch from "$lib/stores/patch";
+    import NofloGraph from "$lib/middlewares/fbp-graph";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -32,6 +34,9 @@
 
     nodeSelected.subscribe((n) => {
         label = n;
+        if (n !== "") {
+            // console.log(n);
+        }
     });
 </script>
 
