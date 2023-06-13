@@ -15,6 +15,7 @@
 
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { TextField } from "@bojit/svelte-components/smelte";
+    import { CodeEditor } from "@bojit/svelte-components/widgets";
 
     import { Settings } from "@svicons/ionicons-outline";
 
@@ -52,6 +53,7 @@
         />
     </form>
     <h6>Ports</h6>
+    <CodeEditor code={"let input = {\n\n};"} maxHeight="10rem" />
 </BaseDialog>
 
 <style>
