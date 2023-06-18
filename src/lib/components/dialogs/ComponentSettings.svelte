@@ -19,9 +19,7 @@
 
     import { Settings } from "@svicons/ionicons-outline";
 
-    import { nodeSelected } from "$lib/stores/runState";
-
-    import NofloGraph from "$lib/middlewares/fbp-graph";
+    import { activeGraph, nodeSelected } from "$lib/stores/runState";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -33,10 +31,15 @@
 
     /*------------------------------- Lifecycle ------------------------------*/
 
-    nodeSelected.subscribe((n) => {
-        label = n;
-        if (n !== "") {
-            // console.log(n);
+    nodeSelected.subscribe((node) => {
+        label = node;
+        if (node !== "") {
+            console.log("Selected");
+            console.log(
+                $activeGraph.nodes.find((n) => {
+                    node === n.id;
+                })
+            );
         }
     });
 </script>

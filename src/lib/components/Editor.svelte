@@ -36,7 +36,7 @@
         addComponentOverlay,
         componenSettingsOverlay,
     } from "$lib/stores/overlays";
-    import { nodeSelected } from "$lib/stores/runState";
+    import { activeGraph, nodeSelected } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     import { clickOutside } from "$lib/utils/clickoutside";
@@ -52,7 +52,6 @@
     const accentColour: string = "rgba(131, 137, 172, 0.527)";
 
     let editor: SvelvetEditor;
-    let graph: NofloGraphType;
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -70,8 +69,8 @@
     /*------------------------------- Lifecycle ------------------------------*/
 
     patch.subscribe(async (p) => {
-        // Deserialise graph
-        graph = await NofloGraph.loadJSON(p.graph);
+        // Deserialise patch and assign to active graph
+        $activeGraph = await NofloGraph.loadJSON(p.graph);
     });
 </script>
 
@@ -80,13 +79,13 @@
 <div class="editor" class:visible>
     <SvelvetEditor
         bind:this={editor}
-        bind:graph
+        bind:graph={$activeGraph}
         theme={$theme}
         on:change={() => {
-            console.log(graph.nodes); // TODO remove
+            console.log($activeGraph.nodes); // TODO write changes back to patch store with a delay
 
             // Serialise graph
-            $patch.graph = graph.toJSON();
+            $patch.graph = $activeGraph.toJSON();
         }}
     />
 </div>
