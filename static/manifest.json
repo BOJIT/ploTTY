@@ -2,6 +2,7 @@
     "theme_color": "#021312",
     "background_color": "#021312",
     "display": "standalone",
+    "orientation": "landscape-primary",
     "scope": "/",
     "start_url": "/",
     "name": "ploTTY",

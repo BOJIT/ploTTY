@@ -34,7 +34,7 @@
     nodeSelected.subscribe((node) => {
         label = node;
         if (node !== "") {
-            console.log("Selected");
+            console.log(node);
             console.log(
                 $activeGraph.nodes.find((n) => {
                     node === n.id;
