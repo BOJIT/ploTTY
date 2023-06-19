@@ -61,6 +61,7 @@
         height = extraHeight > 0 ? 100 + anchorSpacing * extraHeight : 100;
 
         if (thisSelected) {
+            // TODO stop this firing incessantly!!!
             setTimeout(() => {
                 $nodeSelected = id;
             }, 10); // Ensures that another node's deselection always fires last

@@ -29,7 +29,6 @@
     } from "@svicons/ionicons-outline";
 
     import NofloGraph from "$lib/middlewares/fbp-graph";
-    import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
     import {
         extendedSettingsOverlay,
