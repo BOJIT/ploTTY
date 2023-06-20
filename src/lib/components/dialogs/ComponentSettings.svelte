@@ -11,6 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import { IconButton } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { TextField } from "@bojit/svelte-components/smelte";
     import { CodeEditor } from "@bojit/svelte-components/widgets";
@@ -22,6 +23,7 @@
         Settings,
     } from "@svicons/ionicons-outline";
 
+    import type { PlottyPortMode } from "$lib/types/plotty";
     import type { GraphNode } from "$lib/middlewares/fbp-graph/Types";
 
     import { activeGraph, nodeSelected } from "$lib/stores/runState";
@@ -41,10 +43,26 @@
     function getInputsFromLibrary(
         lib: ComponentLibrary,
         component: string
-    ): string[] {
+    ): [string, object][] {
         if (lib[component] === undefined) return [];
         if (lib[component].inputs === undefined) return [];
-        return Object.keys(lib[component].inputs);
+        return Object.entries(lib[component].inputs);
+    }
+
+    function getPortMode(portName: string): PlottyPortMode {
+        if (nodeObject === undefined) return "input";
+
+        if (nodeObject.metadata.portConfig === undefined)
+            nodeObject.metadata.portConfig = {};
+
+        // Create default port config if doesn't exist
+        if (nodeObject.metadata.portConfig[portName] === undefined) {
+            nodeObject.metadata.portConfig[portName] = {
+                mode: "input",
+            };
+        }
+
+        return nodeObject.metadata.portConfig[portName].mode;
     }
 
     function validateLabel(label: string): string | false {
@@ -93,32 +111,53 @@
             color="secondary"
         />
     </form>
-    {#if nodeObject}
+    {#if nodeObject !== undefined}
         <h6>Ports</h6>
         <hr />
         {#each getInputsFromLibrary($components, nodeObject.component) as i}
+            {@const mode = getPortMode(i[0])}
             <div class="config">
-                <h7 class="config-title">{i}</h7>
-                <div
-                    class="config-icon"
-                    style:background-color="var(--color-primary-400)"
-                >
-                    <ArrowForwardCircle width="2rem" />
-                </div>
-                <div
-                    class="config-icon"
-                    style:background-color="var(--color-success-400)"
-                >
-                    <List width="2rem" />
-                </div>
-                <div
-                    class="config-icon"
-                    style:background-color="var(--color-alert-400)"
-                >
-                    <CodeSlash width="2rem" />
-                </div>
+                <h7 class="config-title">{i[0]}</h7>
+                <IconButton
+                    icon={ArrowForwardCircle}
+                    shape="square"
+                    size="1rem"
+                    color={mode === "input"
+                        ? "var(--color-primary-400)"
+                        : "var(--color-primary-trans-dark)"}
+                    useRipple={false}
+                    on:click={() => {
+                        nodeObject.metadata.portConfig[i[0]].mode = "input";
+                    }}
+                />
+                <IconButton
+                    icon={List}
+                    shape="square"
+                    size="1rem"
+                    color={mode === "enum"
+                        ? "var(--color-success-400)"
+                        : "var(--color-success-trans-dark)"}
+                    useRipple={false}
+                    on:click={() => {
+                        nodeObject.metadata.portConfig[i[0]].mode = "enum";
+                    }}
+                />
+                <IconButton
+                    icon={CodeSlash}
+                    shape="square"
+                    size="1rem"
+                    color={mode === "custom"
+                        ? "var(--color-alert-400)"
+                        : "var(--color-alert-trans-dark)"}
+                    useRipple={false}
+                    on:click={() => {
+                        nodeObject.metadata.portConfig[i[0]].mode = "custom";
+                    }}
+                />
             </div>
-            <CodeEditor code={"let input = {\n\n};"} maxHeight="10rem" />
+            {#if mode === "custom"}
+                <CodeEditor code={"let input = {\n\n};"} maxHeight="10rem" />
+            {/if}
         {/each}
     {/if}
 </BaseDialog>
@@ -152,8 +191,8 @@
 
     .config-icon {
         justify-self: flex-end;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 2.2rem;
+        height: 2.2rem;
         display: grid;
         place-items: center;
     }

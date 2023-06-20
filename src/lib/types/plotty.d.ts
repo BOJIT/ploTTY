@@ -38,6 +38,8 @@ type Metadata = {
 
 /*--------------------------------- Types ------------------------------------*/
 
+type PlottyPortMode = "input" | "enum" | "custom"
+
 // TODO work out how to strongly type this
 interface PlottyWidget extends SvelteComponent {
     // reset(): Function,
@@ -78,15 +80,18 @@ type PlottyComponentMetadata = {
     },
     label?: string  // If unset, component type is used
     portConfig?: {
-        [key: string]: any,
+        [key: string]: {
+            mode: PlottyPortMode
+        },
     },
 }
 
 /*-------------------------------- Exports -----------------------------------*/
 
 export type {
-    PlottyWidget,
     PlottyComponent,
     PlottyComponentMetadata,
     PlottyPatch,
+    PlottyPortMode,
+    PlottyWidget,
 };
