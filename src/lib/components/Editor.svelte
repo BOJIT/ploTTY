@@ -28,15 +28,13 @@
         Trash,
     } from "@svicons/ionicons-outline";
 
-    import NofloGraph from "$lib/middlewares/fbp-graph";
-
     import {
         extendedSettingsOverlay,
         addComponentOverlay,
         componenSettingsOverlay,
     } from "$lib/stores/overlays";
-    import { activeGraph, nodeSelected } from "$lib/stores/runState";
-    import patch from "$lib/stores/patch";
+    import { nodeSelected } from "$lib/stores/runState";
+    import patch, { graph } from "$lib/stores/patch";
 
     import { clickOutside } from "$lib/utils/clickoutside";
 
@@ -52,8 +50,6 @@
 
     let editor: SvelvetEditor;
 
-    let patchChange: boolean = false;
-
     /*-------------------------------- Methods -------------------------------*/
 
     function handleKeydown(event: KeyboardEvent) {
@@ -68,41 +64,12 @@
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
-
-    patch.subscribe(async (p) => {
-        // Deserialise patch and assign to active graph
-        patchChange = true;
-        $activeGraph = await NofloGraph.loadJSON(p.graph);
-        setTimeout(() => {
-            patchChange = false;
-        }, 100);
-    });
-
-    activeGraph.subscribe((g) => {
-        // let timeout = 0;
-        // if (patchChange === false && timeout === 0) {
-        //     // If changeset not currently processing, run patch serialise
-        //     $patch.graph = $activeGraph.toJSON();
-        //     timeout = setTimeout(() => {
-        //         timeout = 0;
-        //     }, 3000);
-        // }
-    });
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="editor" class:visible>
-    <SvelvetEditor
-        bind:this={editor}
-        bind:graph={$activeGraph}
-        theme={$theme}
-        on:change={() => {
-            // console.log($activeGraph.nodes); // TODO write changes back to patch store with a delay
-            // // Serialise graph
-            // $patch.graph = $activeGraph.toJSON();
-        }}
-    />
+    <SvelvetEditor bind:this={editor} bind:graph={$graph} theme={$theme} />
 </div>
 
 <div

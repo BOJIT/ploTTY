@@ -12,9 +12,12 @@
 
 import { get, writable, type Writable } from "svelte/store";
 
-import type { PlottyPatch } from "$lib/types/plotty";
-
+import writableDerived from "svelte-writable-derived";
 import localForage from "localforage";
+
+import type { PlottyPatch } from "$lib/types/plotty";
+import type { Graph as GraphType } from "$lib/middlewares/fbp-graph/Graph";
+
 
 import NofloGraph from "$lib/middlewares/fbp-graph";
 import file from "$lib/utils/file";
@@ -49,6 +52,9 @@ let patchlist: Writable<string[]> = writable([]);
 const localStore: LocalForage = localForage.createInstance({
     name: "patches"
 });
+let localStoreTransaction: ReturnType<typeof setTimeout> | null = null;
+
+const graph: Writable<GraphType> = writableDerived(store, patchToGraph, graphToPatch);
 
 /*-------------------------------- Helpers -----------------------------------*/
 
@@ -58,6 +64,19 @@ async function updateKeylist() {
     if (idx != -1)
         keys.splice(idx, 1);
     patchlist.set(keys);
+}
+
+function patchToGraph(patch: PlottyPatch): GraphType {
+    // TODO deal with deserialisation errors!
+    const g = NofloGraph.loadJSONSync(patch.graph);
+    return g !== null ? g : new NofloGraph.Graph();
+
+    // TODO timeout every 5 seconds to prevent too many writes to disk!
+}
+
+function graphToPatch(graph: GraphType, previous: PlottyPatch): PlottyPatch {
+    previous.graph = graph.toJSON();
+    return previous;
 }
 
 /*------------------------------- Functions ----------------------------------*/
@@ -89,12 +108,17 @@ async function init(): Promise<Writable<PlottyPatch>> {
     // Update key list
     await updateKeylist();
 
-    // Subscribe for store updates
+    // Subscribe for store updates (run 0.5 seconds behind to cache movements)
     store.subscribe(async (val: PlottyPatch) => {
-        const name = await localStore.getItem("_currentPatch") as string;
-        await localStore.setItem(name, val);
+        if (localStoreTransaction !== null) {
+            clearTimeout(localStoreTransaction);
+        }
 
-        // TODO timeout every 5 seconds to prevent too many writes to disk!
+        localStoreTransaction = setTimeout(async () => {
+            const name = await localStore.getItem("_currentPatch") as string;
+            await localStore.setItem(name, val);
+            localStoreTransaction = null;
+        }, 500);
     });
 
     return store;
@@ -206,7 +230,7 @@ async function download(key: string): Promise<Blob | null> {
 
 /*-------------------------------- Exports -----------------------------------*/
 
-export { patchlist };
+export { patchlist, graph };
 
 export default {
     subscribe: store.subscribe,

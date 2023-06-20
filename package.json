@@ -32,6 +32,7 @@
         "events": "^3.3.0",
         "localforage": "^1.10.0",
         "noflo": "^1.4.3",
+        "svelte-writable-derived": "^3.1.0",
         "svelvet": "^8.0.2"
     }
 }

@@ -26,7 +26,8 @@
     import type { PlottyPortMode } from "$lib/types/plotty";
     import type { GraphNode } from "$lib/middlewares/fbp-graph/Types";
 
-    import { activeGraph, nodeSelected } from "$lib/stores/runState";
+    import { nodeSelected } from "$lib/stores/runState";
+    import { graph } from "$lib/stores/patch";
 
     import components, { type ComponentLibrary } from "$lib/stores/components";
 
@@ -70,7 +71,7 @@
 
         if (!label.match(labelRegex)) return "Invalid ID!";
 
-        if ($activeGraph.nodes.some((n) => label === n.id))
+        if ($graph.nodes.some((n) => label === n.id))
             return "ID already taken!";
 
         return false;
@@ -81,7 +82,7 @@
     nodeSelected.subscribe((node) => {
         label = node;
         if (node !== "") {
-            let graphRef = $activeGraph.nodes.find((n) => node === n.id);
+            let graphRef = $graph.nodes.find((n) => node === n.id);
             if (graphRef !== undefined) nodeObject = graphRef;
         } else {
             nodeObject = undefined;
@@ -104,8 +105,9 @@
                     label = nodeObject.id; // Revert to previous
                 else {
                     nodeObject.id = label;
+                    nodeObject.metadata.label = label; // Explicit override
                     $nodeSelected = nodeObject.id;
-                    $activeGraph = $activeGraph; // Trigger store update
+                    $graph = $graph; // Trigger store update
                 }
             }}
             color="secondary"
@@ -128,7 +130,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "input";
-                        $activeGraph = $activeGraph; // Trigger store update
+                        $graph = $graph; // Trigger store update
                     }}
                 />
                 <IconButton
@@ -141,7 +143,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "enum";
-                        $activeGraph = $activeGraph; // Trigger store update
+                        $graph = $graph; // Trigger store update
                     }}
                 />
                 <IconButton
@@ -154,7 +156,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "custom";
-                        $activeGraph = $activeGraph; // Trigger store update
+                        $graph = $graph; // Trigger store update
                     }}
                 />
             </div>

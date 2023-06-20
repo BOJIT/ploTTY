@@ -1145,13 +1145,127 @@ function loadJSON(passedDefinition: string | GraphJson, callback?: GraphLoadingC
     }
     return promise;
 }
+function loadJSONSync(passedDefinition: GraphJson): Graph | null {
+    let definition: GraphJson;
+    if (typeof passedDefinition === 'string') {
+        definition = JSON.parse(passedDefinition);
+    } else {
+        definition = structuredClone(passedDefinition);
+    }
+
+    if (!definition.properties) { definition.properties = {}; }
+    if (!definition.processes) { definition.processes = {}; }
+    if (!definition.connections) { definition.connections = []; }
+
+    const graph = new Graph(definition.properties.name, {
+        caseSensitive: definition.caseSensitive || false,
+    });
+
+    graph.startTransaction('loadJSON');
+    const properties: PropertyMap = {};
+    Object.keys(definition.properties).forEach((property) => {
+        if (property === 'name') {
+            return null;
+        }
+        if (!definition.properties) {
+            return null;
+        }
+        const value: any = definition.properties[property];
+        properties[property] = value;
+    });
+    graph.setProperties(properties);
+
+    Object.keys(definition.processes).forEach((id) => {
+        if (!definition.processes) {
+            return null;
+        }
+        const def = definition.processes[id];
+        if (!def.metadata) { def.metadata = {}; }
+        graph.addNode(id, def.component, def.metadata);
+    });
+
+    definition.connections.forEach((conn) => {
+        const meta = conn.metadata ? conn.metadata : {};
+        if (typeof conn.data !== 'undefined') {
+            if (typeof conn.tgt.index === 'number') {
+                graph.addInitialIndex(
+                    conn.data,
+                    conn.tgt.process,
+                    graph.getPortName(conn.tgt.port),
+                    conn.tgt.index,
+                    meta,
+                );
+            } else {
+                graph.addInitial(
+                    conn.data,
+                    conn.tgt.process,
+                    graph.getPortName(conn.tgt.port),
+                    meta,
+                );
+            }
+            return null;
+        }
+        if (typeof conn.src === 'undefined') {
+            return null;
+        }
+        if ((typeof conn.src.index === 'number') || (typeof conn.tgt.index === 'number')) {
+            graph.addEdgeIndex(
+                conn.src.process,
+                graph.getPortName(conn.src.port),
+                conn.src.index,
+                conn.tgt.process,
+                graph.getPortName(conn.tgt.port),
+                conn.tgt.index,
+                meta,
+            );
+            return null;
+        }
+        graph.addEdge(
+            conn.src.process,
+            graph.getPortName(conn.src.port),
+            conn.tgt.process,
+            graph.getPortName(conn.tgt.port),
+            meta,
+        );
+    });
+
+    if (definition.inports) {
+        Object.keys(definition.inports).forEach((pub) => {
+            if (!definition.inports || !definition.inports[pub]) {
+                return null;
+            }
+            const priv = definition.inports[pub];
+            graph.addInport(pub, priv.process, graph.getPortName(priv.port), priv.metadata || {});
+        });
+    }
+    if (definition.outports) {
+        Object.keys(definition.outports).forEach((pub) => {
+            if (!definition.outports || !definition.outports[pub]) {
+                return null;
+            }
+            const priv = definition.outports[pub];
+            graph.addOutport(pub, priv.process, graph.getPortName(priv.port), priv.metadata || {});
+        });
+    }
+
+    if (definition.groups) {
+        definition.groups.forEach((group) => {
+            graph.addGroup(group.name, group.nodes, group.metadata || {});
+        });
+    }
+
+    graph.endTransaction('loadJSON');
+
+    return graph;
+}
 
 /*----------------------------------------------------------------------------*/
 
 export default {
     Graph,
     createGraph,
-    loadJSON
+    loadJSON,
+    loadJSONSync,
 };
 
 export type { Graph };
