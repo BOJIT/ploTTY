@@ -16,14 +16,10 @@
     import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
-    import {
-        Background,
-        Svelvet,
-        Minimap,
-        type Graph as SvelvetGraph,
-    } from "svelvet";
+    import { Background, Svelvet, Minimap } from "svelvet";
 
     import NofloGraph from "$lib/middlewares/fbp-graph";
+    import SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
     import SvelvetNode from "$lib/components/svelvet-editor/SvelvetNode.svelte";
 
     import components from "$lib/stores/components";
@@ -111,6 +107,7 @@
 </script>
 
 <Svelvet id="svelvet-editor" {theme} editable snapTo={2}>
+    <SvelvetAPI />
     <Minimap
         width={100}
         corner="NE"

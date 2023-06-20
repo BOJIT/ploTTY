@@ -11,19 +11,11 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { createEventDispatcher } from "svelte";
-
-    import type { SvelteComponent } from "svelte";
+    import { type SvelteComponent } from "svelte";
 
     import { Node, Anchor } from "svelvet";
 
     import { ExtensionPuzzle as DefaultIcon } from "@svicons/ionicons-outline";
-
-    import { nodeSelected } from "$lib/stores/runState";
-
-    import SvelvetLetHook from "./SvelvetLetHook.svelte";
-
-    import { clickOutside } from "$lib/utils/clickoutside";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -40,72 +32,26 @@
     export let inports: string[] = [];
     export let outports: string[] = [];
 
-    let thisSelected: boolean = false;
-
-    const dispatch = createEventDispatcher();
-
     let height: number = 100;
     const anchorSpacing: number = 15 + 12; // 15px Gap + 12px width
 
     // TODO get zoom level from Svelvet library
     let zoom = 5;
 
-    let pendingRelease: boolean = false;
-
     /*-------------------------------- Methods -------------------------------*/
-
-    function handleOutsideClick(e: CustomEvent) {}
-
-    function handleClick(e: CustomEvent) {
-        // dispatch("change");
-        // console.log("Clicked");
-        // setTimeout()
-    }
-
-    function handleRelease(e: CustomEvent) {
-        // console.log("Released");
-        // $nodeSelected = id;
-    }
 
     /*------------------------------- Lifecycle ------------------------------*/
 
     $: {
         const extraHeight = Math.max(inports.length, outports.length) - 3;
         height = extraHeight > 0 ? 100 + anchorSpacing * extraHeight : 100;
-
-        // if (thisSelected) {
-        //     // TODO stop this firing incessantly!!!
-        //     setTimeout(() => {
-        //         $nodeSelected = id;
-        //     }, 10); // Ensures that another node's deselection always fires last
-        // } else {
-        //     $nodeSelected = "";
-        // }
-        // if (thisSelected === false) {
-        //     console.log(id);
-        // }
     }
 </script>
 
 <div />
 
-<Node
-    bind:id
-    bind:position
-    let:grabHandle
-    let:selected
-    on:nodeClicked={handleClick}
-    on:nodeReleased={handleRelease}
-    width={100}
-    {height}
->
-    <div
-        use:grabHandle
-        use:clickOutside
-        class:selected
-        class="node"
-        style="height: {height}px"
-    >
+<Node bind:id bind:position let:grabHandle let:selected width={100} {height}>
+    <div use:grabHandle class:selected class="node" style="height: {height}px">
         <div class="slab">
             <div class="icon">
                 <svelte:component
@@ -135,8 +81,6 @@
     {#if label !== ""}
         <div class="label">{label}</div>
     {/if}
-
-    <!-- <SvelvetLetHook input={selected} bind:output={thisSelected} /> -->
 </Node>
 
 <style>
