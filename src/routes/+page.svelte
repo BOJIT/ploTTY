@@ -201,7 +201,7 @@
 
 <style>
     :global(.app) {
-        max-height: 100vh !important;
+        height: 100vh !important;
     }
 
     .interface {
