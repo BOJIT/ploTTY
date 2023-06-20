@@ -11,7 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { type SvelteComponent } from "svelte";
+    import { getContext, type SvelteComponent } from "svelte";
 
     import { Node, Anchor } from "svelvet";
 
@@ -32,11 +32,11 @@
     export let inports: string[] = [];
     export let outports: string[] = [];
 
+    const graph = getContext("graph");
+    const scale = graph.transforms.scale;
+
     let height: number = 100;
     const anchorSpacing: number = 15 + 12; // 15px Gap + 12px width
-
-    // TODO get zoom level from Svelvet library
-    let zoom = 5;
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -63,7 +63,7 @@
         </div>
         <div class="ports inports">
             {#each inports as ip}
-                <div class="port-annotation" class:visible={zoom > 2}>
+                <div class="port-annotation" class:visible={$scale > 0.8}>
                     <Anchor input />
                     <p class="left">{ip}</p>
                 </div>
@@ -71,7 +71,7 @@
         </div>
         <div class="ports outports">
             {#each outports as op}
-                <div class="port-annotation" class:visible={zoom > 2}>
+                <div class="port-annotation" class:visible={$scale > 0.8}>
                     <Anchor output />
                     <p class="right">{op}</p>
                 </div>
@@ -168,7 +168,7 @@
         color: black;
         white-space: nowrap;
         opacity: 0;
-        transition: opacity 0.4s;
+        transition: opacity 0.6s;
     }
 
     .port-annotation.visible p {

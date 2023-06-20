@@ -30,14 +30,14 @@
     export let graph: NofloGraphType = new NofloGraph.Graph();
     let nodes = graph.nodes;
 
+    let api: SvelvetAPI;
+
     const dispatch = createEventDispatcher();
 
     /*-------------------------------- Methods -------------------------------*/
 
     export function fitGraph() {
-        // const { x, y, scale } = calculateFitView($dimensions, $nodeBounds);
-        // transforms.translation.set({ x: x || 0, y: y || 0 });
-        // transforms.scale.set(scale || 1);
+        api.fitGraph();
     }
 
     export function addNode(type: string) {
@@ -107,7 +107,7 @@
 </script>
 
 <Svelvet id="svelvet-editor" {theme} editable snapTo={2}>
-    <SvelvetAPI />
+    <SvelvetAPI bind:this={api} />
     <Minimap
         width={100}
         corner="NE"
