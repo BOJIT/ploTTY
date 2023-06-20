@@ -23,6 +23,8 @@
 
     import SvelvetLetHook from "./SvelvetLetHook.svelte";
 
+    import { clickOutside } from "$lib/utils/clickoutside";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let id: string;
@@ -42,16 +44,27 @@
 
     const dispatch = createEventDispatcher();
 
-    let height = 100;
-    const anchorSpacing = 15 + 12; // 15px Gap + 12px width
+    let height: number = 100;
+    const anchorSpacing: number = 15 + 12; // 15px Gap + 12px width
 
     // TODO get zoom level from Svelvet library
     let zoom = 5;
 
+    let pendingRelease: boolean = false;
+
     /*-------------------------------- Methods -------------------------------*/
 
+    function handleOutsideClick(e: CustomEvent) {}
+
     function handleClick(e: CustomEvent) {
-        dispatch("change");
+        // dispatch("change");
+        // console.log("Clicked");
+        // setTimeout()
+    }
+
+    function handleRelease(e: CustomEvent) {
+        // console.log("Released");
+        // $nodeSelected = id;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -60,14 +73,17 @@
         const extraHeight = Math.max(inports.length, outports.length) - 3;
         height = extraHeight > 0 ? 100 + anchorSpacing * extraHeight : 100;
 
-        if (thisSelected) {
-            // TODO stop this firing incessantly!!!
-            setTimeout(() => {
-                $nodeSelected = id;
-            }, 10); // Ensures that another node's deselection always fires last
-        } else {
-            $nodeSelected = "";
-        }
+        // if (thisSelected) {
+        //     // TODO stop this firing incessantly!!!
+        //     setTimeout(() => {
+        //         $nodeSelected = id;
+        //     }, 10); // Ensures that another node's deselection always fires last
+        // } else {
+        //     $nodeSelected = "";
+        // }
+        // if (thisSelected === false) {
+        //     console.log(id);
+        // }
     }
 </script>
 
@@ -79,10 +95,17 @@
     let:grabHandle
     let:selected
     on:nodeClicked={handleClick}
+    on:nodeReleased={handleRelease}
     width={100}
     {height}
 >
-    <div use:grabHandle class:selected class="node" style="height: {height}px">
+    <div
+        use:grabHandle
+        use:clickOutside
+        class:selected
+        class="node"
+        style="height: {height}px"
+    >
         <div class="slab">
             <div class="icon">
                 <svelte:component
@@ -113,7 +136,7 @@
         <div class="label">{label}</div>
     {/if}
 
-    <SvelvetLetHook input={selected} bind:output={thisSelected} />
+    <!-- <SvelvetLetHook input={selected} bind:output={thisSelected} /> -->
 </Node>
 
 <style>
