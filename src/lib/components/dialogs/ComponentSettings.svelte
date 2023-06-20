@@ -128,6 +128,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "input";
+                        $activeGraph = $activeGraph; // Trigger store update
                     }}
                 />
                 <IconButton
@@ -140,6 +141,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "enum";
+                        $activeGraph = $activeGraph; // Trigger store update
                     }}
                 />
                 <IconButton
@@ -152,6 +154,7 @@
                     useRipple={false}
                     on:click={() => {
                         nodeObject.metadata.portConfig[i[0]].mode = "custom";
+                        $activeGraph = $activeGraph; // Trigger store update
                     }}
                 />
             </div>
@@ -187,13 +190,5 @@
     .config-title {
         flex-grow: 1;
         padding-left: 0.7rem;
-    }
-
-    .config-icon {
-        justify-self: flex-end;
-        width: 2.2rem;
-        height: 2.2rem;
-        display: grid;
-        place-items: center;
     }
 </style>

@@ -21,7 +21,7 @@
 
     // Stores
     import { editorOverlay } from "$lib/stores/overlays";
-    import { graphRunning } from "$lib/stores/runState";
+    import { graphRunning, nodeSelected } from "$lib/stores/runState";
     import patch from "$lib/stores/patch";
 
     /*--------------------------------- Props --------------------------------*/
@@ -51,9 +51,10 @@
         // Stop editor, open file, then switch to graph view
         $graphRunning = false;
         await patch.open($name);
-        $editorOverlay = true;
 
         // If success
+        $editorOverlay = true;
+        $nodeSelected = "";
         visible = false;
     }
 
