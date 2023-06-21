@@ -11,6 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import { message } from "@bojit/svelte-components/core";
     import { IconButton } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
     import { TextField, List, ListItem } from "@bojit/svelte-components/smelte";
@@ -171,6 +172,7 @@
                                 <div
                                     slot="item"
                                     let:item
+                                    on:keypress
                                     on:click={() => {
                                         nodeObject.metadata.portConfig[
                                             i[0]
@@ -194,10 +196,26 @@
                         code={nodeObject.metadata.portConfig[i[0]]
                             .codeString !== undefined
                             ? nodeObject.metadata.portConfig[i[0]].codeString
-                            : "let input = 0;"}
+                            : "return 0;"}
                         maxHeight="10rem"
                         on:save={(e) => {
-                            console.log(e);
+                            try {
+                                const exec = Function(`${e.detail}`);
+                                nodeObject.metadata.portConfig[
+                                    i[0]
+                                ].codeString = e.detail;
+                                $graph = $graph; // Trigger store update
+                            } catch (err) {
+                                nodeObject.metadata.portConfig[
+                                    i[0]
+                                ].codeString = "return 0";
+                                message.push({
+                                    type: "error",
+                                    title: "Invalid JS Syntax!",
+                                    message: "Port config is invalid",
+                                    timeout: 5,
+                                });
+                            }
                         }}
                     />
                 {/if}
