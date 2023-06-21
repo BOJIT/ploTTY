@@ -82,6 +82,8 @@ type PlottyComponentMetadata = {
     portConfig?: {
         [key: string]: {
             mode: PlottyPortMode
+            codeString?: string,   // Stores custom code for port input (if used)
+            chosenEnumeration?: number, // Chosen enumeration for port input (if used)
         },
     },
 }

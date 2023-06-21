@@ -13,13 +13,13 @@
 
     import { IconButton } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
-    import { TextField } from "@bojit/svelte-components/smelte";
+    import { TextField, List, ListItem } from "@bojit/svelte-components/smelte";
     import { CodeEditor } from "@bojit/svelte-components/widgets";
 
     import {
         ArrowForwardCircle,
         CodeSlash,
-        List,
+        List as ListIcon,
         Settings,
     } from "@svicons/ionicons-outline";
 
@@ -92,7 +92,7 @@
 
 <BaseDialog title="Component Settings" icon={Settings} bind:visible>
     <h6>Label</h6>
-    <form autocomplete="off" class="overflow">
+    <form autocomplete="off" class="overflow" data-simplebar>
         <TextField
             outlined
             prepend="label"
@@ -112,59 +112,98 @@
             }}
             color="secondary"
         />
+        {#if nodeObject !== undefined}
+            <h6>Ports</h6>
+            <hr />
+            {#each getInputsFromLibrary($components, nodeObject.component) as i}
+                {@const mode = getPortMode(i[0])}
+                <div class="config">
+                    <h7 class="config-title">{i[0]}</h7>
+                    <IconButton
+                        icon={ArrowForwardCircle}
+                        shape="square"
+                        size="1rem"
+                        color={mode === "input"
+                            ? "var(--color-primary-400)"
+                            : "var(--color-primary-trans-dark)"}
+                        useRipple={false}
+                        on:click={() => {
+                            nodeObject.metadata.portConfig[i[0]].mode = "input";
+                            $graph = $graph; // Trigger store update
+                        }}
+                    />
+                    <IconButton
+                        icon={ListIcon}
+                        shape="square"
+                        size="1rem"
+                        color={mode === "enum"
+                            ? "var(--color-success-400)"
+                            : "var(--color-success-trans-dark)"}
+                        useRipple={false}
+                        on:click={() => {
+                            nodeObject.metadata.portConfig[i[0]].mode = "enum";
+                            $graph = $graph; // Trigger store update
+                        }}
+                    />
+                    <IconButton
+                        icon={CodeSlash}
+                        shape="square"
+                        size="1rem"
+                        color={mode === "custom"
+                            ? "var(--color-alert-400)"
+                            : "var(--color-alert-trans-dark)"}
+                        useRipple={false}
+                        on:click={() => {
+                            nodeObject.metadata.portConfig[i[0]].mode =
+                                "custom";
+                            $graph = $graph; // Trigger store update
+                        }}
+                    />
+                </div>
+                {#if mode === "enum"}
+                    {#if i[1].enumeration !== undefined}
+                        <div class="enumeration">
+                            <List
+                                bind:value={nodeObject.metadata.portConfig[i[0]]
+                                    .chosenEnumeration}
+                                items={i[1].enumeration}
+                            >
+                                <div
+                                    slot="item"
+                                    let:item
+                                    on:click={() => {
+                                        nodeObject.metadata.portConfig[
+                                            i[0]
+                                        ].chosenEnumeration = item;
+                                    }}
+                                    class:enumeration-selected={item ===
+                                        nodeObject.metadata.portConfig[i[0]]
+                                            .chosenEnumeration}
+                                >
+                                    <ListItem>
+                                        {item}
+                                    </ListItem>
+                                </div>
+                            </List>
+                        </div>
+                    {:else}
+                        <h6 class="warn">No Enumerations Available!</h6>
+                    {/if}
+                {:else if mode === "custom"}
+                    <CodeEditor
+                        code={nodeObject.metadata.portConfig[i[0]]
+                            .codeString !== undefined
+                            ? nodeObject.metadata.portConfig[i[0]].codeString
+                            : "let input = 0;"}
+                        maxHeight="10rem"
+                        on:save={(e) => {
+                            console.log(e);
+                        }}
+                    />
+                {/if}
+            {/each}
+        {/if}
     </form>
-    {#if nodeObject !== undefined}
-        <h6>Ports</h6>
-        <hr />
-        {#each getInputsFromLibrary($components, nodeObject.component) as i}
-            {@const mode = getPortMode(i[0])}
-            <div class="config">
-                <h7 class="config-title">{i[0]}</h7>
-                <IconButton
-                    icon={ArrowForwardCircle}
-                    shape="square"
-                    size="1rem"
-                    color={mode === "input"
-                        ? "var(--color-primary-400)"
-                        : "var(--color-primary-trans-dark)"}
-                    useRipple={false}
-                    on:click={() => {
-                        nodeObject.metadata.portConfig[i[0]].mode = "input";
-                        $graph = $graph; // Trigger store update
-                    }}
-                />
-                <IconButton
-                    icon={List}
-                    shape="square"
-                    size="1rem"
-                    color={mode === "enum"
-                        ? "var(--color-success-400)"
-                        : "var(--color-success-trans-dark)"}
-                    useRipple={false}
-                    on:click={() => {
-                        nodeObject.metadata.portConfig[i[0]].mode = "enum";
-                        $graph = $graph; // Trigger store update
-                    }}
-                />
-                <IconButton
-                    icon={CodeSlash}
-                    shape="square"
-                    size="1rem"
-                    color={mode === "custom"
-                        ? "var(--color-alert-400)"
-                        : "var(--color-alert-trans-dark)"}
-                    useRipple={false}
-                    on:click={() => {
-                        nodeObject.metadata.portConfig[i[0]].mode = "custom";
-                        $graph = $graph; // Trigger store update
-                    }}
-                />
-            </div>
-            {#if mode === "custom"}
-                <CodeEditor code={"let input = {\n\n};"} maxHeight="10rem" />
-            {/if}
-        {/each}
-    {/if}
 </BaseDialog>
 
 <style>
@@ -172,6 +211,8 @@
         padding-left: 4px;
         padding-right: 4px;
         padding-bottom: 4px;
+
+        max-height: 70vh;
     }
 
     .config {
@@ -192,5 +233,26 @@
     .config-title {
         flex-grow: 1;
         padding-left: 0.7rem;
+    }
+
+    .enumeration {
+        background-color: rgba(206, 206, 206, 0.1);
+    }
+
+    .enumeration > :global(ul) {
+        padding: 0px !important;
+    }
+
+    .enumeration .enumeration-selected {
+        background-color: var(--color-secondary-trans-dark);
+    }
+
+    .warn {
+        color: var(--color-alert-700);
+        text-align: center;
+    }
+
+    :global(.mode-dark) .warn {
+        color: var(--color-alert-400);
     }
 </style>
