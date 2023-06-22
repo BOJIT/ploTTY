@@ -144,6 +144,16 @@
                         on:click={() => {
                             nodeObject.metadata.portConfig[i[0]].mode = "enum";
                             $graph = $graph; // Trigger store update
+
+                            // Set default enum if not picked
+                            if (
+                                nodeObject.metadata.portConfig[i[0]]
+                                    .chosenEnumeration === undefined &&
+                                i[1].enumeration !== undefined
+                            )
+                                nodeObject.metadata.portConfig[
+                                    i[0]
+                                ].chosenEnumeration = i[1].enumeration[0];
                         }}
                     />
                     <IconButton
@@ -177,6 +187,7 @@
                                         nodeObject.metadata.portConfig[
                                             i[0]
                                         ].chosenEnumeration = item;
+                                        $graph = $graph; // Trigger store update
                                     }}
                                     class:enumeration-selected={item ===
                                         nodeObject.metadata.portConfig[i[0]]
