@@ -39,6 +39,7 @@
         openPatchOverlay,
         duplicatePatchOverlay,
         settingsOverlay,
+        burgerMenuOverlay,
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
     import components from "$lib/stores/components";
@@ -52,6 +53,7 @@
     import OpenPatch from "$lib/components/dialogs/OpenPatch.svelte";
     import DuplicatePatch from "$lib/components/dialogs/DuplicatePatch.svelte";
     import SettingsDialog from "$lib/components/dialogs/Settings.svelte";
+    import BurgerMenu from "$lib/components/dialogs/BurgerMenu.svelte";
     import Widget from "$lib/components/Widget.svelte";
 
     /*--------------------------------- Props --------------------------------*/
@@ -109,6 +111,9 @@
             color: "transparent",
             icon: Menu,
             visibility: "mobile",
+            callback: () => {
+                $burgerMenuOverlay = true;
+            },
         },
     ];
 
@@ -191,6 +196,7 @@
 <OpenPatch bind:visible={$openPatchOverlay} />
 <DuplicatePatch bind:visible={$duplicatePatchOverlay} />
 <SettingsDialog bind:visible={$settingsOverlay} />
+<BurgerMenu bind:visible={$burgerMenuOverlay} />
 
 {#if import.meta.env.VITE_SHOW_UNSTABLE === "true"}
     <!-- Beta Banner -->

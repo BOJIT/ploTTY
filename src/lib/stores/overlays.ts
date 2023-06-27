@@ -24,6 +24,7 @@ const menuOverlay: Writable<boolean> = writable(false);
 const extendedSettingsOverlay: Writable<boolean> = writable(false);
 const addComponentOverlay: Writable<boolean> = writable(false);
 const componenSettingsOverlay: Writable<boolean> = writable(false);
+const burgerMenuOverlay: Writable<boolean> = writable(false);
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -40,4 +41,5 @@ export {
     extendedSettingsOverlay,
     addComponentOverlay,
     componenSettingsOverlay,
+    burgerMenuOverlay,
 };
