@@ -64,18 +64,7 @@
         };
     }
 
-    function endTransaction() {
-        dispatch("change");
-    }
-
     /*----------------------------- Public Methods ---------------------------*/
-
-    // TODO deprecate
-    export function assignTransaction() {
-        // This is quite hacky, eventually remove
-        graph.removeAllListeners();
-        graph.on("endTransaction", endTransaction);
-    }
 
     export function fitGraph() {
         const { x, y, scale } = calculateFitView($dimensions, $nodeBounds);
@@ -84,10 +73,12 @@
     }
 
     export function resetGraph() {
-        // Reset graph to initial state
+        // Copy over listeners
+        const listeners = graph.listeners("endTransaction");
+        // Reset graph to initial state, then restore listeners
         graph = new NofloGraph.Graph();
-        assignTransaction();
-        endTransaction();
+        graph.on("endTransaction", listeners[0]);
+
         nodeSelected = "";
     }
 
@@ -122,6 +113,8 @@
         };
 
         graph.addNode(id, type, metadata);
+
+        console.log(graph);
     }
 
     export function removeNode(id: string) {
@@ -159,9 +152,5 @@
         } else {
             nodeSelected = "";
         }
-    });
-
-    onMount(() => {
-        assignTransaction();
     });
 </script>

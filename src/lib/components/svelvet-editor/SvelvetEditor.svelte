@@ -11,7 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
 
     import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
@@ -34,13 +34,28 @@
     let nodes = graph.nodes;
     const dispatch = createEventDispatcher();
 
+    /*-------------------------------- Methods -------------------------------*/
+
+    function dispatchChange() {
+        nodes = graph.nodes; // assignment to trigger update
+        graph = graph;
+        dispatch("change");
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     // Reset any state that needs an explicit update
     $: {
         nodes = graph.nodes;
-        api?.assignTransaction();
+        graph.removeAllListeners();
+        graph.on("endTransaction", dispatchChange);
     }
+
+    onMount(() => {
+        // This is quite hacky, eventually remove
+        graph.removeAllListeners();
+        graph.on("endTransaction", dispatchChange);
+    });
 </script>
 
 <Svelvet id="svelvet-editor" {theme} editable snapTo={2}>
@@ -48,12 +63,7 @@
         bind:this={api}
         bind:graph
         bind:nodeSelected
-        on:change={() => {
-            // TODO this should encompass ALL change types
-            nodes = graph.nodes; // assignment to trigger update
-            graph = graph;
-            dispatch("change");
-        }}
+        on:change={dispatchChange}
     />
     <Minimap
         width={100}
