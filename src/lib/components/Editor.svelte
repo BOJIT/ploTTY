@@ -29,6 +29,11 @@
     } from "@svicons/ionicons-outline";
 
     import {
+        newPatchOverlay,
+        openPatchOverlay,
+        duplicatePatchOverlay,
+        settingsOverlay,
+        burgerMenuOverlay,
         extendedSettingsOverlay,
         addComponentOverlay,
         componenSettingsOverlay,
@@ -39,8 +44,15 @@
     import { clickOutside } from "$lib/utils/clickoutside";
 
     import SvelvetEditor from "$lib/components/svelvet-editor/SvelvetEditor.svelte";
+    import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
+
     import AddComponent from "$lib/components/dialogs/AddComponent.svelte";
+    import BurgerMenu from "$lib/components/dialogs/BurgerMenu.svelte";
     import ComponentSettings from "$lib/components/dialogs/ComponentSettings.svelte";
+    import DuplicatePatch from "$lib/components/dialogs/DuplicatePatch.svelte";
+    import NewPatch from "$lib/components/dialogs/NewPatch.svelte";
+    import OpenPatch from "$lib/components/dialogs/OpenPatch.svelte";
+    import SettingsDialog from "$lib/components/dialogs/Settings.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -48,7 +60,7 @@
 
     const accentColour: string = "rgba(131, 137, 172, 0.527)";
 
-    let editor: SvelvetEditor;
+    let api: SvelvetAPI;
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -57,8 +69,7 @@
         if ($nodeSelected !== "" && $componenSettingsOverlay === false) {
             if (event.key === "Backspace") {
                 event.preventDefault();
-                editor.removeNode($nodeSelected); // Delete shortcut
-                $nodeSelected = "";
+                api.removeNode($nodeSelected); // Delete shortcut
             }
         }
     }
@@ -69,7 +80,12 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="editor" class:visible>
-    <SvelvetEditor bind:this={editor} bind:graph={$graph} theme={$theme} />
+    <SvelvetEditor
+        bind:api
+        bind:graph={$graph}
+        bind:nodeSelected={$nodeSelected}
+        theme={$theme}
+    />
 </div>
 
 <div
@@ -105,8 +121,7 @@
                 ? "var(--color-error-300)"
                 : "var(--color-error-500)"}
             on:click={() => {
-                editor.resetGraph();
-                $nodeSelected = "";
+                api.resetGraph();
             }}
         />
         <IconButton
@@ -150,8 +165,7 @@
                     ? accentColour
                     : "var(--color-gray-800)"}
                 on:click={() => {
-                    editor.removeNode($nodeSelected);
-                    $nodeSelected = "";
+                    api.removeNode($nodeSelected);
                 }}
             />
         </div>
@@ -170,7 +184,7 @@
         shape="circle"
         color={$theme === "light" ? accentColour : "var(--color-gray-800)"}
         on:click={() => {
-            editor.fitGraph();
+            api.fitGraph();
         }}
     />
     <IconButton
@@ -184,10 +198,15 @@
 </div>
 
 <!-- Editor Overlays -->
+<NewPatch bind:visible={$newPatchOverlay} />
+<OpenPatch bind:visible={$openPatchOverlay} {api} />
+<DuplicatePatch bind:visible={$duplicatePatchOverlay} />
+<SettingsDialog bind:visible={$settingsOverlay} />
+<BurgerMenu bind:visible={$burgerMenuOverlay} />
 <AddComponent
     bind:visible={$addComponentOverlay}
     on:add={(e) => {
-        editor.addNode(e.detail);
+        api.addNode(e.detail);
     }}
 />
 <ComponentSettings bind:visible={$componenSettingsOverlay} />

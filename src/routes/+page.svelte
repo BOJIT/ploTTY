@@ -49,11 +49,6 @@
     // Components
     import Editor from "$lib/components/Editor.svelte";
     import KeyBindings from "$lib/components/KeyBindings.svelte";
-    import NewPatch from "$lib/components/dialogs/NewPatch.svelte";
-    import OpenPatch from "$lib/components/dialogs/OpenPatch.svelte";
-    import DuplicatePatch from "$lib/components/dialogs/DuplicatePatch.svelte";
-    import SettingsDialog from "$lib/components/dialogs/Settings.svelte";
-    import BurgerMenu from "$lib/components/dialogs/BurgerMenu.svelte";
     import Widget from "$lib/components/Widget.svelte";
 
     /*--------------------------------- Props --------------------------------*/
@@ -192,11 +187,6 @@
 
 <!-- GLobal Overlays -->
 <KeyBindings />
-<NewPatch bind:visible={$newPatchOverlay} />
-<OpenPatch bind:visible={$openPatchOverlay} />
-<DuplicatePatch bind:visible={$duplicatePatchOverlay} />
-<SettingsDialog bind:visible={$settingsOverlay} />
-<BurgerMenu bind:visible={$burgerMenuOverlay} />
 
 {#if import.meta.env.VITE_SHOW_UNSTABLE === "true"}
     <!-- Beta Banner -->

@@ -11,6 +11,8 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
+
     import { message } from "@bojit/svelte-components/core";
     import {
         SearchableList,
@@ -38,6 +40,7 @@
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = true;
+    export let api: SvelvetAPI;
 
     let searchableList: SearchableList;
 
@@ -82,6 +85,7 @@
                 }
 
                 $editorOverlay = true;
+                api.fitGraph();
                 $nodeSelected = "";
                 visible = false;
             }, 200);

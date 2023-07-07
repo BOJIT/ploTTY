@@ -11,20 +11,26 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { getContext } from "svelte";
+    import { createEventDispatcher, getContext, onMount } from "svelte";
 
-    import { nodeSelected } from "$lib/stores/runState";
+    import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
+
+    import NofloGraph from "$lib/middlewares/fbp-graph";
 
     /*--------------------------------- Props --------------------------------*/
 
-    const graph: any = getContext("graph");
-    const { bounds, dimensions, groups } = graph;
+    export let graph: NofloGraphType;
+    export let nodeSelected: string = "";
+
+    const svelvetGraph: any = getContext("graph");
+    const { bounds, dimensions, groups } = svelvetGraph;
     const selectedNodes = $groups.selected.nodes;
     const nodeBounds = bounds.nodeBounds;
 
+    const dispatch = createEventDispatcher();
+
     /*-------------------------------- Methods -------------------------------*/
 
-    // TODO import this from Svelvet library
     function calculateFitView(
         dimensions: any,
         bounds: { top: number; left: number; right: number; bottom: number }
@@ -56,16 +62,80 @@
         };
     }
 
+    function endTransaction() {
+        dispatch("change");
+    }
+
+    /*----------------------------- Public Methods ---------------------------*/
+
+    // TODO deprecate
+    export function assignTransaction() {
+        // This is quite hacky, eventually remove
+        graph.removeAllListeners();
+        graph.on("endTransaction", endTransaction);
+    }
+
     export function fitGraph() {
         const { x, y, scale } = calculateFitView($dimensions, $nodeBounds);
-        graph.transforms.translation.set({ x: x || 0, y: y || 0 });
-        graph.transforms.scale.set(scale || 1);
+        svelvetGraph.transforms.translation.set({ x: x || 0, y: y || 0 });
+        svelvetGraph.transforms.scale.set(scale || 1);
     }
+
+    export function resetGraph() {
+        // Reset graph to initial state
+        graph = new NofloGraph.Graph();
+        assignTransaction();
+        endTransaction();
+        nodeSelected = "";
+    }
+
+    export function addNode(type: string) {
+        /* Generate node ID - this is a sanitised string with increasing index */
+        const root = type.split("/").pop()?.replace(/\s/g, "-"); // Start as node identifier
+        let id: string = root;
+        let suffix = 1;
+        while (graph.nodes.some((node) => node.id === id)) {
+            id = `${root}${suffix}`;
+            suffix += 1;
+        }
+
+        /* Place in stack if place is taken */
+        let increment = 0;
+        while (
+            graph.nodes.some(
+                (node) =>
+                    node.metadata.position.x ===
+                    window.innerWidth / 2 + increment
+            )
+        ) {
+            increment += 20;
+        }
+
+        /* Add UI-related metadata */
+        const metadata = {
+            position: {
+                x: window.innerWidth / 2 + increment,
+                y: window.innerHeight / 2 + increment,
+            },
+        };
+
+        graph.addNode(id, type, metadata);
+    }
+
+    export function removeNode(id: string) {
+        graph.removeNode(id);
+    }
+
+    export function renameNode(id: string, rename: string) {}
 
     /*------------------------------- Lifecycle ------------------------------*/
 
     selectedNodes.subscribe((s: Set<any>) => {
-        if (s.size === 1) $nodeSelected = [...s][0].id.substring(2);
-        else $nodeSelected = "";
+        if (s.size === 1) nodeSelected = [...s][0].id.substring(2);
+        else nodeSelected = "";
+    });
+
+    onMount(() => {
+        assignTransaction();
     });
 </script>

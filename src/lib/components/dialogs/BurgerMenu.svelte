@@ -103,4 +103,9 @@
         gap: 0.5rem;
         min-width: 18rem;
     }
+
+    .buttons > :global(button) {
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;
+    }
 </style>

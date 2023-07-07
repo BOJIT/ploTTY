@@ -81,12 +81,14 @@
     /*------------------------------- Lifecycle ------------------------------*/
 
     nodeSelected.subscribe((node) => {
+        console.log(node);
         label = node;
         if (node !== "") {
             let graphRef = $graph.nodes.find((n) => node === n.id);
             if (graphRef !== undefined) nodeObject = graphRef;
         } else {
             nodeObject = undefined;
+            console.log("HUH");
         }
     });
 </script>
@@ -107,8 +109,8 @@
                 else {
                     nodeObject.id = label;
                     nodeObject.metadata.label = label; // Explicit override
-                    $nodeSelected = nodeObject.id;
                     $graph = $graph; // Trigger store update
+                    $nodeSelected = nodeObject.id;
                 }
             }}
             color="secondary"
