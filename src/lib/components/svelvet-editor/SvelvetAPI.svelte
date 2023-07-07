@@ -124,6 +124,7 @@
 
     export function removeNode(id: string) {
         graph.removeNode(id);
+        nodeSelected = "";
     }
 
     export function renameNode(id: string, rename: string) {}
