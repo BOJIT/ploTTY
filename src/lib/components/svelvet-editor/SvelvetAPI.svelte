@@ -29,6 +29,8 @@
 
     const dispatch = createEventDispatcher();
 
+    let renamePending: any | null = null;
+
     /*-------------------------------- Methods -------------------------------*/
 
     function calculateFitView(
@@ -127,13 +129,36 @@
         nodeSelected = "";
     }
 
-    export function renameNode(id: string, rename: string) {}
+    export function renameNode(id: string, rename: string) {
+        let node = graph.nodes.find((n) => id === n.id);
+        if (node === undefined) return;
+
+        renamePending = node;
+        node.id = rename; // Assigning this will deselect the node
+
+        node.metadata.label = rename; // Explicit override
+        graph = graph; // Trigger prop update
+        nodeSelected = node.id;
+    }
 
     /*------------------------------- Lifecycle ------------------------------*/
 
     selectedNodes.subscribe((s: Set<any>) => {
-        if (s.size === 1) nodeSelected = [...s][0].id.substring(2);
-        else nodeSelected = "";
+        if (renamePending) {
+            // Deal with annoyance of deselection on id change
+            $selectedNodes.add(renamePending);
+            renamePending = null;
+            $selectedNodes = $selectedNodes;
+            return;
+        }
+
+        if (s.size === 1) {
+            if ([...s][0].id.startsWith("N-"))
+                nodeSelected = [...s][0].id.substring(2);
+            else nodeSelected = [...s][0].id;
+        } else {
+            nodeSelected = "";
+        }
     });
 
     onMount(() => {

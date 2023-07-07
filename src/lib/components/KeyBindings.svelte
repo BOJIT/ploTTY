@@ -52,12 +52,10 @@
 
         // Global controls
         if (event.key === "Tab") {
-            event.preventDefault();
             $editorOverlay = !$editorOverlay;
         } else if (event.key === " ") {
-            event.preventDefault();
             $graphRunning = !$graphRunning;
-        } else if (event.key === "a") {
+        } else if (event.key === "a" && !(event.ctrlKey || event.metaKey)) {
             setTimeout(() => {
                 $addComponentOverlay = true;
             }, 100);
@@ -66,23 +64,22 @@
                 $componenSettingsOverlay = true;
             }, 100);
         } else if (event.shiftKey && event.key === "N") {
-            event.preventDefault();
             $newPatchOverlay = true;
         } else if (event.shiftKey && event.key === "O") {
-            event.preventDefault();
             $openPatchOverlay = true;
         } else if (event.shiftKey && event.key === "D") {
-            event.preventDefault();
             $duplicatePatchOverlay = true;
         } else if ((event.ctrlKey || event.metaKey) && event.key === "'") {
-            event.preventDefault();
             $settingsOverlay = true;
         } else if ((event.ctrlKey || event.metaKey) && event.key === "s") {
             event.preventDefault(); // Saving should not do anything!
         } else {
             // Unhandled case
             // console.log(event);
+            return;
         }
+
+        event.preventDefault();
     }
 
     /*------------------------------- Lifecycle ------------------------------*/

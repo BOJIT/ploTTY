@@ -209,7 +209,7 @@
         api.addNode(e.detail);
     }}
 />
-<ComponentSettings bind:visible={$componenSettingsOverlay} />
+<ComponentSettings bind:visible={$componenSettingsOverlay} {api} />
 
 <style>
     .editor {

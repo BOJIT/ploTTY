@@ -11,8 +11,6 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
-
     import { message } from "@bojit/svelte-components/core";
     import {
         SearchableList,
@@ -28,6 +26,8 @@
         FolderOpen,
         Trash,
     } from "@svicons/ionicons-outline";
+
+    import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
 
     // Stores
     import { editorOverlay } from "$lib/stores/overlays";

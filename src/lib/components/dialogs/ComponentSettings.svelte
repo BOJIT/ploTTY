@@ -24,6 +24,8 @@
         Settings,
     } from "@svicons/ionicons-outline";
 
+    import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
+
     import type { PlottyPortMode } from "$lib/types/plotty";
     import type { GraphNode } from "$lib/middlewares/fbp-graph/Types";
 
@@ -35,6 +37,7 @@
     /*--------------------------------- Props --------------------------------*/
 
     export let visible: boolean = true;
+    export let api: SvelvetAPI;
 
     let label: string = "";
     let nodeObject: GraphNode | undefined = undefined;
@@ -81,14 +84,13 @@
     /*------------------------------- Lifecycle ------------------------------*/
 
     nodeSelected.subscribe((node) => {
-        console.log(node);
         label = node;
         if (node !== "") {
             let graphRef = $graph.nodes.find((n) => node === n.id);
             if (graphRef !== undefined) nodeObject = graphRef;
         } else {
             nodeObject = undefined;
-            console.log("HUH");
+            visible = false; // Settings hidden if multiple components selected
         }
     });
 </script>
@@ -107,10 +109,7 @@
                 if (validateLabel(label) !== false)
                     label = nodeObject.id; // Revert to previous
                 else {
-                    nodeObject.id = label;
-                    nodeObject.metadata.label = label; // Explicit override
-                    $graph = $graph; // Trigger store update
-                    $nodeSelected = nodeObject.id;
+                    api.renameNode(nodeObject.id, label);
                 }
             }}
             color="secondary"
