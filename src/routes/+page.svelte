@@ -49,7 +49,7 @@
     // Components
     import Editor from "$lib/components/Editor.svelte";
     import KeyBindings from "$lib/components/KeyBindings.svelte";
-    import Widget from "$lib/components/Widget.svelte";
+    import Widgets from "$lib/components/Widgets.svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -112,15 +112,6 @@
         },
     ];
 
-    let tabs = [
-        {
-            label: "Plot 1",
-        },
-        {
-            label: "Plot 2",
-        },
-    ];
-
     /*-------------------------------- Methods -------------------------------*/
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -175,13 +166,7 @@
 
 <!-- Primary User Interface -->
 <div class="interface">
-    <div class="pad">
-        <Tabs {tabs} />
-    </div>
-
-    <!-- Placeholder TEMPORARY -->
-    <Widget />
-
+    <Widgets />
     <Editor visible={$editorOverlay} />
 </div>
 
@@ -208,10 +193,6 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-    }
-
-    .pad {
-        padding: 0.2rem;
     }
 
     .beta {

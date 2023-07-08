@@ -113,8 +113,6 @@
         };
 
         graph.addNode(id, type, metadata);
-
-        console.log(graph);
     }
 
     export function removeNode(id: string) {

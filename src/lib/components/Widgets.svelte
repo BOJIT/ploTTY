@@ -1,0 +1,107 @@
+<!--
+ * @file Widgets.svelte
+ * @author James Bennion-Pedley
+ * @brief Container for graphical widgets
+ * @date 29/05/2023
+ *
+ * @copyright Copyright (c) 2023
+ *
+-->
+
+<script lang="ts">
+    /*-------------------------------- Imports -------------------------------*/
+
+    import { derived } from "svelte/store";
+
+    import { Plotter, Tabs } from "@bojit/svelte-components/widgets";
+
+    import { graphRunning } from "$lib/stores/runState";
+    import { graph } from "$lib/stores/patch";
+    import components from "$lib/stores/components";
+
+    /*--------------------------------- Props --------------------------------*/
+
+    const widgetNodes = derived([graph, components], ([g, c]) => {
+        const w = g.nodes.filter((n) => {
+            if (c[n.component] === undefined) return false;
+            if (c[n.component].widget === undefined) return false;
+            return true;
+        });
+
+        return w;
+    });
+
+    const widgetIds = derived(widgetNodes, (w) => {
+        return w.map((n) => {
+            return {
+                label: n.id,
+            };
+        });
+    });
+
+    let activeIds: number = 0;
+
+    /*-------------------------------- Methods -------------------------------*/
+
+    function checkSelectedWidget(ids, idx, w) {
+        // If selection has been deleted, reset to entry 0
+        if (ids[activeIds] === undefined) {
+            activeIds = 0;
+            return false;
+        }
+
+        return ids[activeIds].label === w.id;
+    }
+
+    /*------------------------------- Lifecycle ------------------------------*/
+</script>
+
+{#if $widgetNodes.length > 0}
+    <div class="pad">
+        <Tabs tabs={$widgetIds} bind:index={activeIds} />
+    </div>
+{/if}
+
+<div class="widgets">
+    {#if $widgetNodes.length === 0}
+        <h2 class="no-widgets">[No Active Widgets]</h2>
+    {/if}
+
+    {#each $widgetNodes as w (w.id)}
+        <div
+            class="widget"
+            class:visible={checkSelectedWidget($widgetIds, activeIds, w)}
+        >
+            <h1>{w.id}</h1>
+        </div>
+        <!-- <Plotter numLines={10} wide demo={$graphRunning} /> -->
+    {/each}
+</div>
+
+<style>
+    .pad {
+        padding: 0.2rem;
+    }
+
+    .widgets {
+        flex-grow: 2;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+
+        position: relative;
+    }
+
+    .widget {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    .visible {
+        visibility: visible;
+    }
+
+    .no-widgets {
+        color: rgba(135, 135, 135, 0.5);
+    }
+</style>
