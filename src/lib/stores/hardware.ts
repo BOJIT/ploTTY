@@ -12,7 +12,18 @@
 
 import { writable, type Writable } from "svelte/store";
 
+import { browser } from "$app/environment";
+
 import localForage from "localforage";
+
+import {
+    Bluetooth,
+    Desktop,
+    GameController,
+    Location,
+    MusicalNotes,
+    Terminal,
+} from "@svicons/ionicons-outline";
 
 /*--------------------------------- Types ------------------------------------*/
 
@@ -56,6 +67,10 @@ async function init(): Promise<Writable<Hardware>> {
         await localStore.setItem("hardware", val);
     });
 
+    // Register hardware listener if on frontend
+    if (browser)
+        registerListeners();
+
     return store;
 }
 
@@ -91,15 +106,15 @@ async function addDevice(type: HardwareType): Promise<void> {
         }
 
         case "midi": {
-            // No browser check: mandatory support
+            // Check browser support
+            if (!("requestMIDIAccess" in navigator))
+                throw new Error("MIDI API not supported in your browser!");
 
             // Request acess to all MIDI devices
             const access = await navigator.requestMIDIAccess({
                 software: true,
                 sysex: true,
             });
-
-            console.log(access);
 
             break;
         }
@@ -121,8 +136,52 @@ async function addDevice(type: HardwareType): Promise<void> {
     }
 }
 
-async function enumerateAccess(hardware): Promise<string[]> {
+async function enumerateAccess(hardware): Promise<object> {
+    if (!browser)
+        return {};  // Server-side renders an empty list
 
+    const enumeration: any = {};
+
+    if ("serial" in navigator) {
+        const ports = await navigator.serial.getPorts();
+
+        ports.forEach((p) => {
+            let info = p.getInfo();
+            enumeration[`S-PID${info.usbProductId}-VID${info.usbVendorId}`] = {
+                icon: Terminal,
+            };
+        })
+    }
+
+    // TODO add bluetooth enumeration
+
+    const midiEnabled = await navigator.permissions.query({ name: "midi", sysex: true });
+    if (midiEnabled.state === "granted")
+        enumeration["MIDI"] = { icon: MusicalNotes };
+
+    const gpsEnabled = await navigator.permissions.query({ name: "geolocation" });
+    if (gpsEnabled.state === "granted")
+        enumeration["GPS"] = { icon: Location };
+
+    return enumeration;
+}
+
+async function registerListeners() {
+    // register connect/disconnect events to update the hardware store
+
+    if ("serial" in navigator) {
+
+        navigator.serial.addEventListener("connect", (e) => {
+            store.update((h) => h);
+            // Currently cannot assign any ID: see https://github.com/WICG/serial/issues/128
+        });
+
+        navigator.serial.addEventListener("disconnect", (e) => {
+            store.update((h) => h);
+        });
+    }
+
+    // TODO add bluetooth listeners
 }
 
 /*-------------------------------- Exports -----------------------------------*/
@@ -134,4 +193,6 @@ export default {
     init,
     reset,
     addDevice,
+    enumerateAccess,
+    registerListeners,
 }

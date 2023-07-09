@@ -88,8 +88,8 @@
     ];
 
     let index = 0;
-
     let areYouSure = false;
+    let permissions = {};
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -111,7 +111,7 @@
 
     async function addHardwarePermission(type: HardwareType) {
         try {
-            const success = await hardware.addDevice(type);
+            await hardware.addDevice(type);
         } catch (error: any) {
             message.push({
                 type: "error",
@@ -120,6 +120,9 @@
                 timeout: 10,
             });
         }
+
+        // In the case of non-store hardware (e.g. GPS), force store update
+        $hardware = $hardware;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -127,6 +130,10 @@
     $: if (visible) {
         index = 0;
     }
+
+    hardware.subscribe(async (h) => {
+        permissions = await hardware.enumerateAccess($hardware);
+    });
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -152,6 +159,7 @@
                     />
                 {/each}
             </div>
+            <br />
             <hr />
             <h6 class="center">Program Configuration</h6>
             <div class="themes center">
@@ -206,13 +214,15 @@
                         on:click={() => addHardwarePermission("bluetooth")}
                     />
                 {/if}
-                <IconButton
-                    icon={MusicalNotes}
-                    size="1rem"
-                    color={col}
-                    label="MIDI"
-                    on:click={() => addHardwarePermission("midi")}
-                />
+                {#if "requestMIDIAccess" in navigator}
+                    <IconButton
+                        icon={MusicalNotes}
+                        size="1rem"
+                        color={col}
+                        label="MIDI"
+                        on:click={() => addHardwarePermission("midi")}
+                    />
+                {/if}
                 <IconButton
                     icon={Desktop}
                     size="1rem"
@@ -235,8 +245,14 @@
                     on:click={() => addHardwarePermission("gps")}
                 />
             </div>
-            {#if Object.keys($hardware).length > 0}
-                <SearchableList items={{}} />
+            {#if Object.keys(permissions).length > 0}
+                <SearchableList items={permissions} maxHeight="12rem" />
+                <p>
+                    some permissions may need to be cleared in your <a
+                        href="https://support.google.com/chrome/answer/114662"
+                        target="_blank">browser</a
+                    >
+                </p>
             {:else}
                 <p style:color="var(--color-gray-500)">[No Permissions]</p>
             {/if}
