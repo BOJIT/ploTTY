@@ -23,17 +23,25 @@
     const mode = theme.Mode;
 
     import {
+        Bluetooth,
         CheckmarkCircle,
         CloseCircle,
         CloudDownload,
         Contrast,
+        Desktop,
+        GameController,
+        Location,
         Moon,
+        MusicalNotes,
         Settings,
         Sunny,
+        Terminal,
         Warning,
     } from "@svicons/ionicons-outline";
 
     import components from "$lib/stores/components";
+    import hardware, { type HardwareType } from "$lib/stores/hardware";
+    import logs from "$lib/stores/logs";
     import patch from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
 
@@ -66,6 +74,9 @@
             label: "Global",
         },
         {
+            label: "Hardware",
+        },
+        {
             label: "Components",
         },
         {
@@ -95,6 +106,19 @@
         } else if (event.key === "Tab") {
             event.preventDefault();
             index = mod(index + 1, tabs.length);
+        }
+    }
+
+    async function addHardwarePermission(type: HardwareType) {
+        try {
+            const success = await hardware.addDevice(type);
+        } catch (error: any) {
+            message.push({
+                type: "error",
+                title: "Hardware Error",
+                message: error.message,
+                timeout: 10,
+            });
         }
     }
 
@@ -158,16 +182,82 @@
             </div>
         </div>
 
-        <!-- Component Library -->
+        <!-- Hardware Permissions -->
         <div class="tab">
-            <h5>Component Library</h5>
-            <SearchableList items={{}} />
+            <h5>Hardware Permissions</h5>
+            <hr />
+            <div class="add-hardware">
+                <h6 style:padding-top="0.3rem">Add:</h6>
+                {#if "serial" in navigator}
+                    <IconButton
+                        icon={Terminal}
+                        size="1rem"
+                        color={col}
+                        label="Serial"
+                        on:click={() => addHardwarePermission("serial")}
+                    />
+                {/if}
+                {#if "bluetooth" in navigator}
+                    <IconButton
+                        icon={Bluetooth}
+                        size="1rem"
+                        color={col}
+                        label="Bluetooth"
+                        on:click={() => addHardwarePermission("bluetooth")}
+                    />
+                {/if}
+                <IconButton
+                    icon={MusicalNotes}
+                    size="1rem"
+                    color={col}
+                    label="MIDI"
+                    on:click={() => addHardwarePermission("midi")}
+                />
+                <IconButton
+                    icon={Desktop}
+                    size="1rem"
+                    color={col}
+                    label="WebSocket"
+                    on:click={() => addHardwarePermission("websocket")}
+                />
+                <IconButton
+                    icon={GameController}
+                    size="1rem"
+                    color={col}
+                    label="Gamepad"
+                    on:click={() => addHardwarePermission("gamepad")}
+                />
+                <IconButton
+                    icon={Location}
+                    size="1rem"
+                    color={col}
+                    label="GPS"
+                    on:click={() => addHardwarePermission("gps")}
+                />
+            </div>
+            {#if Object.keys($hardware).length > 0}
+                <SearchableList items={{}} />
+            {:else}
+                <p style:color="var(--color-gray-500)">[No Permissions]</p>
+            {/if}
+        </div>
+
+        <!-- Component Libraries -->
+        <div class="tab">
+            <h5>Component Libraries</h5>
+            <hr />
+            <p style:color="var(--color-error-400)">Not implemented yet!</p>
         </div>
 
         <!-- Logs -->
         <div class="tab">
             <h5>Logs</h5>
-            <SearchableList items={{}} />
+            <hr />
+            {#if Object.keys($logs).length > 0}
+                <SearchableList items={{}} />
+            {:else}
+                <p style:color="var(--color-gray-500)">[No Logs]</p>
+            {/if}
         </div>
 
         <!-- About -->
@@ -223,9 +313,11 @@
             color="error"
             outlined
             on:click={() => {
-                settings.reset();
                 patch.reset();
                 components.reset();
+                logs.reset();
+                hardware.reset();
+                settings.reset();
 
                 areYouSure = false;
                 message.push({
@@ -258,7 +350,6 @@
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         text-align: center;
-        /* color: var(--color-gray-200); */
     }
 
     :global(.mode-dark) a {
@@ -275,6 +366,14 @@
         display: flex;
         gap: 0.5rem;
         align-items: center;
+    }
+
+    .add-hardware {
+        padding: 0.5rem;
+
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     img {

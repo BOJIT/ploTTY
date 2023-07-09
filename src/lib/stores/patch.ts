@@ -18,7 +18,6 @@ import localForage from "localforage";
 import type { PlottyPatch } from "$lib/types/plotty";
 import type { Graph as GraphType } from "$lib/middlewares/fbp-graph/Graph";
 
-
 import NofloGraph from "$lib/middlewares/fbp-graph";
 import file from "$lib/utils/file";
 

@@ -16,7 +16,6 @@
     import { IconButton } from "@bojit/svelte-components/form";
     import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
     import { mode as themeMode } from "@bojit/svelte-components/theme";
-    import { Tabs } from "@bojit/svelte-components/widgets";
 
     import {
         BarChart,
@@ -43,6 +42,8 @@
     } from "$lib/stores/overlays";
     import { graphRunning } from "$lib/stores/runState";
     import components from "$lib/stores/components";
+    import hardware from "$lib/stores/hardware";
+    import logs from "$lib/stores/logs";
     import patch from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
 
@@ -119,6 +120,8 @@
     onMount(async () => {
         // Initialise local storage databases
         await settings.init();
+        await hardware.init();
+        await logs.init();
         await components.init();
         await patch.init();
 
