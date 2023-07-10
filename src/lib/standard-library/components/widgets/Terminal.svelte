@@ -30,7 +30,7 @@
     /*------------------------------- Lifecycle ------------------------------*/
 </script>
 
-<div />
+<h1>Hello Terminal Again!</h1>
 
 <style>
 </style>

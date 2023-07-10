@@ -13,7 +13,7 @@
 
     import { derived } from "svelte/store";
 
-    import { Plotter, Tabs } from "@bojit/svelte-components/widgets";
+    import { Tabs } from "@bojit/svelte-components/widgets";
 
     import { graphRunning } from "$lib/stores/runState";
     import { graph } from "$lib/stores/patch";
@@ -45,12 +45,12 @@
 
     function checkSelectedWidget(ids, idx, w) {
         // If selection has been deleted, reset to entry 0
-        if (ids[activeIds] === undefined) {
+        if (ids[idx] === undefined) {
             activeIds = 0;
             return false;
         }
 
-        return ids[activeIds].label === w.id;
+        return ids[idx].label === w.id;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -72,9 +72,8 @@
             class="widget"
             class:visible={checkSelectedWidget($widgetIds, activeIds, w)}
         >
-            <h1>{w.id}</h1>
+            <svelte:component this={$components[w.component].widget} />
         </div>
-        <!-- <Plotter numLines={10} wide demo={$graphRunning} /> -->
     {/each}
 </div>
 
@@ -95,6 +94,9 @@
     .widget {
         position: absolute;
         visibility: hidden;
+
+        width: 100%;
+        height: 100%;
     }
 
     .visible {
