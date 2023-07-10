@@ -15,6 +15,7 @@
 
     import theme from "@bojit/svelte-components/theme";
 
+    /* WebGL-Plot */
     import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
     /*--------------------------------- Props --------------------------------*/
@@ -157,7 +158,7 @@
 
 <style>
     canvas {
-        margin: 0.5%;
+        margin: 0.5rem;
         width: 100%;
         height: 100%;
     }
