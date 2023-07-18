@@ -19,7 +19,6 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
-    // color={selected ? "#bf288d" : null}
     let targetDiv: HTMLDivElement;
     let deleteConfirmation: boolean = false;
 
