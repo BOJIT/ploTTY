@@ -306,7 +306,7 @@
         }
 
         .controls {
-            bottom: 6.9rem;
+            bottom: 5.9rem;
         }
 
         .controls.extended {

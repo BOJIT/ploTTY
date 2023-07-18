@@ -21,6 +21,7 @@
     import NofloGraph from "$lib/middlewares/fbp-graph";
     import SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
     import SvelvetNode from "$lib/components/svelvet-editor/SvelvetNode.svelte";
+    import SvelvetEdge from "$lib/components/svelvet-editor/SvelvetEdge.svelte";
 
     import components from "$lib/stores/components"; // TODO import as prop
 
@@ -58,7 +59,7 @@
     });
 </script>
 
-<Svelvet id="svelvet-editor" {theme} editable snapTo={2}>
+<Svelvet id="svelvet-editor" {theme} editable snapTo={2} edge={SvelvetEdge}>
     <SvelvetAPI
         bind:this={api}
         bind:graph
@@ -107,6 +108,7 @@
     /* Svelvet Theme Overrides */
     :global(:root[svelvet-theme="light"]) {
         --default-background-color: rgba(255, 255, 255, 0.6) !important;
+        --default-target-edge-color: rgb(212, 221, 129) !important;
         --anchor-border-color: #444444;
         --anchor-connected-border: #444444;
         --anchor-hovering-border: #444444;
@@ -115,6 +117,7 @@
 
     :global(:root[svelvet-theme="dark"]) {
         --default-background-color: rgba(26, 26, 26, 0.6) !important;
+        --default-target-edge-color: rgb(169, 202, 139) !important;
         --anchor-border-color: #444444;
         --anchor-connected-border: #444444;
         --anchor-hovering-border: #444444;
