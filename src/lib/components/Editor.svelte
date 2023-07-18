@@ -297,14 +297,31 @@
     @media screen and (max-width: 940px) {
         .statusbar {
             width: calc(100vw - 4rem);
+            height: 3rem;
         }
 
         .statusbar h5 {
             max-width: calc(100vw - 6rem);
+            font-size: 1rem;
         }
 
         .controls {
             bottom: 6.9rem;
+        }
+
+        .controls.extended {
+            right: 6rem;
+        }
+
+        /* HACK - saves updating the prop on every button */
+        .controls :global(button) {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .controls :global(svg) {
+            width: 1.6rem;
+            height: 1.6rem;
         }
     }
 </style>

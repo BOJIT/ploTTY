@@ -106,4 +106,10 @@
     .no-widgets {
         color: rgba(135, 135, 135, 0.5);
     }
+
+    @media screen and (max-width: 940px) {
+        h2 {
+            font-size: 2rem;
+        }
+    }
 </style>
