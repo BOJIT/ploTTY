@@ -36,6 +36,7 @@
         "svelvet": "^8.0.3",
         "webgl-plot": "^0.7.0",
         "xterm": "^5.2.1",
-        "xterm-addon-fit": "^0.7.0"
+        "xterm-addon-fit": "^0.7.0",
+        "xterm-addon-webgl": "^0.15.0"
     }
 }

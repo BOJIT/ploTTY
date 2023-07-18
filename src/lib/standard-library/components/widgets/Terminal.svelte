@@ -18,14 +18,12 @@
 
     /* XTermJS */
     import type { Terminal } from "xterm";
-    import type { FitAddon } from "xterm-addon-fit";
     import "xterm/css/xterm.css";
 
     /*--------------------------------- Props --------------------------------*/
 
     let container: HTMLElement;
     let terminal: Terminal;
-    let fitAddon: FitAddon;
     let resizeObserver: ResizeObserver | null = null;
 
     let interval: any = null; // TODO remove!!!
@@ -74,19 +72,29 @@
         // XTerm cannot be server-side rendered
         const { Terminal } = await import("xterm");
         const { FitAddon } = await import("xterm-addon-fit");
+        const { WebglAddon } = await import("xterm-addon-webgl");
+
         // Create Terminal
         terminal = new Terminal({
             theme: {
                 background: "#00000000",
             },
             allowTransparency: true,
-            convertEol: true, // TODO make configuration?
+            convertEol: true, // TODO make configuration?,
+            scrollback: 5000,
         });
 
         // Mount terminal with fit addon
-        fitAddon = new FitAddon();
+        let fitAddon = new FitAddon();
+        let webglAddon = new WebglAddon();
+        webglAddon.onContextLoss((e) => {
+            webglAddon.dispose();
+        });
+
         terminal.loadAddon(fitAddon);
+        terminal.loadAddon(webglAddon);
         terminal.open(container);
+
         fitAddon.fit();
 
         // Redraw on size change
