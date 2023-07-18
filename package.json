@@ -33,7 +33,7 @@
         "localforage": "^1.10.0",
         "noflo": "^1.4.3",
         "svelte-writable-derived": "^3.1.0",
-        "svelvet": "^8.0.3",
+        "svelvet": "^8.0.8",
         "webgl-plot": "^0.7.0",
         "xterm": "^5.2.1",
         "xterm-addon-fit": "^0.7.0",

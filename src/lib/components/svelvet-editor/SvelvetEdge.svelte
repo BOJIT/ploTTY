@@ -17,25 +17,42 @@
 
     /*--------------------------------- Props --------------------------------*/
 
-    let selected: boolean = false;
-
     /*-------------------------------- Methods -------------------------------*/
+
+    // color={selected ? "#bf288d" : null}
+    let targetDiv: HTMLDivElement;
+    let deleteConfirmation: boolean = false;
 
     /*------------------------------- Lifecycle ------------------------------*/
 </script>
 
 <Edge
     let:destroy
+    targetColor={deleteConfirmation ? "#bf288d" : null}
     animate={$graphRunning}
     enableHover
     edgeClick={() => {
-        selected = !selected;
+        targetDiv.click();
     }}
-/>
+>
+    <div slot="label">
+        <div
+            bind:this={targetDiv}
+            on:click={() => {
+                if (deleteConfirmation) {
+                    destroy();
+                } else {
+                    // Wait for confirmation
+                    deleteConfirmation = true;
+                    setTimeout(() => {
+                        deleteConfirmation = false;
+                    }, 500);
+                }
+            }}
+            on:keypress
+        />
+    </div>
+</Edge>
 
 <style>
-    /* path {
-        stroke: rgb(246, 231, 20);
-        stroke-width: 4px;
-    } */
 </style>
