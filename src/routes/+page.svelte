@@ -54,6 +54,12 @@
 
     /*--------------------------------- Props --------------------------------*/
 
+    let hideTooltips: boolean = true;
+    const mql = window.matchMedia("(max-width: 940px)");
+    mql.onchange = (e) => {
+        hideTooltips = e.matches;
+    };
+
     let items: NavItem[] = [
         {
             type: "separator",
@@ -152,7 +158,11 @@
                 ? "var(--color-error-700)"
                 : "var(--color-success-700)"}
             size="1.75rem"
-            label={$graphRunning ? "Stop [␣]" : "Start [␣]"}
+            label={hideTooltips
+                ? "label"
+                : $graphRunning
+                ? "Stop [␣]"
+                : "Start [␣]"}
             on:click={() => ($graphRunning = !$graphRunning)}
         />
         <IconButton
@@ -161,7 +171,11 @@
                 ? "var(--color-primary-400)"
                 : "var(--color-alert-400)"}
             size="1.75rem"
-            label={$editorOverlay ? "Graph View [↹]" : "Editor View [↹]"}
+            label={hideTooltips
+                ? "label"
+                : $editorOverlay
+                ? "Graph View [↹]"
+                : "Editor View [↹]"}
             on:click={() => ($editorOverlay = !$editorOverlay)}
         />
     </div>
