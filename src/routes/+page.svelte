@@ -55,10 +55,6 @@
     /*--------------------------------- Props --------------------------------*/
 
     let hideTooltips: boolean = true;
-    const mql = window.matchMedia("(max-width: 940px)");
-    mql.onchange = (e) => {
-        hideTooltips = e.matches;
-    };
 
     let items: NavItem[] = [
         {
@@ -136,6 +132,12 @@
         themeMode.subscribe((t) => {
             $settings.theme = t;
         });
+
+        // HACK - fix tooltips on mobile
+        const mql = window.matchMedia("(max-width: 940px)");
+        mql.onchange = (e) => {
+            hideTooltips = e.matches;
+        };
     });
 </script>
 
