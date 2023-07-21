@@ -14,7 +14,7 @@
     import { onDestroy, onMount } from "svelte";
 
     import theme from "@bojit/svelte-components/theme";
-    import type { ThemeMode } from "$lib/theme/theme";
+    import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
 
     /* XTermJS */
     import type { Terminal } from "xterm";

@@ -210,6 +210,7 @@
                             ? nodeObject.metadata.portConfig[i[0]].codeString
                             : "return 0;"}
                         maxHeight="10rem"
+                        lineNumbers={false}
                         on:save={(e) => {
                             try {
                                 const exec = Function(`${e.detail}`);
