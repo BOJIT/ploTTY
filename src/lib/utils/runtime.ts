@@ -14,6 +14,7 @@ import type { Graph } from "$lib/middlewares/fbp-graph/Graph";
 import components, { type ComponentLibrary } from "$lib/stores/components";
 
 import { createNetwork, Component, ComponentLoader } from "noflo";
+import type { Network } from "noflo/lib/Network";
 
 /*--------------------------------- Types ------------------------------------*/
 
@@ -53,6 +54,8 @@ class Loader extends ComponentLoader {
 
 const loader = new Loader();
 
+let network: Network;
+
 /*------------------------------- Functions ----------------------------------*/
 
 function Init() {
@@ -62,18 +65,22 @@ function Init() {
 }
 
 async function Start(g: Graph, l: ComponentLibrary) {
-    const network = await createNetwork(g, {
+    network = await createNetwork(g, {
         componentLoader: loader,
     });
+
+    // network.sendInitials();
+
+    console.log(network);
 }
 
 function Stop() {
-
+    // network.sendInitials
 }
 
 /*-------------------------------- Exports -----------------------------------*/
 
-export {
+export default {
     Init,
     Start,
     Stop,

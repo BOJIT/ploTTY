@@ -44,8 +44,10 @@
     import components from "$lib/stores/components";
     import hardware from "$lib/stores/hardware";
     import logs from "$lib/stores/logs";
-    import patch from "$lib/stores/patch";
+    import patch, { graph } from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
+
+    // import runtime from "$lib/utils/runtime";
 
     // Components
     import Editor from "$lib/components/Editor.svelte";
@@ -118,6 +120,14 @@
     /*-------------------------------- Methods -------------------------------*/
 
     /*------------------------------- Lifecycle ------------------------------*/
+
+    graphRunning.subscribe((r) => {
+        if (r === true) {
+            // runtime.Start($graph, $components);
+        } else {
+            // runtime.Stop();
+        }
+    });
 
     onMount(async () => {
         // Initialise local storage databases
