@@ -47,7 +47,7 @@
     import patch, { graph } from "$lib/stores/patch";
     import settings from "$lib/stores/settings";
 
-    // import runtime from "$lib/utils/runtime";
+    import runtime from "$lib/utils/runtime";
 
     // Components
     import Editor from "$lib/components/Editor.svelte";
@@ -123,9 +123,9 @@
 
     graphRunning.subscribe((r) => {
         if (r === true) {
-            // runtime.Start($graph, $components);
+            runtime.start($graph, $components);
         } else {
-            // runtime.Stop();
+            runtime.stop();
         }
     });
 
@@ -136,6 +136,9 @@
         await logs.init();
         await components.init();
         await patch.init();
+
+        // Initialise runtime
+        runtime.init();
 
         // Update settings store when theme changes
         $themeMode = $settings.theme;

@@ -1261,11 +1261,11 @@ function loadJSONSync(passedDefinition: GraphJson): Graph | null {
 
 /*----------------------------------------------------------------------------*/
 
+export { Graph, createGraph, loadJSON, loadJSONSync };
+
 export default {
     Graph,
     createGraph,
     loadJSON,
     loadJSONSync,
 };
-
-export type { Graph };

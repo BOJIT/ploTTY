@@ -1,21 +1,61 @@
 /**
- * @file index.ts
+ * @file NoFlo.js
  * @author James Bennion-Pedley
- * @brief Public interface for modified NoFlo runtime
+ * @brief Simplified re-write
  * @date 22/07/2023
  *
  * @copyright Copyright (c) 2023
  *
  */
 
-/*-------------------------------- Imports -----------------------------------*/
+/*---------------------------------- Imports ---------------------------------*/
 
-import { createNetwork } from "./src/NoFlo";
+import type { Graph } from '$lib/middlewares/fbp-graph/Graph';
 
-/*--------------------------------- State ------------------------------------*/
+import { Network } from './Network';
+import type { NetworkOptions } from './BaseNetwork';
 
-/*------------------------------- Functions ----------------------------------*/
+import { LegacyNetwork } from './LegacyNetwork';
 
-/*-------------------------------- Exports -----------------------------------*/
+export { isBrowser } from './Platform';
+export { ComponentLoader } from './ComponentLoader';
+export { Component } from './Component';
+export { InPorts, OutPorts } from './Ports';
+export { default as InPort } from './InPort';
+export { default as OutPort } from './OutPort';
 
-export { createNetwork };
+export { asCallback, asPromise } from './AsCallback';
+export { asComponent } from './AsComponent';
+
+import * as internalSocket from './InternalSocket';
+export { internalSocket };
+
+export { default as IP } from './IP';
+
+/*--------------------------------- Functions --------------------------------*/
+
+export function createNetwork(graphInstance: Graph, options: NetworkOptions): Promise<Network> {
+    if (typeof options !== 'object') {
+        options = {};
+    }
+    if (typeof options.subscribeGraph === 'undefined') {
+        options.subscribeGraph = false;
+    }
+
+    // Choose legacy or modern network based on whether graph
+    // subscription is needed
+    const NetworkType = options.subscribeGraph ? LegacyNetwork : Network;
+    const network = new NetworkType(graphInstance, options);
+
+    // Ensure components are loaded before continuing
+    const promise = network.loader.listComponents()
+        .then(() => {
+            if (options.delay) {
+                // In case of delayed execution we don't wire it up
+                return Promise.resolve(network);
+            }
+            const connected = /** @type {Promise<Network|LegacyNetwork>} */ (network.connect());
+            return connected.then(() => network.start());
+        });
+    return promise;
+}

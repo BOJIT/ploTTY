@@ -13,8 +13,8 @@
 import type { Graph } from "$lib/middlewares/fbp-graph/Graph";
 import components, { type ComponentLibrary } from "$lib/stores/components";
 
-import { createNetwork, Component, ComponentLoader } from "noflo";
-import type { Network } from "noflo/lib/Network";
+import { createNetwork, Component, ComponentLoader } from "$lib/middlewares/noflo";
+import type { Network } from "$lib/middlewares/noflo/Network";
 
 /*--------------------------------- Types ------------------------------------*/
 
@@ -28,6 +28,8 @@ class Loader extends ComponentLoader {
     }
 
     load(name: string) {
+        console.log("huh");
+
         const promise = new Promise((resolve, reject) => {
             if (!this.components) {
                 reject(new Error(`Component tree not initialised!`));
@@ -58,13 +60,16 @@ let network: Network;
 
 /*------------------------------- Functions ----------------------------------*/
 
-function Init() {
+function init(errorHook: (e: any) => {}) {
     // Subscribe loader to the component library
+    components.subscribe((c) => {
+        loader.components = c;
+    })
 
     // Create initial (empty) network
 }
 
-async function Start(g: Graph, l: ComponentLibrary) {
+async function start(g: Graph, l: ComponentLibrary) {
     network = await createNetwork(g, {
         componentLoader: loader,
     });
@@ -74,14 +79,14 @@ async function Start(g: Graph, l: ComponentLibrary) {
     console.log(network);
 }
 
-function Stop() {
+function stop() {
     // network.sendInitials
 }
 
 /*-------------------------------- Exports -----------------------------------*/
 
 export default {
-    Init,
-    Start,
-    Stop,
+    init,
+    start,
+    stop,
 };
