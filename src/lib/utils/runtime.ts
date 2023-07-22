@@ -28,8 +28,6 @@ class Loader extends ComponentLoader {
     }
 
     load(name: string) {
-        console.log("huh");
-
         const promise = new Promise((resolve, reject) => {
             if (!this.components) {
                 reject(new Error(`Component tree not initialised!`));
@@ -45,8 +43,7 @@ class Loader extends ComponentLoader {
             }
             resolve(component);
         }).then((component: any) => {
-            let instance = component.getComponent(Component);
-            return instance;
+            return new Component(component);
         });
         return promise;
     }
@@ -56,7 +53,7 @@ class Loader extends ComponentLoader {
 
 const loader = new Loader();
 
-let network: Network;
+let network: Network | null = null;
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -81,6 +78,8 @@ async function start(g: Graph, l: ComponentLibrary) {
 
 function stop() {
     // network.sendInitials
+    if (network !== null)
+        network = null;
 }
 
 /*-------------------------------- Exports -----------------------------------*/

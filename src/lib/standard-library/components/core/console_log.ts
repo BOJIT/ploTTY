@@ -22,7 +22,7 @@ const c: PlottyComponent = {
         icon: Open,
         colour: '#FF7777',
     },
-    inputs: {
+    inPorts: {
         enable: {
             default: {},
         },

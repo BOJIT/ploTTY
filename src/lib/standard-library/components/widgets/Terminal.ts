@@ -24,7 +24,7 @@ const c: PlottyComponent = {
     ui: {
         icon: TerminalIcon,
     },
-    inputs: {
+    inPorts: {
         data: {
             default: {},
         },
@@ -33,7 +33,7 @@ const c: PlottyComponent = {
             default: '80',
         }
     },
-    outputs: {
+    outPorts: {
         data: {
             default: {},
         },

@@ -21,7 +21,7 @@ const c: PlottyComponent = {
     ui: {
         icon: Terminal,
     },
-    inputs: {
+    inPorts: {
         enable: {
             datatype: 'boolean',
             default: true,
@@ -53,7 +53,7 @@ const c: PlottyComponent = {
             ]
         }
     },
-    outputs: {
+    outPorts: {
         out: {
             datatype: 'string',
         }

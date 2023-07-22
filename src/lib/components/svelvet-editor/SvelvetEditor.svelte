@@ -91,11 +91,11 @@
                     // HACK: force store to update. TODO subscribe to store.
                     n.metadata.position = n.metadata.position;
                 }}
-                inports={$components[n.component].inputs !== undefined
-                    ? Object.keys($components[n.component].inputs)
+                inports={$components[n.component].inPorts !== undefined
+                    ? Object.keys($components[n.component].inPorts)
                     : []}
-                outports={$components[n.component].outputs !== undefined
-                    ? Object.keys($components[n.component].outputs)
+                outports={$components[n.component].outPorts !== undefined
+                    ? Object.keys($components[n.component].outPorts)
                     : []}
             />
         {:else}

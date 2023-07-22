@@ -50,8 +50,8 @@
         component: string
     ): [string, object][] {
         if (lib[component] === undefined) return [];
-        if (lib[component].inputs === undefined) return [];
-        return Object.entries(lib[component].inputs);
+        if (lib[component].inPorts === undefined) return [];
+        return Object.entries(lib[component].inPorts);
     }
 
     function getPortMode(portName: string): PlottyPortMode {

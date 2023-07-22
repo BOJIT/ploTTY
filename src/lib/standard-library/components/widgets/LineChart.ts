@@ -24,7 +24,7 @@ const c: PlottyComponent = {
     ui: {
         icon: Analytics,
     },
-    inputs: {
+    inPorts: {
         data: {
             default: {},
         },

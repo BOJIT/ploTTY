@@ -55,8 +55,8 @@ type PlottyComponent = {
         colour?: CSSColorString, // If unset, uses default component colours
     },
     widget?: PlottyWidget,  // Widget for graph outputs
-    inputs?: Ports,         // Object containing input 'anchors'
-    outputs?: Ports,        // Object containing output 'anchors'
+    inPorts?: Ports,         // Object containing input 'anchors'
+    outPorts?: Ports,        // Object containing output 'anchors'
     process: ProcessingFunction,        // The primary component logic
     teardown?: Promise<void> | void,    // Optional function called on halting of graph
 }

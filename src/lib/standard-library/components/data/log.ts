@@ -21,7 +21,7 @@ const c: PlottyComponent = {
     ui: {
         icon: DocumentText,
     },
-    inputs: {
+    inPorts: {
         data: {},
         newfile: {
             datatype: 'signal'

@@ -21,7 +21,7 @@ const c: PlottyComponent = {
     ui: {
         icon: Funnel,
     },
-    inputs: {
+    inPorts: {
         data: {
             default: {},
         },
@@ -29,7 +29,7 @@ const c: PlottyComponent = {
             default: {},
         }
     },
-    outputs: {
+    outPorts: {
         out: {},
     },
     process: (input, output) => {
