@@ -1,4 +1,5 @@
 /* Standard Component Library Index */
+import Clock from "./core/clock";
 import ConsoleLog from "./core/console_log";
 import Filter from "./core/filter";
 import Log from "./data/log"
@@ -7,6 +8,7 @@ import LineChart from "./widgets/LineChart";
 import Terminal from "./widgets/Terminal";
 
 export default [
+    Clock,
     ConsoleLog,
     Filter,
     Log,

@@ -38,13 +38,10 @@ export function createNetwork(graphInstance: Graph, options: NetworkOptions): Pr
     if (typeof options !== 'object') {
         options = {};
     }
-    if (typeof options.subscribeGraph === 'undefined') {
-        options.subscribeGraph = false;
-    }
 
     // Choose legacy or modern network based on whether graph
     // subscription is needed
-    const NetworkType = options.subscribeGraph ? LegacyNetwork : Network;
+    const NetworkType = Network;
     const network = new NetworkType(graphInstance, options);
 
     // Ensure components are loaded before continuing
@@ -54,7 +51,7 @@ export function createNetwork(graphInstance: Graph, options: NetworkOptions): Pr
                 // In case of delayed execution we don't wire it up
                 return Promise.resolve(network);
             }
-            const connected = /** @type {Promise<Network|LegacyNetwork>} */ (network.connect());
+            const connected = /** @type {Promise<Network>} */ (network.connect());
             return connected.then(() => network.start());
         });
     return promise;

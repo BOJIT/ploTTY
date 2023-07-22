@@ -18,7 +18,7 @@ import type { ProcessingFunction } from "noflo/lib/Component";
 
 /*------------------------------ Partial Types -------------------------------*/
 
-type Datatype = 'string' | 'number' | 'boolean' | 'object' | 'signal'
+type Datatype = 'string' | 'number' | 'boolean' | 'object' | 'bang'
 
 type Port = {
     datatype?: Datatype,    // If not set, assume 'any'
@@ -59,6 +59,7 @@ type PlottyComponent = {
     outPorts?: Ports,        // Object containing output 'anchors'
     process: ProcessingFunction,        // The primary component logic
     teardown?: Promise<void> | void,    // Optional function called on halting of graph
+    state?: object  // Any runtime state (for cleanup, etc...)
 }
 
 type PlottyPatch = {

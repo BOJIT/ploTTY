@@ -27,6 +27,13 @@ class Loader extends ComponentLoader {
         this.ready = true;
     }
 
+    async listComponents(callback?: any): Promise<{ [x: string]: any; }> {
+        if (this.components === null)
+            return {};
+
+        return this.components;
+    }
+
     load(name: string) {
         const promise = new Promise((resolve, reject) => {
             if (!this.components) {
