@@ -83,10 +83,12 @@ async function start(g: Graph, l: ComponentLibrary) {
     console.log(network);
 }
 
-function stop() {
+async function stop() {
     // network.sendInitials
-    if (network !== null)
+    if (network !== null) {
+        await network.stop();
         network = null;
+    }
 }
 
 /*-------------------------------- Exports -----------------------------------*/

@@ -38,7 +38,8 @@ const c: PlottyComponent = {
             datatype: 'bang'
         }
     },
-    process: (input, output) => {
+    process: (input, output, context) => {
+        console.log(context);
         // if (!c.timer) {
         //     let count = 0;
         //     c.timer = context;
@@ -51,11 +52,12 @@ const c: PlottyComponent = {
         //     }, 1000);
         // }
     },
-    teardown: (callback) => {
+    deinit: async (context) => {
+        console.log("TEARDOWN");
+        console.log(callback);
         // if (this.timer) {
         //     cleanup();
         // }
-        callback();
     },
     state: {
         timer: null,

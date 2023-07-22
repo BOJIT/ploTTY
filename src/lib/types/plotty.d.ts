@@ -14,7 +14,7 @@ import type { SvelteComponent } from "svelte";
 
 import type { CSSColorString } from "svelvet";
 import type { GraphJson } from "$lib/middlewares/fbp-graph/Graph"
-import type { ProcessingFunction } from "noflo/lib/Component";
+import type { ProcessingFunction } from "$lib/middlewares/noflo/Component";
 
 /*------------------------------ Partial Types -------------------------------*/
 
@@ -57,8 +57,9 @@ type PlottyComponent = {
     widget?: PlottyWidget,  // Widget for graph outputs
     inPorts?: Ports,         // Object containing input 'anchors'
     outPorts?: Ports,        // Object containing output 'anchors'
-    process: ProcessingFunction,        // The primary component logic
-    teardown?: Promise<void> | void,    // Optional function called on halting of graph
+    process: ProcessingFunction,    // The primary component logic
+    init?: (context: any) => Promise<void>,     // Optional function called on initialising of graph
+    deinit?: (context: any) => Promise<void>,   // Optional function called on halting of graph
     state?: object  // Any runtime state (for cleanup, etc...)
 }
 
