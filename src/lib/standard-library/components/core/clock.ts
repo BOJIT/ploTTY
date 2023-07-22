@@ -52,12 +52,12 @@ const c: PlottyComponent = {
         //     }, 1000);
         // }
     },
-    deinit: async (context) => {
+    deinit: async (resolve, context) => {
         console.log("TEARDOWN");
-        console.log(callback);
         // if (this.timer) {
         //     cleanup();
         // }
+        resolve();
     },
     state: {
         timer: null,

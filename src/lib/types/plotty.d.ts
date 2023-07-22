@@ -16,6 +16,9 @@ import type { CSSColorString } from "svelvet";
 import type { GraphJson } from "$lib/middlewares/fbp-graph/Graph"
 import type { ProcessingFunction } from "$lib/middlewares/noflo/Component";
 
+// TEMP
+type InitialisationFunction = (resolve: () => {}, context: any) => Promise<void>
+
 /*------------------------------ Partial Types -------------------------------*/
 
 type Datatype = 'string' | 'number' | 'boolean' | 'object' | 'bang'
@@ -58,8 +61,8 @@ type PlottyComponent = {
     inPorts?: Ports,         // Object containing input 'anchors'
     outPorts?: Ports,        // Object containing output 'anchors'
     process: ProcessingFunction,    // The primary component logic
-    init?: (context: any) => Promise<void>,     // Optional function called on initialising of graph
-    deinit?: (context: any) => Promise<void>,   // Optional function called on halting of graph
+    init?: InitialisationFunction,     // Optional function called on initialising of graph
+    deinit?: InitialisationFunction,   // Optional function called on halting of graph
     state?: object  // Any runtime state (for cleanup, etc...)
 }
 
