@@ -39,7 +39,6 @@ const c: PlottyComponent = {
         }
     },
     process: (input, output) => {
-        console.log("LOADED");
         // if (!c.timer) {
         //     let count = 0;
         //     c.timer = context;

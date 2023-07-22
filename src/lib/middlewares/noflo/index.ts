@@ -15,8 +15,6 @@ import type { Graph } from '$lib/middlewares/fbp-graph/Graph';
 import { Network } from './Network';
 import type { NetworkOptions } from './BaseNetwork';
 
-import { LegacyNetwork } from './LegacyNetwork';
-
 export { isBrowser } from './Platform';
 export { ComponentLoader } from './ComponentLoader';
 export { Component } from './Component';
