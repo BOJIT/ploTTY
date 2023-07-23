@@ -17,7 +17,7 @@ import type { GraphJson } from "$lib/middlewares/fbp-graph/Graph"
 import type { ProcessingFunction } from "$lib/middlewares/noflo/Component";
 
 // TEMP
-type InitialisationFunction = (resolve: () => {}, context: any) => Promise<void>
+type InitialisationFunction = (resolve: () => {}, reject: (err: any) => {}, context: any) => Promise<void>
 
 /*------------------------------ Partial Types -------------------------------*/
 

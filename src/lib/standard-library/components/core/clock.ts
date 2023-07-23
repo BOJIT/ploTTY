@@ -39,7 +39,6 @@ const c: PlottyComponent = {
         }
     },
     process: (input, output, context) => {
-        console.log(context);
         // if (!c.timer) {
         //     let count = 0;
         //     c.timer = context;
@@ -52,12 +51,18 @@ const c: PlottyComponent = {
         //     }, 1000);
         // }
     },
-    deinit: async (resolve, context) => {
-        console.log("TEARDOWN");
+    init: async (resolve, reject, context) => {
+        console.log("Started");
+
+        resolve();
+    },
+    deinit: async (resolve, reject, context) => {
+        console.log("Stopped");
         // if (this.timer) {
         //     cleanup();
         // }
         resolve();
+        // reject("Something wrong!")
     },
     state: {
         timer: null,

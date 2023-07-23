@@ -11,6 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
+    import { onMount } from "svelte";
     import { fly } from "svelte/transition";
 
     import { IconButton } from "@bojit/svelte-components/form";
@@ -75,6 +76,12 @@
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
+
+    onMount(() => {
+        setTimeout(() => {
+            api.fitGraph(); // TODO find neater way of dealing with this!
+        }, 200);
+    });
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
