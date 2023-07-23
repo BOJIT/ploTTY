@@ -23,9 +23,11 @@ type InitialisationFunction = (resolve: () => {}, reject: (err: any) => {}, cont
 
 type Datatype = 'string' | 'number' | 'boolean' | 'object' | 'bang'
 
+type PortEnumeration = string[] | number[] | boolean[]
+
 type Port = {
     datatype?: Datatype,    // If not set, assume 'any'
-    enumeration?: string[] | number[] | boolean[],  // Array of pre-determined values
+    enumeration?: PortEnumeration | (() => Promise<(PortEnumeration)>),  // Array of pre-determined values
     default?: string | number | boolean | {},    // Default value (should be in enumeration)
 }
 

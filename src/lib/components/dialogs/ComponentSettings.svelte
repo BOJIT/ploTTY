@@ -81,6 +81,11 @@
         return false;
     }
 
+    function evaluateEnumeration(e: any) {
+        if (typeof e === "function") return e();
+        else return e;
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     nodeSelected.subscribe((node) => {
@@ -178,7 +183,7 @@
                             <List
                                 bind:value={nodeObject.metadata.portConfig[i[0]]
                                     .chosenEnumeration}
-                                items={i[1].enumeration}
+                                items={evaluateEnumeration(i[1].enumeration)}
                             >
                                 <div
                                     slot="item"

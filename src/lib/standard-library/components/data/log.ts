@@ -24,7 +24,7 @@ const c: PlottyComponent = {
     inPorts: {
         data: {},
         newfile: {
-            datatype: 'signal'
+            datatype: 'bang'
         },
     },
     process: (input, output) => {

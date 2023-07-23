@@ -48,8 +48,6 @@ const c: PlottyComponent = {
                 output.send({
                     out: countstring
                 });
-                console.log(countstring);
-
                 s.count++;
             }, 100, state);
         }

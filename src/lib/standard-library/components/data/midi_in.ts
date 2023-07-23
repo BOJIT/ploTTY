@@ -22,8 +22,35 @@ const c: PlottyComponent = {
         icon: MusicalNotes,
     },
     inPorts: {
+        device: {
+            datatype: 'string',
+            default: 'any',
+            enumeration: async () => {
+                return [];
+            },
+        },
         channel: {
-            default: {},
+            datatype: 'number',
+            default: 0,
+            enumeration: [
+                0,  // Any
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+            ]
         },
     },
     outPorts: {
@@ -33,6 +60,22 @@ const c: PlottyComponent = {
     },
     process: (input, output) => {
 
+    },
+    init: async (resolve, reject, context) => {
+        const access = await navigator.requestMIDIAccess();
+
+        for (const entry of access.inputs) {
+            const input = entry[1];
+            console.log(
+                `Input port [type:'${input.type}']` +
+                ` id:'${input.id}'` +
+                ` manufacturer:'${input.manufacturer}'` +
+                ` name:'${input.name}'` +
+                ` version:'${input.version}'`,
+            );
+        }
+
+        resolve();
     },
 };
 
