@@ -86,6 +86,7 @@
                 id={n.id}
                 label={n.metadata.label ? n.metadata.label : n.component}
                 icon={$components[n.component].ui?.icon}
+                colour={$components[n.component].ui?.colour}
                 bind:position={n.metadata.position}
                 on:change={() => {
                     // HACK: force store to update. TODO subscribe to store.

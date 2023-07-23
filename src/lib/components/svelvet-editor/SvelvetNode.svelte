@@ -13,7 +13,7 @@
 
     import { getContext, type SvelteComponent } from "svelte";
 
-    import { Node, Anchor } from "svelvet";
+    import { Node, Anchor, type CSSColorString } from "svelvet";
 
     import { ExtensionPuzzle as DefaultIcon } from "@svicons/ionicons-outline";
 
@@ -27,6 +27,7 @@
           }
         | undefined;
     export let icon: typeof SvelteComponent = DefaultIcon;
+    export let colour: CSSColorString | undefined = undefined;
     export let label: string = "Default Node";
 
     export let inports: string[] = [];
@@ -53,7 +54,11 @@
 <Node bind:id bind:position let:grabHandle let:selected width={100} {height}>
     <div use:grabHandle class:selected class="node" style="height: {height}px">
         <div class="slab">
-            <div class="icon">
+            <div
+                class="icon"
+                class:colour={colour !== undefined}
+                style:background-color={colour}
+            >
                 <svelte:component
                     this={icon}
                     height="70px"
@@ -132,6 +137,11 @@
 
     .icon :global(svg) {
         transition: color 0.5s ease;
+    }
+
+    .icon.colour :global(svg) {
+        opacity: 30%;
+        filter: brightness(50%);
     }
 
     .ports {

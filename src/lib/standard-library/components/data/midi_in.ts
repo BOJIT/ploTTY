@@ -1,8 +1,8 @@
 /**
- * @file console_log.ts
+ * @file midi_in.ts
  * @author James Bennion-Pedley
- * @brief Component to log messages to the DeveloperTools console
- * @date 05/06/2023
+ * @brief Component to capture MIDI input commands
+ * @date 23/07/2023
  *
  * @copyright Copyright (c) 2023
  *
@@ -11,26 +11,28 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Open } from "@svicons/ionicons-outline";
+import { MusicalNotes } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "console log",
-    category: 'core',
+    name: "midi-in",
+    category: 'data',
     ui: {
-        icon: Open,
-        colour: '#c4dea2',
+        icon: MusicalNotes,
     },
     inPorts: {
-        in: {
+        channel: {
+            default: {},
+        },
+    },
+    outPorts: {
+        out: {
             default: {},
         },
     },
     process: (input, output) => {
-        if (!input.hasData('in')) { return; }
-        const msg = input.getData('in');
-        console.log(msg);
+
     },
 };
 
