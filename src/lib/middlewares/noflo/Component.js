@@ -98,8 +98,13 @@ export class Component extends EventEmitter {
             this.outPorts = new OutPorts(opts.outPorts);
         }
 
+        // Set lifecycle handlers
         this.initHandler = opts.init;
         this.deinitHandler = opts.deinit;
+
+        // Allocate area for internal state
+        /** @type {any} */
+        this.state = {}
 
         // Set the default component icon and description
         this.icon = opts.icon ? opts.icon : '';
@@ -199,41 +204,6 @@ export class Component extends EventEmitter {
             return;
         }
         throw e;
-    }
-
-    /**
-     * @callback ErrorableCallback
-     * @param {Error | null} error
-     */
-
-    // ### Setup
-    //
-    // The setUp method is for component-specific initialization.
-    // Called at network start-up.
-    //
-    // Override in component implementation to do component-specific
-    // setup work.
-    /**
-     * @param {ErrorableCallback} callback - Callback for when teardown is ready
-     * @returns {Promise<void> | void}
-     */
-    setUp(callback) {
-        callback(null);
-    }
-
-    // ### Teardown
-    //
-    // The tearDown method is for component-specific cleanup. Called
-    // at network shutdown
-    //
-    // Override in component implementation to do component-specific
-    // cleanup work, like clearing any accumulated state.
-    /**
-     * @param {ErrorableCallback} callback - Callback for when teardown is ready
-     * @returns {Promise<void> | void}
-     */
-    tearDown(callback) {
-        callback(null);
     }
 
     // ### Start

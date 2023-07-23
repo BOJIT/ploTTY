@@ -30,6 +30,8 @@ const c: PlottyComponent = {
             enumeration: [
                 "signal",
                 "timestamp",
+                "unix",
+                "counter",
             ],
         },
     },
@@ -39,44 +41,37 @@ const c: PlottyComponent = {
         }
     },
     process: (input, output, context) => {
-        // if (!c.timer) {
-        //     let count = 0;
-        //     c.timer = context;
-        //     c.timer.interval = setInterval(() => {
-        //         let countstring = "test packet: " + count + "\n";
-        //         output.send({
-        //             out: countstring
-        //         });
-        //         count++;
-        //     }, 1000);
-        // }
+        let state = context.nodeInstance.state;
+        if (state.timer === undefined) {
+            state.timer = setInterval((s) => {
+                let countstring = `count ${s.count}`;
+                output.send({
+                    out: countstring
+                });
+                console.log(countstring);
+
+                s.count++;
+            }, 100, state);
+        }
     },
     init: async (resolve, reject, context) => {
-        console.log("Started");
+        // Reset internal counter
+        context.state.count = 0;
+        context.state.timer = undefined;
 
         resolve();
     },
     deinit: async (resolve, reject, context) => {
-        console.log("Stopped");
-        // if (this.timer) {
-        //     cleanup();
-        // }
+        // Clear and erase timer
+        if (context.state.timer !== undefined) {
+            clearInterval(context.state.timer);
+            context.state.timer = undefined;
+        }
+        context.state.count = 0;
+
         resolve();
-        // reject("Something wrong!")
-    },
-    state: {
-        timer: null,
     },
 };
-
-/*-------------------------------- Helpers -----------------------------------*/
-
-// Helpers
-function cleanup(c) {
-    clearInterval(c.timer.interval);
-    c.timer.deactivate();
-    c.timer = null;
-}
 
 /*-------------------------------- Exports -----------------------------------*/
 
