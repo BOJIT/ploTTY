@@ -26,7 +26,19 @@ const c: PlottyComponent = {
             datatype: 'string',
             default: 'any',
             enumeration: async () => {
-                return [];
+                try {
+                    const access = await navigator.requestMIDIAccess();
+                    const names: string[] = [];
+
+                    for (const entry of access.inputs) {
+                        if (entry[1].name)
+                            names.push(entry[1].name);
+                    }
+
+                    return names;
+                } catch (e) {
+                    return [];
+                }
             },
         },
         channel: {
@@ -63,6 +75,8 @@ const c: PlottyComponent = {
     },
     init: async (resolve, reject, context) => {
         const access = await navigator.requestMIDIAccess();
+
+        console.log(access.inputs);
 
         for (const entry of access.inputs) {
             const input = entry[1];

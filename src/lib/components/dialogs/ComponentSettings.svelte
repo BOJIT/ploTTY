@@ -26,7 +26,7 @@
 
     import type SvelvetAPI from "$lib/components/svelvet-editor/SvelvetAPI.svelte";
 
-    import type { PlottyPortMode } from "$lib/types/plotty";
+    import type { PlottyPort, PlottyPortMode } from "$lib/types/plotty";
     import type { GraphNode } from "$lib/middlewares/fbp-graph/Types";
 
     import { nodeSelected } from "$lib/stores/runState";
@@ -48,7 +48,7 @@
     function getInputsFromLibrary(
         lib: ComponentLibrary,
         component: string
-    ): [string, object][] {
+    ): [string, PlottyPort][] {
         if (lib[component] === undefined) return [];
         if (lib[component].inPorts === undefined) return [];
         return Object.entries(lib[component].inPorts);
@@ -79,11 +79,6 @@
             return "ID already taken!";
 
         return false;
-    }
-
-    function evaluateEnumeration(e: any) {
-        if (typeof e === "function") return e();
-        else return e;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -179,32 +174,65 @@
                 </div>
                 {#if mode === "enum"}
                     {#if i[1].enumeration !== undefined}
-                        <div class="enumeration">
-                            <List
-                                bind:value={nodeObject.metadata.portConfig[i[0]]
-                                    .chosenEnumeration}
-                                items={evaluateEnumeration(i[1].enumeration)}
-                            >
-                                <div
-                                    slot="item"
-                                    let:item
-                                    on:keypress
-                                    on:click={() => {
-                                        nodeObject.metadata.portConfig[
-                                            i[0]
-                                        ].chosenEnumeration = item;
-                                        $graph = $graph; // Trigger store update
-                                    }}
-                                    class:enumeration-selected={item ===
-                                        nodeObject.metadata.portConfig[i[0]]
-                                            .chosenEnumeration}
-                                >
-                                    <ListItem>
-                                        {item}
-                                    </ListItem>
+                        {#if typeof i[1].enumeration === "function"}
+                            {#await i[1].enumeration() then e}
+                                <div class="enumeration">
+                                    <List
+                                        bind:value={nodeObject.metadata
+                                            .portConfig[i[0]].chosenEnumeration}
+                                        items={e}
+                                    >
+                                        <div
+                                            slot="item"
+                                            let:item
+                                            on:keypress
+                                            on:click={() => {
+                                                nodeObject.metadata.portConfig[
+                                                    i[0]
+                                                ].chosenEnumeration = item;
+                                                $graph = $graph; // Trigger store update
+                                            }}
+                                            class:enumeration-selected={item ===
+                                                nodeObject.metadata.portConfig[
+                                                    i[0]
+                                                ].chosenEnumeration}
+                                        >
+                                            <ListItem>
+                                                {item}
+                                            </ListItem>
+                                        </div>
+                                    </List>
                                 </div>
-                            </List>
-                        </div>
+                            {/await}
+                        {:else}
+                            <div class="enumeration">
+                                <List
+                                    bind:value={nodeObject.metadata.portConfig[
+                                        i[0]
+                                    ].chosenEnumeration}
+                                    items={i[1].enumeration}
+                                >
+                                    <div
+                                        slot="item"
+                                        let:item
+                                        on:keypress
+                                        on:click={() => {
+                                            nodeObject.metadata.portConfig[
+                                                i[0]
+                                            ].chosenEnumeration = item;
+                                            $graph = $graph; // Trigger store update
+                                        }}
+                                        class:enumeration-selected={item ===
+                                            nodeObject.metadata.portConfig[i[0]]
+                                                .chosenEnumeration}
+                                    >
+                                        <ListItem>
+                                            {item}
+                                        </ListItem>
+                                    </div>
+                                </List>
+                            </div>
+                        {/if}
                     {:else}
                         <h6 class="warn">No Enumerations Available!</h6>
                     {/if}

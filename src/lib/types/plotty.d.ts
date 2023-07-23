@@ -98,6 +98,7 @@ type PlottyComponentMetadata = {
 /*-------------------------------- Exports -----------------------------------*/
 
 export type {
+    Port as PlottyPort,
     PlottyComponent,
     PlottyComponentMetadata,
     PlottyPatch,
