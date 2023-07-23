@@ -23,6 +23,7 @@ const c: PlottyComponent = {
     widget: LineChart,
     ui: {
         icon: Analytics,
+        colour: '#c0b2d1',
     },
     inPorts: {
         data: {

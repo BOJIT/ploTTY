@@ -64,7 +64,7 @@ let network: Network | null = null;
 
 /*------------------------------- Functions ----------------------------------*/
 
-function init(errorHook: (e: any) => {}) {
+function init(errorHook: (e: any) => void) {
     // Subscribe loader to the component library
     components.subscribe((c) => {
         loader.components = c;
@@ -73,12 +73,37 @@ function init(errorHook: (e: any) => {}) {
     // Create initial (empty) network
 }
 
-async function start(g: Graph, l: ComponentLibrary) {
+async function start(g: Graph) {
     network = await createNetwork(g, {
         componentLoader: loader,
     });
 
+    // Iterate through nodes to collect IIP config
+    g.nodes.forEach((n) => {
+        if ("portConfig" in n.metadata) {
+            Object.entries(n.metadata.portConfig).forEach((p) => {
+                // remove existing initials
+                g.removeInitial(n.id, p[0]);
+
+                // Add relevant IIP
+                switch (p[1].mode) {
+                    case "enum": {
+                        if (p[1].chosenEnumeration !== undefined)
+                            g.addInitial(p[1].chosenEnumeration, n.id, p[0]);
+                        break;
+                    }
+                    case "custom": {
+
+                        break;
+                    }
+                }
+            });
+        }
+    })
+
     network.sendInitials();
+
+    // TODO find way to update initials on <ComponentSettings/> change
 
     console.log(network);
 }

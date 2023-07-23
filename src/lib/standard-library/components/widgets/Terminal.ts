@@ -23,6 +23,7 @@ const c: PlottyComponent = {
     widget: Terminal,
     ui: {
         icon: TerminalIcon,
+        colour: '#c0b2d1',
     },
     inPorts: {
         data: {

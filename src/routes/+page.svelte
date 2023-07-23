@@ -124,7 +124,7 @@
     graphRunning.subscribe((r) => {
         if (r === true) {
             console.log($graph);
-            runtime.start($graph, $components);
+            runtime.start($graph);
         } else {
             runtime.stop();
         }
@@ -139,7 +139,9 @@
         await patch.init();
 
         // Initialise runtime
-        runtime.init();
+        runtime.init((e) => {
+            console.warn(`error hook: ${e}`);
+        });
 
         // Update settings store when theme changes
         $themeMode = $settings.theme;

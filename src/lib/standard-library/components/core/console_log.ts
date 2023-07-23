@@ -23,9 +23,7 @@ const c: PlottyComponent = {
         colour: '#c4dea2',
     },
     inPorts: {
-        in: {
-            default: {},
-        },
+        in: {},
     },
     process: (input, output) => {
         if (!input.hasData('in')) { return; }

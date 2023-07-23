@@ -70,23 +70,43 @@ const c: PlottyComponent = {
             default: {},
         },
     },
-    process: (input, output) => {
+    process: (input, output, context) => {
+        if (input.hasData('device')) {
+            const target = input.getData('device');
 
+            // If device is enumerated, attach listener
+            const names: any = {};
+
+            for (const entry of context.nodeInstance.state.midiAccess.inputs) {
+                if (entry[1].name)
+                    names[entry[1].name] = entry[1];
+            }
+
+            if (!(target in names)) {
+                throw new Error(`Selected Device [${target}] cannot be opened!`);
+            }
+
+            // Send MIDI messages as arrays
+            names[target].onmidimessage = (m) => {
+                output.send({
+                    out: Array.from(m.data)
+                });
+            }
+        }
+
+        // if (input.hasData('channel'))
+        //     console.log(`Channel: ${input.getData('channel')}`);
     },
     init: async (resolve, reject, context) => {
-        const access = await navigator.requestMIDIAccess();
+        // Request access to MIDI API
+        context.state.midiAccess = await navigator.requestMIDIAccess();
 
-        console.log(access.inputs);
-
-        for (const entry of access.inputs) {
-            const input = entry[1];
-            console.log(
-                `Input port [type:'${input.type}']` +
-                ` id:'${input.id}'` +
-                ` manufacturer:'${input.manufacturer}'` +
-                ` name:'${input.name}'` +
-                ` version:'${input.version}'`,
-            );
+        resolve();
+    },
+    deinit: async (resolve, reject, context) => {
+        for (const entry of context.state.midiAccess.inputs) {
+            // Remove all listeners
+            entry[1].onmidimessage = undefined;
         }
 
         resolve();
