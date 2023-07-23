@@ -125,7 +125,8 @@
         if (node === undefined) return;
 
         renamePending = node;
-        node.id = rename; // Assigning this will deselect the node
+        // Assigning this will deselect the node
+        graph.renameNode(node.id, rename);
 
         node.metadata.label = rename; // Explicit override
         graph = graph; // Trigger prop update

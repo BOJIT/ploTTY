@@ -31,7 +31,6 @@ const c: PlottyComponent = {
         if (!input.hasData('in')) { return; }
         const msg = input.getData('in');
         console.log(msg);
-        output.done();
     },
 };
 
