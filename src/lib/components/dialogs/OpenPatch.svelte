@@ -86,7 +86,7 @@
 
                 $editorOverlay = true;
                 api.fitGraph();
-                $nodeSelected = "";
+                $nodeSelected = [];
                 visible = false;
             }, 200);
         }}

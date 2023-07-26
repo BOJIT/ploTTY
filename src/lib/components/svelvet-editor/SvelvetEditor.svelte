@@ -30,7 +30,7 @@
     export let theme: ThemeMode = "light";
     export let graph: NofloGraphType = new NofloGraph.Graph();
     export let api: SvelvetAPI; // Has to be separate component to get context
-    export let nodeSelected: string = "";
+    export let nodeSelected: string[] = [];
 
     let nodes = graph.nodes;
     const dispatch = createEventDispatcher();

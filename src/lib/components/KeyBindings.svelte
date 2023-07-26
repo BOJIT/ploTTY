@@ -59,7 +59,7 @@
             setTimeout(() => {
                 $addComponentOverlay = true;
             }, 100);
-        } else if (event.key === "p" && $nodeSelected !== "") {
+        } else if (event.key === "p" && $nodeSelected.length === 1) {
             setTimeout(() => {
                 $componenSettingsOverlay = true;
             }, 100);

@@ -67,10 +67,10 @@
 
     function handleKeydown(event: KeyboardEvent) {
         // Only handle editor-specific events here
-        if ($nodeSelected !== "" && $componenSettingsOverlay === false) {
+        if ($nodeSelected.length > 0 && $componenSettingsOverlay === false) {
             if (event.key === "Backspace") {
                 event.preventDefault();
-                api.removeNode($nodeSelected); // Delete shortcut
+                $nodeSelected.forEach((n) => api.removeNode(n));
             }
         }
     }
@@ -104,7 +104,7 @@
 >
     <h5>
         {$patch.key}<span class="statuspath">
-            {$nodeSelected !== "" ? `/${$nodeSelected}` : ""}
+            {$nodeSelected.length === 1 ? `/${$nodeSelected}` : ""}
         </span>
     </h5>
 </div>
@@ -150,7 +150,7 @@
 {/if}
 
 <div class="controls" class:visible>
-    {#if $nodeSelected !== ""}
+    {#if $nodeSelected.length === 1}
         <div transition:fly={{ y: 100 }}>
             <IconButton
                 icon={Settings}
@@ -172,7 +172,7 @@
                     ? accentColour
                     : "var(--color-gray-800)"}
                 on:click={() => {
-                    api.removeNode($nodeSelected);
+                    api.removeNode($nodeSelected[0]);
                 }}
             />
         </div>

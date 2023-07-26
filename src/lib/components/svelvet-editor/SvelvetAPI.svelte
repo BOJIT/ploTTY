@@ -11,7 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { createEventDispatcher, getContext, onMount } from "svelte";
+    import { createEventDispatcher, getContext } from "svelte";
 
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
@@ -20,14 +20,14 @@
     /*--------------------------------- Props --------------------------------*/
 
     export let graph: NofloGraphType;
-    export let nodeSelected: string = "";
+    export let nodeSelected: string[] = [];
 
     const svelvetGraph: any = getContext("graph");
-    const { bounds, dimensions, groups } = svelvetGraph;
+    const { bounds, center, dimensions, groups } = svelvetGraph;
     const selectedNodes = $groups.selected.nodes;
     const nodeBounds = bounds.nodeBounds;
 
-    const dispatch = createEventDispatcher();
+    // const dispatch = createEventDispatcher();
 
     let renamePending: any | null = null;
 
@@ -79,7 +79,7 @@
         graph = new NofloGraph.Graph();
         graph.on("endTransaction", listeners[0]);
 
-        nodeSelected = "";
+        nodeSelected = [];
     }
 
     export function addNode(type: string) {
@@ -95,11 +95,18 @@
         /* Place in stack if place is taken */
         let increment = 0;
         while (
-            graph.nodes.some(
-                (node) =>
-                    node.metadata.position.x ===
-                    window.innerWidth / 2 + increment
-            )
+            graph.nodes.some((node) => {
+                // Check if any node is within 20px of target
+                if (
+                    Math.abs(node.metadata.position.x - $center.x + increment) <
+                        20 &&
+                    Math.abs(node.metadata.position.y - $center.y + increment) <
+                        20
+                )
+                    return true;
+
+                return false;
+            })
         ) {
             increment += 20;
         }
@@ -107,8 +114,8 @@
         /* Add UI-related metadata */
         const metadata = {
             position: {
-                x: window.innerWidth / 2 + increment,
-                y: window.innerHeight / 2 + increment,
+                x: $center.x + increment,
+                y: $center.y + increment,
             },
         };
 
@@ -117,10 +124,12 @@
 
     export function removeNode(id: string) {
         graph.removeNode(id);
-        nodeSelected = "";
+        nodeSelected = [];
     }
 
     export function renameNode(id: string, rename: string) {
+        if (nodeSelected.length !== 1) return;
+
         let node = graph.nodes.find((n) => id === n.id);
         if (node === undefined) return;
 
@@ -130,7 +139,7 @@
 
         node.metadata.label = rename; // Explicit override
         graph = graph; // Trigger prop update
-        nodeSelected = node.id;
+        nodeSelected[0] = node.id;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -144,12 +153,11 @@
             return;
         }
 
-        if (s.size === 1) {
-            if ([...s][0].id.startsWith("N-"))
-                nodeSelected = [...s][0].id.substring(2);
-            else nodeSelected = [...s][0].id;
-        } else {
-            nodeSelected = "";
-        }
+        const n: string[] = [];
+        $selectedNodes.forEach((sn: any) => {
+            if ([...s][0].id.startsWith("N-")) n.push(sn.id.substring(2));
+            else n.push(sn.id);
+        });
+        nodeSelected = n;
     });
 </script>

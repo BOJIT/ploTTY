@@ -54,7 +54,7 @@
 
         // If success
         $editorOverlay = true;
-        $nodeSelected = "";
+        $nodeSelected = [];
         visible = false;
     }
 

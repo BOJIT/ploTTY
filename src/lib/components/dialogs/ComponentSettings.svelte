@@ -84,11 +84,12 @@
     /*------------------------------- Lifecycle ------------------------------*/
 
     nodeSelected.subscribe((node) => {
-        label = node;
-        if (node !== "") {
-            let graphRef = $graph.nodes.find((n) => node === n.id);
+        if (node.length === 1) {
+            label = node[0];
+            let graphRef = $graph.nodes.find((n) => node[0] === n.id);
             if (graphRef !== undefined) nodeObject = graphRef;
         } else {
+            label = "";
             nodeObject = undefined;
             visible = false; // Settings hidden if multiple components selected
         }
