@@ -74,10 +74,6 @@ function init(errorHook: (e: any) => void) {
 }
 
 async function start(g: Graph) {
-    network = await createNetwork(g, {
-        componentLoader: loader,
-    });
-
     // Iterate through nodes to collect IIP config
     g.nodes.forEach((n) => {
         if ("portConfig" in n.metadata) {
@@ -93,13 +89,27 @@ async function start(g: Graph) {
                         break;
                     }
                     case "custom": {
+                        if (p[1].codeString === undefined || p[1].codeString === "")
+                            break;  // Nothing to send
 
+                        try {
+                            const expr = Function(p[1].codeString)();
+                            if (expr !== undefined)
+                                g.addInitial(expr, n.id, p[0]);
+                        } catch (err) {
+                            // TODO route this to central exception handler
+                            throw new Error(err);
+                        }
                         break;
                     }
                 }
             });
         }
     })
+
+    network = await createNetwork(g, {
+        componentLoader: loader,
+    });
 
     network.sendInitials();
 

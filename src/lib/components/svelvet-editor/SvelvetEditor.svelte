@@ -59,7 +59,14 @@
     });
 </script>
 
-<Svelvet id="svelvet-editor" {theme} editable snapTo={2} edge={SvelvetEdge}>
+<Svelvet
+    id="svelvet-editor"
+    {theme}
+    editable
+    snapTo={2}
+    edge={SvelvetEdge}
+    modifier="shift"
+>
     <SvelvetAPI
         bind:this={api}
         bind:graph
