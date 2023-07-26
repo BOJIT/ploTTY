@@ -24,7 +24,6 @@ const c: PlottyComponent = {
     inPorts: {
         device: {
             datatype: 'string',
-            default: 'any',
             enumeration: async () => {
                 try {
                     const access = await navigator.requestMIDIAccess();
