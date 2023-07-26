@@ -10,11 +10,14 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
+import type { SvelteComponent } from "svelte";
+
 import type { Graph } from "$lib/middlewares/fbp-graph/Graph";
 import components, { type ComponentLibrary } from "$lib/stores/components";
 
 import { createNetwork, Component, ComponentLoader } from "$lib/middlewares/noflo";
 import type { Network } from "$lib/middlewares/noflo/Network";
+import type Widgets from "$lib/components/Widgets.svelte";
 
 /*--------------------------------- Types ------------------------------------*/
 
@@ -50,7 +53,19 @@ class Loader extends ComponentLoader {
             }
             resolve(component);
         }).then((component: any) => {
-            return new Component(component);
+            const c = new Component(component);
+            if (component.widget !== undefined && widgetsAPI !== null)
+                // Expose widget methods to component
+                c.widget = {
+                    post: (m: any): void => {
+                        widgetsAPI.post(c.nodeId, m);
+                    },
+                    get: (): any => {
+                        return widgetsAPI.get(c.nodeId);
+                    }
+                }
+
+            return c;
         });
         return promise;
     }
@@ -62,15 +77,19 @@ const loader = new Loader();
 
 let network: Network | null = null;
 
+let widgetsAPI: Widgets | null = null;
+
 /*------------------------------- Functions ----------------------------------*/
 
-function init(errorHook: (e: any) => void) {
+function init(errorHook: (e: any) => void, widgets: Widgets) {
     // Subscribe loader to the component library
     components.subscribe((c) => {
         loader.components = c;
     })
 
-    // Create initial (empty) network
+    widgetsAPI = widgets;
+
+    // TODO setup error hook
 }
 
 async function start(g: Graph) {
@@ -107,10 +126,10 @@ async function start(g: Graph) {
         }
     })
 
+    // Start network and send IIPs
     network = await createNetwork(g, {
         componentLoader: loader,
     });
-
     network.sendInitials();
 
     // TODO find way to update initials on <ComponentSettings/> change

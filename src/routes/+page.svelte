@@ -117,6 +117,8 @@
         },
     ];
 
+    let widgets: Widgets;
+
     /*-------------------------------- Methods -------------------------------*/
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -141,7 +143,7 @@
         // Initialise runtime
         runtime.init((e) => {
             console.warn(`error hook: ${e}`);
-        });
+        }, widgets);
 
         // Update settings store when theme changes
         $themeMode = $settings.theme;
@@ -201,7 +203,7 @@
 
 <!-- Primary User Interface -->
 <div class="interface">
-    <Widgets />
+    <Widgets bind:this={widgets} />
     <Editor visible={$editorOverlay} />
 </div>
 

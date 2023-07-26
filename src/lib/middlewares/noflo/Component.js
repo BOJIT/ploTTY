@@ -102,6 +102,9 @@ export class Component extends EventEmitter {
         this.initHandler = opts.init;
         this.deinitHandler = opts.deinit;
 
+        // Widget handle is null by default
+        this.widget = null;
+
         // Allocate area for internal state
         /** @type {any} */
         this.state = {}

@@ -39,8 +39,10 @@ const c: PlottyComponent = {
             default: {},
         },
     },
-    process: (input, output) => {
-
+    process: (input, output, context) => {
+        // context.nodeInstance.widget.post({
+        //     "hello world": true
+        // });
     },
 };
 

@@ -18,6 +18,8 @@
     import { graphRunning } from "$lib/stores/runState";
     import { graph } from "$lib/stores/patch";
     import components from "$lib/stores/components";
+    import type { Node } from "svelvet/dist/types/parser";
+    import type { SvelteComponent } from "svelte";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -41,9 +43,15 @@
 
     let activeIds: number = 0;
 
+    const widgetHandles: { [key: string]: SvelteComponent } = {};
+
     /*-------------------------------- Methods -------------------------------*/
 
-    function checkSelectedWidget(ids, idx, w) {
+    function checkSelectedWidget(
+        ids: { label: string }[],
+        idx: number,
+        w: Node
+    ) {
         // If selection has been deleted, reset to entry 0
         if (ids[idx] === undefined) {
             activeIds = 0;
@@ -51,6 +59,18 @@
         }
 
         return ids[idx].label === w.id;
+    }
+
+    /*---------------------------------- API ---------------------------------*/
+
+    export function post(id: string, message: any) {
+        if (widgetHandles[id] === undefined) return null;
+        widgetHandles[id].post(message);
+    }
+
+    export function get(id: string) {
+        if (widgetHandles[id] === undefined) return null;
+        return widgetHandles[id].get();
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -72,7 +92,10 @@
             class="widget"
             class:visible={checkSelectedWidget($widgetIds, activeIds, w)}
         >
-            <svelte:component this={$components[w.component].widget} />
+            <svelte:component
+                this={$components[w.component].widget}
+                bind:this={widgetHandles[w.id]}
+            />
         </div>
     {/each}
 </div>

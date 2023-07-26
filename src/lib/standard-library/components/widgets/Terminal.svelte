@@ -54,16 +54,12 @@
 
     /*-------------------------------- Methods -------------------------------*/
 
-    export function reset() {
-        console.log("Placeholder");
+    export function post(message: any) {
+        console.log(message);
     }
 
-    export function update() {
-        console.log("Placeholder");
-    }
-
-    export function generate() {
-        console.log("Placeholder");
+    export function get() {
+        return {};
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
