@@ -17,6 +17,8 @@
 
     import { ExtensionPuzzle as DefaultIcon } from "@svicons/ionicons-outline";
 
+    import type { PlottyPortConfig } from "$lib/types/plotty";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let id: string;
@@ -32,6 +34,8 @@
 
     export let inports: string[] = [];
     export let outports: string[] = [];
+
+    export let portConfig: PlottyPortConfig | undefined = undefined;
 
     const graph = getContext("graph");
     const scale = graph.transforms.scale;
@@ -69,7 +73,19 @@
         <div class="ports inports">
             {#each inports as ip}
                 <div class="port-annotation" class:visible={$scale > 0.8}>
-                    <Anchor input />
+                    {#if portConfig && portConfig[ip] !== undefined}
+                        <Anchor
+                            input
+                            locked={portConfig[ip].mode !== "input"}
+                            bgColor={portConfig[ip].mode === "enum"
+                                ? "#8ac38c"
+                                : portConfig[ip].mode === "custom"
+                                ? "#fbae3d"
+                                : null}
+                        />
+                    {:else}
+                        <Anchor input />
+                    {/if}
                     <p class="left">{ip}</p>
                 </div>
             {/each}

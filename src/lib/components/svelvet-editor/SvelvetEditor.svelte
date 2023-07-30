@@ -99,6 +99,7 @@
                     // HACK: force store to update. TODO subscribe to store.
                     n.metadata.position = n.metadata.position;
                 }}
+                portConfig={n.metadata.portConfig}
                 inports={$components[n.component].inPorts !== undefined
                     ? Object.keys($components[n.component].inPorts)
                     : []}
