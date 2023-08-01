@@ -88,6 +88,18 @@ async function addDevice(type: HardwareType): Promise<void> {
 
             // Request device (no filters currently)
             let port = await navigator.serial.requestPort();
+            const info = port.getInfo();
+
+            // Note this isn't a unique identifier: it's the best that the API
+            // currently offers: https://github.com/WICG/serial/issues/128
+            const key = `S-PID${info.usbProductId}-VID${info.usbVendorId}`
+
+            store.update((h) => {
+                h[key] = {
+                    type: 'serial',
+                };
+                return h;
+            });
 
             break;
         }
@@ -149,6 +161,7 @@ async function enumerateAccess(hardware): Promise<object> {
             let info = p.getInfo();
             enumeration[`S-PID${info.usbProductId}-VID${info.usbVendorId}`] = {
                 icon: Terminal,
+
             };
         })
     }

@@ -125,7 +125,6 @@
 
     graphRunning.subscribe((r) => {
         if (r === true) {
-            console.log($graph);
             runtime.start($graph);
         } else {
             runtime.stop();
