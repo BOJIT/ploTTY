@@ -18,6 +18,7 @@
         TextIconButton,
     } from "@bojit/svelte-components/form";
     import { BaseDialog } from "@bojit/svelte-components/layout";
+    import { Switch } from "@bojit/svelte-components/smelte";
     import { Tabs } from "@bojit/svelte-components/widgets";
     import theme from "@bojit/svelte-components/theme";
     const mode = theme.Mode;
@@ -162,6 +163,17 @@
             <br />
             <hr />
             <h6 class="center">Program Configuration</h6>
+            <div class="switches">
+                <Switch
+                    label="clear widgets on start"
+                    bind:value={$settings.switches.clearWidgetsOnStart}
+                />
+                <Switch
+                    label="basic graphics mode"
+                    bind:value={$settings.switches.lowGraphicsMode}
+                />
+            </div>
+
             <div class="themes center">
                 <TextIconButton
                     icon={CloudDownload}
@@ -400,5 +412,13 @@
     hr {
         margin-top: 0.4rem;
         margin-bottom: 0.4rem;
+    }
+
+    .switches {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        margin: 0.5rem;
     }
 </style>

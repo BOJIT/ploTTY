@@ -13,6 +13,9 @@
 import type { PlottyComponent } from "$lib/types/plotty";
 import { Terminal as TerminalIcon } from "@svicons/ionicons-outline";
 
+import { get } from "svelte/store";
+
+import settings from "$lib/stores/settings";
 import Terminal from "./Terminal.svelte";
 
 /*-------------------------------- Component ---------------------------------*/
@@ -28,7 +31,11 @@ const c: PlottyComponent = {
     inPorts: {
         data: {},
         clear: {
-            datatype: 'bang',
+            datatype: 'boolean',
+            enumeration: [
+                true,
+                false,
+            ],
         }
     },
     outPorts: {
@@ -62,6 +69,25 @@ const c: PlottyComponent = {
 
             context.nodeInstance.widget.post(data);
         }
+
+        if (input.hasData('clear')) {
+            let data = input.getData('clear');   // Any datatype will trigger a clear
+            if (data) {
+                context.nodeInstance.widget.post({
+                    "command": "clear",
+                });
+            }
+        }
+    },
+    init: async (resolve, reject, context) => {
+        // Global clear of widgets if set
+        if (get(settings).switches.clearWidgetsOnStart) {
+            context.widget.post({
+                "command": "clear",
+            });
+        }
+
+        resolve();
     },
 };
 

@@ -20,12 +20,20 @@ import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
 
 type Settings = {
     theme: ThemeMode,
+    switches: {
+        clearWidgetsOnStart: boolean,
+        lowGraphicsMode: boolean,
+    }
 };
 
 /*--------------------------------- State ------------------------------------*/
 
 const DEFAULT: Settings = {
     theme: 'dark',
+    switches: {
+        clearWidgetsOnStart: true,
+        lowGraphicsMode: false,
+    }
 }
 
 const store: Writable<Settings> = writable(DEFAULT);
@@ -35,12 +43,12 @@ const localStore: LocalForage = localForage.createInstance({
 
 /*------------------------------- Functions ----------------------------------*/
 
-async function init() : Promise<Writable<Settings>> {
+async function init(): Promise<Writable<Settings>> {
     // Does local store exist?
     let entry = await localStore.getItem("settings");
 
     // Get localStorage if it exists
-    if(entry !== null)
+    if (entry !== null)
         store.set(entry as Settings);
 
     /* Local storage is subscribed to store updates */
@@ -51,7 +59,7 @@ async function init() : Promise<Writable<Settings>> {
     return store;
 }
 
-async function reset() : Promise<void> {
+async function reset(): Promise<void> {
     await localStore.clear();
     store.set(DEFAULT);          // Reset all stores
 }

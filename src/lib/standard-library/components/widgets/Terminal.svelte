@@ -46,10 +46,18 @@
         }
     }
 
+    function clearTerminal() {
+        terminal.clear();
+    }
+
     /*-------------------------------- Methods -------------------------------*/
 
     export function post(message: any) {
         if (typeof message === "string") terminal?.write(message);
+        // Send control messages as objects
+        else if (typeof message == "object") {
+            if (message.command === "clear") clearTerminal();
+        }
     }
 
     export function get() {
@@ -103,6 +111,12 @@
     theme.subscribe((t) => {
         if (terminal !== undefined) setTheme(t);
     });
+
+    // TODO add overlays:
+    // - clear screen
+    // - copy N lines
+    // - break-out response pane (toggle)
+    // - to bottom (scroll)
 </script>
 
 <div class="xterm-container" bind:this={container} />
