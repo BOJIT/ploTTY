@@ -30,12 +30,6 @@
 
     /*---------------------------- Helper Functions --------------------------*/
 
-    function demoText() {
-        terminal.write(
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odi"
-        );
-    }
-
     function setTheme(t: ThemeMode) {
         if (t == "light") {
             terminal.options.theme = {
@@ -55,7 +49,7 @@
     /*-------------------------------- Methods -------------------------------*/
 
     export function post(message: any) {
-        console.log(message);
+        if (typeof message === "string") terminal?.write(message);
     }
 
     export function get() {
@@ -98,9 +92,6 @@
             fitAddon?.fit();
         });
         resizeObserver.observe(container);
-
-        // Temp - show demo text
-        interval = setInterval(demoText, 200);
     });
 
     onDestroy(() => {

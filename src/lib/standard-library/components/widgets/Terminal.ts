@@ -26,12 +26,9 @@ const c: PlottyComponent = {
         colour: '#c0b2d1',
     },
     inPorts: {
-        data: {
-            default: {},
-        },
-        columns: {
-            datatype: 'number',
-            default: '80',
+        data: {},
+        clear: {
+            datatype: 'bang',
         }
     },
     outPorts: {
@@ -40,9 +37,31 @@ const c: PlottyComponent = {
         },
     },
     process: (input, output, context) => {
-        // context.nodeInstance.widget.post({
-        //     "hello world": true
-        // });
+        if (input.hasData('data')) {
+            let data = input.getData('data');
+
+            switch (typeof data) {
+                case 'string':
+                    // No transform needed
+                    break;
+
+                case 'number':
+                    // Attempt to convert number/array into string representation
+                    data = String.fromCharCode(data);
+                    break;
+
+                case 'object':
+                    // Pretty-print objects as JSON
+                    data = JSON.stringify(data, null, 4);
+                    break;
+
+                default:
+                    data = "Unknown datatype!\n";
+                    break;
+            }
+
+            context.nodeInstance.widget.post(data);
+        }
     },
 };
 

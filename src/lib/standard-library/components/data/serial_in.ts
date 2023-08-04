@@ -86,7 +86,9 @@ function launchSerial(state: ComponentState, output: ProcessOutput) {
                     if (done) {
                         break;
                     }
-                    console.log(value);
+                    value.forEach((v: number) => {
+                        output.send(v);
+                    })
                 }
             } catch (e) {
                 throw new Error(e);
