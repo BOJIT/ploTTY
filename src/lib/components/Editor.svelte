@@ -41,6 +41,7 @@
     } from "$lib/stores/overlays";
     import { nodeSelected } from "$lib/stores/runState";
     import patch, { graph } from "$lib/stores/patch";
+    import settings from "$lib/stores/settings";
 
     import { clickOutside } from "$lib/utils/clickoutside";
 
@@ -86,7 +87,11 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="editor" class:visible>
+<div
+    class="editor"
+    class:visible
+    class:low-graphics={$settings.switches.lowGraphicsMode}
+>
     <SvelvetEditor
         bind:api
         bind:graph={$graph}

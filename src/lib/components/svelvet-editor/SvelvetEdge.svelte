@@ -13,7 +13,8 @@
 
     import { Edge } from "svelvet";
 
-    import { graphRunning } from "$lib/stores/runState"; // TODO make this a prop?
+    import { graphRunning } from "$lib/stores/runState";
+    import settings from "$lib/stores/settings";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -28,7 +29,7 @@
 <Edge
     let:destroy
     targetColor={deleteConfirmation ? "#bf288d" : null}
-    animate={$graphRunning}
+    animate={$graphRunning && !$settings.switches.lowGraphicsMode}
     enableHover
     edgeClick={() => {
         targetDiv.click();

@@ -23,7 +23,7 @@
     import SvelvetNode from "$lib/components/svelvet-editor/SvelvetNode.svelte";
     import SvelvetEdge from "$lib/components/svelvet-editor/SvelvetEdge.svelte";
 
-    import components from "$lib/stores/components"; // TODO import as prop
+    import components from "$lib/stores/components";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -131,5 +131,14 @@
         --anchor-connected-border: #444444;
         --anchor-hovering-border: #444444;
         --shadow-color: 0 0 0;
+    }
+
+    /* Disable transparency for low-graphics mode */
+    :global(.low-graphics) :global(#background-wrapper) {
+        --background-color: rgb(255, 255, 255) !important;
+    }
+
+    :global(.mode-dark) :global(.low-graphics) :global(#background-wrapper) {
+        --background-color: rgb(26, 26, 26) !important;
     }
 </style>
