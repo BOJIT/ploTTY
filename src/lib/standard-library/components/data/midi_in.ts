@@ -13,6 +13,30 @@
 import type { PlottyComponent } from "$lib/types/plotty";
 import { MusicalNotes } from "@svicons/ionicons-outline";
 
+/*---------------------------------- Types -----------------------------------*/
+
+type MidiStatus = "note-off" | "note-on" | "key-pressure" | "control-change" | "program-change" | "channel-pressure" | "pitch-bend" | "system";
+
+type MidiMessage = {
+    type: MidiStatus,
+    channel?: number,
+    data1: number,
+    data2: number,
+};
+
+/*---------------------------------- State -----------------------------------*/
+
+const STATUS_MAP: { [key: string]: MidiStatus } = {
+    "8": "note-off",
+    "9": "note-on",
+    "a": "key-pressure",
+    "b": "control-change",
+    "c": "program-change",
+    "d": "channel-pressure",
+    "e": "pitch-bend",
+    "f": "system",
+};
+
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
@@ -85,8 +109,20 @@ const c: PlottyComponent = {
 
             // Send MIDI messages as arrays
             names[target].onmidimessage = (m) => {
+                const isSystem = m.data[0] & (1 << 7);
+                const msg_type = (m.data[0] >> 4).toString(16);
+                const chan_num = (isSystem || msg_type === "system") ? 0 : (m.data[0] % 16);
+
+                // TODO filter if wrong channel
+
+                const msg: MidiMessage = {
+                    type: STATUS_MAP[msg_type],
+                    channel: chan_num,
+                    data1: m.data[1],
+                    data2: m.data[2],
+                }
                 output.send({
-                    out: Array.from(m.data).join(', '),
+                    out: msg,
                 });
             }
         }

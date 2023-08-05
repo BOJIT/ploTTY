@@ -66,7 +66,7 @@ const c: PlottyComponent = {
 
                 case 'object':
                     // Pretty-print objects as JSON
-                    data = JSON.stringify(data, null, 4);
+                    data = JSON.stringify(data, null, 4).concat("\n");
                     break;
 
                 default:
