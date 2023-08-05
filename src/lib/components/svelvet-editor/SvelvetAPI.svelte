@@ -11,7 +11,7 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { createEventDispatcher, getContext } from "svelte";
+    import { getContext } from "svelte";
 
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
@@ -23,11 +23,9 @@
     export let nodeSelected: string[] = [];
 
     const svelvetGraph: any = getContext("graph");
-    const { bounds, center, dimensions, groups } = svelvetGraph;
+    const { bounds, center, dimensions, edges, groups } = svelvetGraph;
     const selectedNodes = $groups.selected.nodes;
     const nodeBounds = bounds.nodeBounds;
-
-    // const dispatch = createEventDispatcher();
 
     let renamePending: any | null = null;
 
@@ -142,6 +140,17 @@
         nodeSelected[0] = node.id;
     }
 
+    export function addEdge(
+        sourceNode: string,
+        sourcePort: string,
+        targetNode: string,
+        targetPort: string
+    ) {
+        // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
+        // if (!source.node || !target.node) return false;
+        // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     selectedNodes.subscribe((s: Set<any>) => {
@@ -160,4 +169,13 @@
         });
         nodeSelected = n;
     });
+
+    // edges.subscribe((e) => {
+    //     console.log(graph.edges);
+
+    //     console.log(edges);
+    //     // edges.getAll().forEach((edge) => {
+    //     //     console.log(edge.source.);
+    //     // });
+    // });
 </script>

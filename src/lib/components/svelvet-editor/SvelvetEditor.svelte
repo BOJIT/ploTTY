@@ -43,6 +43,14 @@
         dispatch("change");
     }
 
+    function addConnection(e: CustomEvent) {
+        console.log(e.detail);
+    }
+
+    function removeConnection(e: CustomEvent) {
+        console.log(e.detail);
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     // Reset any state that needs an explicit update
@@ -66,6 +74,8 @@
     snapTo={2}
     edge={SvelvetEdge}
     modifier="shift"
+    on:connection={addConnection}
+    on:disconnection={removeConnection}
 >
     <SvelvetAPI
         bind:this={api}
