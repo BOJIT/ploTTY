@@ -65,9 +65,7 @@ const c: PlottyComponent = {
         },
     },
     outPorts: {
-        out: {
-            default: {},
-        },
+        out: {},
     },
     process: (input, output, context) => {
         if (input.hasData('device')) {
@@ -88,7 +86,7 @@ const c: PlottyComponent = {
             // Send MIDI messages as arrays
             names[target].onmidimessage = (m) => {
                 output.send({
-                    out: Array.from(m.data)
+                    out: Array.from(m.data).join(', '),
                 });
             }
         }

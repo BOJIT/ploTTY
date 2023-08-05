@@ -87,7 +87,9 @@ function launchSerial(state: ComponentState, output: ProcessOutput) {
                         break;
                     }
                     value.forEach((v: number) => {
-                        output.send(v);
+                        output.send({
+                            out: v
+                        });
                     })
                 }
             } catch (e) {

@@ -36,6 +36,13 @@ const c: PlottyComponent = {
                 true,
                 false,
             ],
+        },
+        echo: {
+            datatype: 'boolean',
+            enumeration: [
+                true,
+                false,
+            ],
         }
     },
     outPorts: {
