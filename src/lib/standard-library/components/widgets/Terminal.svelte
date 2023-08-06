@@ -12,9 +12,20 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { onDestroy, onMount } from "svelte";
+    import { fly } from "svelte/transition";
 
     import theme from "@bojit/svelte-components/theme";
     import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
+    import { IconButton } from "@bojit/svelte-components/form";
+    import { TextField } from "@bojit/svelte-components/smelte";
+
+    import {
+        ChevronDown,
+        CloseCircle,
+        Copy,
+        Enter,
+        Exit,
+    } from "@svicons/ionicons-outline";
 
     /* XTermJS */
     import type { Terminal } from "xterm";
@@ -26,7 +37,9 @@
     let terminal: Terminal;
     let resizeObserver: ResizeObserver | null = null;
 
-    let interval: any = null; // TODO remove!!!
+    let lineEntry: boolean = false;
+    let lineValue: string = "";
+    let lineComponent: HTMLFormElement;
 
     /*---------------------------- Helper Functions --------------------------*/
 
@@ -46,22 +59,22 @@
         }
     }
 
-    function clearTerminal() {
-        terminal.clear();
-    }
-
     /*-------------------------------- Methods -------------------------------*/
 
     export function post(message: any) {
         if (typeof message === "string") terminal?.write(message);
         // Send control messages as objects
         else if (typeof message == "object") {
-            if (message.command === "clear") clearTerminal();
+            if (message.command === "clear") terminal.clear();
         }
     }
 
     export function get() {
         return {};
+    }
+
+    function send() {
+        // TODO work out how to notify Graph component
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -93,6 +106,8 @@
         terminal.loadAddon(webglAddon);
         terminal.open(container);
 
+        // Set initial theme and resize
+        setTheme($theme);
         fitAddon.fit();
 
         // Redraw on size change
@@ -104,8 +119,6 @@
 
     onDestroy(() => {
         resizeObserver?.unobserve(container);
-
-        clearInterval(interval);
     });
 
     theme.subscribe((t) => {
@@ -113,18 +126,124 @@
     });
 
     // TODO add overlays:
-    // - clear screen
     // - copy N lines
-    // - break-out response pane (toggle)
-    // - to bottom (scroll)
 </script>
 
-<div class="xterm-container" bind:this={container} />
+<div class="xterm-container">
+    <div
+        class="xterm-terminal"
+        class:line-entry={lineEntry}
+        bind:this={container}
+    />
+    <div class="control-anchor">
+        {#if lineEntry}
+            <form
+                class="line-overlay"
+                autocomplete="off"
+                transition:fly={{ x: -100 }}
+                bind:this={lineComponent}
+            >
+                <TextField
+                    bind:value={lineValue}
+                    outlined
+                    on:change={(e) => {
+                        send(lineValue);
+                        lineValue = "";
+                        let input = lineComponent.querySelector("input");
+                        setTimeout(() => {
+                            input?.focus();
+                        }, 1);
+                    }}
+                />
+            </form>
+        {/if}
+        <div class="control-overlay">
+            <IconButton
+                size="2rem"
+                icon={lineEntry ? Exit : Enter}
+                color="transparent"
+                on:click={() => {
+                    lineEntry = !lineEntry;
+                }}
+            />
+            <IconButton
+                size="2rem"
+                icon={ChevronDown}
+                color="transparent"
+                on:click={() => {
+                    terminal.scrollToBottom();
+                }}
+            />
+            <IconButton
+                size="2rem"
+                icon={CloseCircle}
+                color="transparent"
+                on:click={() => {
+                    terminal.clear();
+                }}
+            />
+            <IconButton size="2rem" icon={Copy} color="transparent" />
+        </div>
+    </div>
+</div>
 
 <style>
     .xterm-container {
-        margin: 0.5rem;
+        padding: 0.5rem;
         width: 100%;
         height: 100%;
+
+        position: relative;
+    }
+
+    .xterm-terminal {
+        width: 100%;
+        height: 100%;
+    }
+
+    .xterm-terminal.line-entry {
+        height: calc(100% - 5rem);
+    }
+
+    .control-anchor {
+        position: absolute;
+        bottom: 0.4rem;
+        left: 0.4rem;
+        right: 0.4rem;
+
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .control-overlay {
+        background-color: rgba(75, 75, 75, 0.603);
+        border-radius: 0.8rem;
+
+        padding: 0.5rem;
+        display: flex;
+        gap: 0.25rem;
+        z-index: 9;
+    }
+
+    .line-overlay {
+        background-color: rgba(75, 75, 75, 0.603);
+        border-radius: 0.8rem;
+
+        flex-grow: 1;
+        padding: 0.5rem;
+        z-index: 10;
+    }
+
+    .line-overlay > :global(div) {
+        margin: 0px;
+    }
+
+    .line-overlay :global(input) {
+        max-height: 3.4rem;
+    }
+
+    :global(.mode-dark) .control-overlay {
+        background-color: var(--color-gray-trans-light);
     }
 </style>

@@ -60,7 +60,7 @@
 
     export let visible: boolean = false;
 
-    const accentColour: string = "rgba(131, 137, 172, 0.527)";
+    const accentColour: string = "rgba(131, 137, 172, 1)";
 
     let api: SvelvetAPI;
 

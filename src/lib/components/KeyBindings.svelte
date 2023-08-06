@@ -21,6 +21,7 @@
         addComponentOverlay,
         componenSettingsOverlay,
     } from "$lib/stores/overlays";
+    import { graph } from "$lib/stores/patch";
 
     import { graphRunning, nodeSelected } from "$lib/stores/runState";
 
@@ -55,11 +56,19 @@
             $editorOverlay = !$editorOverlay;
         } else if (event.key === " ") {
             $graphRunning = !$graphRunning;
-        } else if (event.key === "a" && !(event.ctrlKey || event.metaKey)) {
+        } else if (
+            event.key === "a" &&
+            !(event.ctrlKey || event.metaKey) &&
+            $editorOverlay
+        ) {
             setTimeout(() => {
                 $addComponentOverlay = true;
             }, 100);
-        } else if (event.key === "p" && $nodeSelected.length === 1) {
+        } else if (
+            event.key === "p" &&
+            $nodeSelected.length === 1 &&
+            $editorOverlay
+        ) {
             setTimeout(() => {
                 $componenSettingsOverlay = true;
             }, 100);
