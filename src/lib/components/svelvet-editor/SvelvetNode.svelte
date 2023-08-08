@@ -158,6 +158,11 @@
     .icon.colour :global(svg) {
         opacity: 30%;
         filter: brightness(50%);
+        transition: 0.5s ease;
+    }
+
+    .selected .icon.colour :global(svg) {
+        opacity: 60%;
     }
 
     .ports {

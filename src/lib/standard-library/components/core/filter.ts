@@ -22,18 +22,34 @@ const c: PlottyComponent = {
         icon: Funnel,
     },
     inPorts: {
-        data: {
-            default: {},
-        },
+        in: {},
         expression: {
-            default: {},
+            codeDefault: "return (i) => i > 1 ? true : false",
         }
     },
     outPorts: {
         out: {},
     },
-    process: (input, output) => {
+    process: (input, output, context) => {
+        if (input.hasData('expression')) {
+            context.nodeInstance.state.func = input.getData('expression');
+        }
 
+        if (input.hasData('in')) {
+            const d = input.getData('in');
+            const ret = context.nodeInstance.state.func(d);
+            if (ret) {
+                output.send({
+                    out: d,
+                });
+            }
+        }
+    },
+    init: async (resolve, reject, context) => {
+        // Default expression lets all through
+        context.state.func = (i: any) => { return true };
+
+        resolve();
     },
 };
 

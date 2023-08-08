@@ -987,25 +987,26 @@ class Graph extends EventEmitter {
             json.connections.push(connection);
         });
 
-        this.initializers.forEach((initializer: GraphIIP) => {
-            const iip: GraphJsonEdge = {
-                data: initializer.from.data,
-                tgt: {
-                    process: initializer.to.node,
-                    port: initializer.to.port,
-                    index: initializer.to.index,
-                },
-            };
-            if (initializer.metadata && Object.keys(initializer.metadata).length) {
-                iip.metadata = {
-                    ...initializer.metadata,
-                };
-            }
-            if (!json.connections) {
-                json.connections = [];
-            }
-            json.connections.push(iip);
-        });
+        /// @BOJIT mod: don't save initialisers
+        // this.initializers.forEach((initializer: GraphIIP) => {
+        //     const iip: GraphJsonEdge = {
+        //         data: initializer.from.data,
+        //         tgt: {
+        //             process: initializer.to.node,
+        //             port: initializer.to.port,
+        //             index: initializer.to.index,
+        //         },
+        //     };
+        //     if (initializer.metadata && Object.keys(initializer.metadata).length) {
+        //         iip.metadata = {
+        //             ...initializer.metadata,
+        //         };
+        //     }
+        //     if (!json.connections) {
+        //         json.connections = [];
+        //     }
+        //     json.connections.push(iip);
+        // });
 
         return json;
     }
