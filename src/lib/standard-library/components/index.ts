@@ -5,6 +5,7 @@ import Filter from "./core/filter";
 import Function from "./core/function";
 import Join from "./core/join";
 import Random from "./core/random";
+import TextColour from "./core/text_colour";
 import Log from "./data/log"
 import MidiIn from "./data/midi_in";
 import WebRTC from "./data/web_rtc";
@@ -20,6 +21,7 @@ export default [
     Function,
     Join,
     Random,
+    TextColour,
     Log,
     MidiIn,
     WebRTC,
