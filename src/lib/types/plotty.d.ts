@@ -29,6 +29,7 @@ type Port = {
     datatype?: Datatype,    // If not set, assume 'any'
     enumeration?: PortEnumeration | (() => Promise<(PortEnumeration)>),  // Array of pre-determined values
     default?: string | number | boolean | {},    // Default value (should be in enumeration)
+    codeDefault?: string;   // Default code snippet populated
 }
 
 type Ports = {

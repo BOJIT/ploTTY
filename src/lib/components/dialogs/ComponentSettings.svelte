@@ -242,6 +242,8 @@
                         code={nodeObject.metadata.portConfig[i[0]]
                             .codeString !== undefined
                             ? nodeObject.metadata.portConfig[i[0]].codeString
+                            : i[1].codeDefault
+                            ? i[1].codeDefault
                             : "return 0;"}
                         maxHeight="10rem"
                         lineNumbers={false}
@@ -253,9 +255,6 @@
                                 ].codeString = e.detail;
                                 $graph = $graph; // Trigger store update
                             } catch (err) {
-                                nodeObject.metadata.portConfig[
-                                    i[0]
-                                ].codeString = "return 0";
                                 message.push({
                                     type: "error",
                                     title: "Invalid JS Syntax!",
