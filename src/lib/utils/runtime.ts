@@ -10,10 +10,8 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-import type { SvelteComponent } from "svelte";
-
 import type { Graph } from "$lib/middlewares/fbp-graph/Graph";
-import components, { type ComponentLibrary } from "$lib/stores/components";
+import components from "$lib/stores/components";
 
 import { createNetwork, Component, ComponentLoader } from "$lib/middlewares/noflo";
 import type { Network } from "$lib/middlewares/noflo/Network";
@@ -54,6 +52,8 @@ class Loader extends ComponentLoader {
             resolve(component);
         }).then((component: any) => {
             const c = new Component(component);
+            // Assign default error hook
+            c.errorHandler = errorHookAPI;
             if (component.widget !== undefined && widgetsAPI !== null)
                 // Expose widget methods to component
                 c.widget = {
@@ -78,6 +78,7 @@ const loader = new Loader();
 let network: Network | null = null;
 
 let widgetsAPI: Widgets | null = null;
+let errorHookAPI: ((e: any) => void) | null = null;
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -88,8 +89,7 @@ function init(errorHook: (e: any) => void, widgets: Widgets) {
     })
 
     widgetsAPI = widgets;
-
-    // TODO setup error hook
+    errorHookAPI = errorHook;
 }
 
 async function start(g: Graph) {

@@ -13,6 +13,7 @@
 
     import { onMount } from "svelte";
 
+    import { message } from "@bojit/svelte-components/core";
     import { IconButton } from "@bojit/svelte-components/form";
     import { NavBar, type NavItem } from "@bojit/svelte-components/layout";
     import { mode as themeMode } from "@bojit/svelte-components/theme";
@@ -140,8 +141,14 @@
         await patch.init();
 
         // Initialise runtime
-        runtime.init((e) => {
-            console.warn(`error hook: ${e}`);
+        runtime.init((e: Error) => {
+            $graphRunning = false; // Stop network
+            console.error(e);
+            message.push({
+                title: "GraphError: ".concat(e.name),
+                message: e.message,
+                type: "error",
+            });
         }, widgets);
 
         // Update settings store when theme changes

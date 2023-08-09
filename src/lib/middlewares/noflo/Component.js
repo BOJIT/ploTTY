@@ -105,6 +105,9 @@ export class Component extends EventEmitter {
         // Widget handle is null by default
         this.widget = null;
 
+        // Error handler is null by default
+        this.errorHandler = null;
+
         // Allocate area for internal state
         /** @type {any} */
         this.state = {}
