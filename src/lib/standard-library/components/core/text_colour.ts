@@ -67,8 +67,22 @@ const c: PlottyComponent = {
             context.nodeInstance.state.colour = input.getData('colour');
         }
 
+        if (input.hasData('mode')) {
+            context.nodeInstance.state.mode = input.getData('mode');
+        }
+
         if (input.hasData('in')) {
             const data = input.getData('in');
+            let code = FOREGROUND_CODES[context.nodeInstance.state.colour];
+            if (code === undefined) code = 37;
+            if (context.nodeInstance.state.mode === "background") {
+                code += 10;
+            }
+
+            const coloured = `\x1b[${code}m${data}\x1b[0m`
+            output.send({
+                out: coloured,
+            })
         }
     },
     init: async (resolve, reject, context) => {

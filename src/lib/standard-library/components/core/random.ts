@@ -22,7 +22,17 @@ const c: PlottyComponent = {
         icon: Help,
     },
     inPorts: {
-        type: {},
+        trigger: {
+            datatype: "bang",
+        },
+        type: {
+            enumeration: [
+                "number [0 → 1]",
+                "number [-1 → 1]",
+                "boolean",
+                "string",
+            ]
+        },
         dimension: {
             datatype: "number"
         }
@@ -31,7 +41,7 @@ const c: PlottyComponent = {
         out: {},
     },
     process: (input, output) => {
-
+        // TODO add implementation
     },
     init: async (resolve, reject, context) => {
         context.state.buffer = [];

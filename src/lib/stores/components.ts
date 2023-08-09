@@ -55,7 +55,7 @@ async function init(): Promise<Writable<ComponentLibrary>> {
 
     // Subscribe for store updates
     store.subscribe(async (val: ComponentLibrary) => {
-        // TODO find out which keys have changed
+        // TODO find out which keys have changed (once component libs are implemented)
         // await localStore.setItem(`${c.category}/${c.name}`, val);
     });
 

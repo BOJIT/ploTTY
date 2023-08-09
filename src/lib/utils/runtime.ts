@@ -116,8 +116,10 @@ async function start(g: Graph) {
                             if (expr !== undefined)
                                 g.addInitial(expr, n.id, p[0]);
                         } catch (err) {
-                            // TODO route this to central exception handler
-                            throw new Error(err);
+                            if (errorHookAPI !== null)
+                                errorHookAPI(err);
+                            else
+                                throw new Error(err);
                         }
                         break;
                     }

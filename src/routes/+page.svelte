@@ -157,7 +157,7 @@
             $settings.theme = t;
         });
 
-        // HACK - fix tooltips on mobile
+        // HACK - fixes tooltips on mobile
         const mql = window.matchMedia("(max-width: 940px)");
         mql.onchange = (e) => {
             hideTooltips = e.matches;

@@ -127,6 +127,8 @@ const c: PlottyComponent = {
             }
         }
 
+        // TODO implement MIDI out too!
+
         // if (input.hasData('channel'))
         //     console.log(`Channel: ${input.getData('channel')}`);
     },
