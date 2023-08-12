@@ -20,11 +20,9 @@
 
     /*--------------------------------- Props --------------------------------*/
 
-    export let demo: boolean = true;
-
-    export let resX: number = 100;
-    export let resY: [number, number] = [-1, 1];
-    export let numLines: number = 3;
+    let resX: number = 100;
+    let resY: [number, number] = [-1, 1];
+    let numLines: number = 1;
 
     let canvas: HTMLCanvasElement;
     let resizeObserver: ResizeObserver | null = null;
@@ -33,7 +31,9 @@
     let lines: WebglLine[] = [];
     let colours: string[] = [];
 
-    const fullRange = 0.9;
+    const fullRange = 0.95;
+
+    let labels: string[] = [];
 
     /*---------------------------- Helper Functions --------------------------*/
 
@@ -96,31 +96,60 @@
         colours.length = numLines;
     }
 
-    function demoSignals() {
-        const freq = 0.005;
-        const amp = 0.7;
-        const noise = 0.1;
-        const phaseStep = (2 * Math.PI) / numLines;
+    /*-------------------------------- Methods -------------------------------*/
 
-        for (let l = 0; l < numLines; l++) {
-            for (let i = 0; i < lines[l].numPoints; i++) {
-                const ySin = Math.sin(
-                    Math.PI * i * freq * Math.PI * 2 + l * phaseStep
-                );
-                const yNoise = Math.random() - 0.5;
-                lines[l].setY(i, ySin * amp + yNoise * noise);
-            }
+    function update(points: number[]) {
+        if (points.length !== numLines) {
+            // Change in number of lines clears the screen
+            numLines = points.length;
+            clear();
+        }
+
+        const sf = (2 * fullRange) / (resY[1] - resY[0]);
+        let rangeProportion = Math.abs(resY[0]) / (resY[1] - resY[0]);
+        let ofst = -fullRange + 2 * fullRange * rangeProportion;
+
+        if (resY[0] < 0 && resY[1] > 0) {
+        } else {
+            ofst = -fullRange - resY[0] * sf;
+        }
+
+        for (let i = 0; i < numLines; i++) {
+            const fl = new Float32Array(1);
+            fl[0] = points[i] * sf + ofst;
+            lines[i].shiftAdd(fl);
         }
     }
 
-    /*-------------------------------- Methods -------------------------------*/
-
-    export function post(message: any) {
-        console.log(message);
+    function clear() {
+        wglp?.clear();
+        createLines();
+        drawCanvas();
     }
 
-    export function get() {
-        return {};
+    export function post(message: any) {
+        // Pass array to plotter
+        if (Array.isArray(message)) update(message);
+        // Send control messages as objects
+        else if (typeof message == "object") {
+            switch (message.command) {
+                case "limits": {
+                    resX = message.data.x;
+                    resY = message.data.y;
+                    break;
+                }
+
+                case "labels": {
+                    labels = message.data;
+                    break;
+                }
+
+                case "clear": {
+                    clear();
+                    break;
+                }
+            }
+        }
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -137,8 +166,6 @@
 
         // Register new frame callback
         function newFrame() {
-            if (demo) demoSignals();
-
             wglp?.update();
             requestAnimationFrame(newFrame);
         }
@@ -150,12 +177,60 @@
     });
 </script>
 
-<canvas bind:this={canvas} />
+<div class="container">
+    <canvas bind:this={canvas} />
+    <div class="labels">
+        {#each labels as l, idx}
+            {#if colours[idx] !== undefined}
+                {@const c = colours[idx]}
+                <div class="legend-entry">
+                    <div class="legend-square" style="background-color: {c};" />
+                    {l}
+                </div>
+            {/if}
+        {/each}
+    </div>
+</div>
 
 <style>
+    .container {
+        width: 100%;
+        height: 100%;
+        padding-top: 1rem;
+
+        position: relative;
+    }
+
     canvas {
         margin: 0.5rem;
         width: 100%;
         height: 100%;
+    }
+
+    .labels {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        margin: 0.5rem;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: row;
+        gap: 0.6rem;
+        height: 2rem;
+        width: 100%;
+    }
+
+    .legend-entry {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+    }
+
+    .legend-square {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 0.2rem;
+        background-color: red;
     }
 </style>

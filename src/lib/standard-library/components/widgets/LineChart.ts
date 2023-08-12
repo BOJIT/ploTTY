@@ -13,6 +13,9 @@
 import type { PlottyComponent } from "$lib/types/plotty";
 import { Analytics } from "@svicons/ionicons-outline";
 
+import { get } from "svelte/store";
+
+import settings from "$lib/stores/settings";
 import LineChart from "./LineChart.svelte";
 
 /*-------------------------------- Component ---------------------------------*/
@@ -29,12 +32,60 @@ const c: PlottyComponent = {
         data: {
             default: {},
         },
+        limits: {
+            codeDefault: "return {\n    x: 100,\n    y: [-1, 1],\n}"
+        },
         labels: {
             datatype: 'string',
+        },
+        clear: {
+            datatype: 'boolean',
+            enumeration: [
+                true,
+                false,
+            ],
+        },
+    },
+    process: (input, output, context) => {
+        if (input.hasData('data')) {
+            let data = input.getData('data');
+            context.nodeInstance.widget.post(data);
+        }
+
+        if (input.hasData('limits')) {
+            let data = input.getData('limits');   // Any datatype will trigger a clear
+            context.nodeInstance.widget.post({
+                "command": "limits",
+                "data": data,
+            });
+        }
+
+        if (input.hasData('labels')) {
+            let data = input.getData('labels');
+            context.nodeInstance.widget.post({
+                "command": "labels",
+                "data": data,
+            });
+        }
+
+        if (input.hasData('clear')) {
+            let data = input.getData('clear');   // Any datatype will trigger a clear
+            if (data) {
+                context.nodeInstance.widget.post({
+                    "command": "clear",
+                });
+            }
         }
     },
-    process: (input, output) => {
+    init: async (resolve, reject, context) => {
+        // Global clear of widgets if set
+        if (get(settings).switches.clearWidgetsOnStart) {
+            context.widget.post({
+                "command": "clear",
+            });
+        }
 
+        resolve();
     },
 };
 
