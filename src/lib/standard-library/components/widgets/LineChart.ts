@@ -33,10 +33,10 @@ const c: PlottyComponent = {
             default: {},
         },
         limits: {
-            codeDefault: "return {\n    x: 100,\n    y: [-1, 1],\n}"
+            codeDefault: "return {\n    x: 100,\n    y: [-1, 1],\n};"
         },
         labels: {
-            datatype: 'string',
+            codeDefault: "return [\n    'Label 1',\n    'Label 2',\n];"
         },
         clear: {
             datatype: 'boolean',
