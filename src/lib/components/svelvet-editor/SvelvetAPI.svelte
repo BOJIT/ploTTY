@@ -184,7 +184,7 @@
     edges.subscribe((e: any) => {
         // IDs take form SN/SP-TN/TP
 
-        const uimap = Array.from(e, ([key, value]): string => {
+        let uimap = Array.from(e, ([key, value]): string => {
             if (key === "cursor") return "";
 
             // I'm sorry...
@@ -195,7 +195,7 @@
 
             return id;
         });
-        uimap.filter((u) => u !== "");
+        uimap = uimap.filter((u) => u !== "");
 
         const graphmap = graph.edges.map((v: any) => {
             return `${v.from.node}/${v.from.port}-${v.to.node}/${v.to.port}`;
