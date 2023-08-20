@@ -135,8 +135,6 @@ async function start(g: Graph) {
     network.sendInitials();
 
     // TODO find way to update initials on <ComponentSettings/> change
-
-    console.log(network);
 }
 
 async function stop() {

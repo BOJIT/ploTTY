@@ -84,7 +84,6 @@
             event.preventDefault(); // Saving should not do anything!
         } else {
             // Unhandled case
-            // console.log(event);
             return;
         }
 

@@ -12,6 +12,7 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { getContext } from "svelte";
+    import { get } from "svelte/store";
 
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
@@ -142,15 +143,21 @@
         nodeSelected[0] = node.id;
     }
 
-    export function addEdge(
-        sourceNode: string,
-        sourcePort: string,
-        targetNode: string,
-        targetPort: string
-    ) {
-        // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
-        // if (!source.node || !target.node) return false;
-        // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
+    export function addEdge(svelvetData: any) {
+        const sn = svelvetData.sourceNode.id.substring(2);
+        const sp = svelvetData.sourceAnchor.inputKey;
+        const tn = svelvetData.targetNode.id.substring(2);
+        const tp = svelvetData.targetAnchor.inputKey;
+
+        graph.addEdge(sn, sp, tn, tp);
+    }
+
+    export function removeEdge(svelvetData: any) {
+        const sn = svelvetData.sourceNode.id.substring(2);
+        const sp = svelvetData.sourceAnchor.inputKey;
+        const tn = svelvetData.targetNode.id.substring(2);
+        const tp = svelvetData.targetAnchor.inputKey;
+        graph.removeEdge(sn, sp, tn, tp);
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -174,9 +181,11 @@
 
     edges.subscribe((e) => {
         // TODO deprecate
-        console.log(graph.edges);
-
-        console.log(edges);
+        // console.log(graph.edges);
+        // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
+        // if (!source.node || !target.node) return false;
+        // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
+        // console.log(e);
         // edges.getAll().forEach((edge) => {
         //     console.log(edge.source.);
         // });

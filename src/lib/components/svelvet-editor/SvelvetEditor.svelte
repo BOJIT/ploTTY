@@ -33,22 +33,27 @@
     export let nodeSelected: string[] = [];
 
     let nodes = graph.nodes;
+    let edges = graph.edges;
+
     const dispatch = createEventDispatcher();
 
     /*-------------------------------- Methods -------------------------------*/
 
     function dispatchChange() {
         nodes = graph.nodes; // assignment to trigger update
+        edges = graph.edges; // assignment to trigger update
         graph = graph;
         dispatch("change");
     }
 
     function addConnection(e: CustomEvent) {
-        console.log(e.detail);
+        api.addEdge(e.detail);
+        dispatchChange();
     }
 
     function removeConnection(e: CustomEvent) {
-        console.log(e.detail);
+        api.removeEdge(e.detail);
+        dispatchChange();
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -56,6 +61,7 @@
     // Reset any state that needs an explicit update
     $: {
         nodes = graph.nodes;
+        edges = graph.edges;
         graph.removeAllListeners();
         graph.on("endTransaction", dispatchChange);
     }

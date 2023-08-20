@@ -76,6 +76,7 @@
                     {#if portConfig && portConfig[ip] !== undefined}
                         <Anchor
                             input
+                            key={ip}
                             locked={portConfig[ip].mode !== "input"}
                             bgColor={portConfig[ip].mode === "enum"
                                 ? "#8ac38c"
@@ -84,7 +85,7 @@
                                 : null}
                         />
                     {:else}
-                        <Anchor input />
+                        <Anchor input key={ip} />
                     {/if}
                     <p class="left">{ip}</p>
                 </div>
@@ -93,7 +94,7 @@
         <div class="ports outports">
             {#each outports as op}
                 <div class="port-annotation" class:visible={$scale > 0.8}>
-                    <Anchor output />
+                    <Anchor output key={op} />
                     <p class="right">{op}</p>
                 </div>
             {/each}

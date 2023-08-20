@@ -14,33 +14,32 @@
 
 /*------------------------------- Functions ----------------------------------*/
 
-function read(file: File) : Promise<unknown> {
+function read(file: File): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      let reader = new FileReader();
+        let reader = new FileReader();
 
-      reader.onload = () => {
-        resolve(reader.result);
-      };
+        reader.onload = () => {
+            resolve(reader.result);
+        };
 
-      reader.onerror = reject;
+        reader.onerror = reject;
 
-      reader.readAsText(file);
+        reader.readAsText(file);
     })
 }
 
-function validName(str: string) : string {
+function validName(str: string): string {
     return (str.replace(/[\/|\\:*?"<>]/g, " "));
 }
 
-function incrementName(name: string, list: string[]) : string {
+function incrementName(name: string, list: string[]): string {
     let inc = 1;
     let regex = /\((.*?)\)/;
-    console.log(list.some((t: any) => (t === name)));
 
-    while(list.some((t: any) => (t === name))) {
+    while (list.some((t: any) => (t === name))) {
         /* Add numbered increment to patch name */
         let ext = regex.exec(name);
-        if(ext && name.endsWith(ext[0])) {
+        if (ext && name.endsWith(ext[0])) {
             inc = parseInt(ext[1]) + 1;
             name = name.slice(0, -(ext[0].length + 1))
         }
@@ -50,7 +49,7 @@ function incrementName(name: string, list: string[]) : string {
     return name;
 }
 
-function download(blob: Blob, filename: string) : void {
+function download(blob: Blob, filename: string): void {
     /* Create hidden download link and programatically click */
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -62,12 +61,12 @@ function download(blob: Blob, filename: string) : void {
     document.body.removeChild(a);
 }
 
-function upload(callback: ((files: File[]) => void), ext: string, multiple?: boolean) : void {
+function upload(callback: ((files: File[]) => void), ext: string, multiple?: boolean): void {
     const i = document.createElement('input');
 
     i.type = "file";
     i.accept = ext;
-    if(multiple) {
+    if (multiple) {
         i.multiple = true;
     }
     document.body.appendChild(i);
@@ -78,7 +77,7 @@ function upload(callback: ((files: File[]) => void), ext: string, multiple?: boo
     document.body.onfocus = (() => {
         document.body.onfocus = null;
         window.setTimeout(() => {
-            if(i.files && i.files.length == 0) {
+            if (i.files && i.files.length == 0) {
                 callback([]);   // Pass no files to callback
                 i.remove();
             }
@@ -87,7 +86,7 @@ function upload(callback: ((files: File[]) => void), ext: string, multiple?: boo
 
     /* File upload handler */
     i.addEventListener('change', () => {
-        if(i.files === null)
+        if (i.files === null)
             return;
 
         callback(Array.from(i.files));
