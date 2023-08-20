@@ -126,7 +126,7 @@
 
     graphRunning.subscribe((r) => {
         if (r === true) {
-            console.log($graph.edges);
+            console.log($graph);
             runtime.start($graph);
         } else {
             runtime.stop();

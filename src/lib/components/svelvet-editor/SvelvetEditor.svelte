@@ -33,7 +33,6 @@
     export let nodeSelected: string[] = [];
 
     let nodes = graph.nodes;
-    let edges = graph.edges;
 
     const dispatch = createEventDispatcher();
 
@@ -41,7 +40,6 @@
 
     function dispatchChange() {
         nodes = graph.nodes; // assignment to trigger update
-        edges = graph.edges; // assignment to trigger update
         graph = graph;
         dispatch("change");
     }
@@ -61,7 +59,6 @@
     // Reset any state that needs an explicit update
     $: {
         nodes = graph.nodes;
-        edges = graph.edges;
         graph.removeAllListeners();
         graph.on("endTransaction", dispatchChange);
     }
@@ -111,10 +108,6 @@
                 icon={$components[n.component].ui?.icon}
                 colour={$components[n.component].ui?.colour}
                 bind:position={n.metadata.position}
-                on:change={() => {
-                    // HACK: force store to update. TODO subscribe to store.
-                    n.metadata.position = n.metadata.position;
-                }}
                 portConfig={n.metadata.portConfig}
                 inports={$components[n.component].inPorts !== undefined
                     ? Object.keys($components[n.component].inPorts)

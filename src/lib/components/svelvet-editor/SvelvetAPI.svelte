@@ -12,7 +12,6 @@
     /*-------------------------------- Imports -------------------------------*/
 
     import { getContext } from "svelte";
-    import { get } from "svelte/store";
 
     import type { Graph as NofloGraphType } from "$lib/middlewares/fbp-graph/Graph";
 
@@ -179,15 +178,48 @@
         nodeSelected = n;
     });
 
-    edges.subscribe((e) => {
-        // TODO deprecate
-        // console.log(graph.edges);
-        // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
-        // if (!source.node || !target.node) return false;
-        // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
-        // console.log(e);
-        // edges.getAll().forEach((edge) => {
-        //     console.log(edge.source.);
-        // });
+    // TODO run sync function on initial graph store set?
+
+    // This keeps the two graphs in sync (HACK until lib support exists)
+    edges.subscribe((e: any) => {
+        // IDs take form SN/SP-TN/TP
+
+        const uimap = Array.from(e, ([key, value]): string => {
+            if (key === "cursor") return "";
+
+            // I'm sorry...
+            const anchormap = [...key];
+            const id = `${anchormap[2].id.substring(2)}/${
+                anchormap[0].inputKey
+            }-${anchormap[3].id.substring(2)}/${anchormap[1].inputKey}`;
+
+            return id;
+        });
+        uimap.filter((u) => u !== "");
+
+        const graphmap = graph.edges.map((v: any) => {
+            return `${v.from.node}/${v.from.port}-${v.to.node}/${v.to.port}`;
+        });
+
+        // Work out intersections for update
+        const toAdd = graphmap.filter((x) => !uimap.includes(x));
+        const toRemove = uimap.filter((x) => !graphmap.includes(x));
+
+        console.log("To Add:", toAdd);
+        console.log("To Remove:", toRemove);
+
+        toAdd.forEach(() => {
+            // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
+            // if (!source.node || !target.node) return false;
+            // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
+            // console.log(e);
+            // edges.getAll().forEach((edge) => {
+            //     console.log(edge.source.);
+            // });
+        });
+
+        toRemove.forEach(() => {
+            //
+        });
     });
 </script>
