@@ -118,7 +118,7 @@
                     : []}
             />
         {:else}
-            <h1>TODO HANDLE ERROR</h1>
+            <h1>RENDERING ERROR</h1>
         {/if}
     {/each}
 </Svelvet>

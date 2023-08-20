@@ -17,6 +17,8 @@
 
     import NofloGraph from "$lib/middlewares/fbp-graph";
 
+    import { createEdge } from "svelvet";
+
     /*--------------------------------- Props --------------------------------*/
 
     export let graph: NofloGraphType;
@@ -170,12 +172,13 @@
         nodeSelected = n;
     });
 
-    // edges.subscribe((e) => {
-    //     console.log(graph.edges);
+    edges.subscribe((e) => {
+        // TODO deprecate
+        console.log(graph.edges);
 
-    //     console.log(edges);
-    //     // edges.getAll().forEach((edge) => {
-    //     //     console.log(edge.source.);
-    //     // });
-    // });
+        console.log(edges);
+        // edges.getAll().forEach((edge) => {
+        //     console.log(edge.source.);
+        // });
+    });
 </script>
