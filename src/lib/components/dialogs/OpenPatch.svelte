@@ -72,6 +72,7 @@
         on:select={(s) => {
             setTimeout(async () => {
                 $graphRunning = false; // Stop curent network
+                api.resetGraph(); // HACK: for edge mods
 
                 if ((await patch.open(s.detail)) === false) {
                     message.push({
@@ -86,6 +87,8 @@
 
                 $editorOverlay = true;
                 api.fitGraph();
+                api.triggerEdgeSync(); // HACK: for edge mods
+
                 $nodeSelected = [];
                 visible = false;
             }, 200);

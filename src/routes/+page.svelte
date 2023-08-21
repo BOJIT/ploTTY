@@ -119,6 +119,7 @@
     ];
 
     let widgets: Widgets;
+    let editor: Editor;
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -126,7 +127,6 @@
 
     graphRunning.subscribe((r) => {
         if (r === true) {
-            console.log($graph);
             runtime.start($graph);
         } else {
             runtime.stop();
@@ -140,6 +140,9 @@
         await logs.init();
         await components.init();
         await patch.init();
+
+        // Run initial focus and edge render (HACK)
+        editor.initialRender();
 
         // Initialise runtime
         runtime.init((e: Error) => {
@@ -211,7 +214,7 @@
 <!-- Primary User Interface -->
 <div class="interface">
     <Widgets bind:this={widgets} />
-    <Editor visible={$editorOverlay} />
+    <Editor bind:this={editor} visible={$editorOverlay} />
 </div>
 
 <!-- GLobal Overlays -->

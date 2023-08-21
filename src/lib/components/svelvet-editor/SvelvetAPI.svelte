@@ -4,6 +4,8 @@
  * @brief Non-DOM component for accessing internal Svelvet context
  * @date 20/06/2023
  *
+ * This entire file is just a workaround for missing library features!
+ *
  * @copyright Copyright (c) 2023
  *
 -->
@@ -17,7 +19,7 @@
 
     import NofloGraph from "$lib/middlewares/fbp-graph";
 
-    import { createEdge } from "svelvet";
+    import { Anchor, createEdge, type EdgeStore } from "svelvet";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -25,7 +27,7 @@
     export let nodeSelected: string[] = [];
 
     const svelvetGraph: any = getContext("graph");
-    const { bounds, center, dimensions, edges, groups } = svelvetGraph;
+    const { bounds, center, dimensions, edges, groups, nodes } = svelvetGraph;
     const selectedNodes = $groups.selected.nodes;
     const nodeBounds = bounds.nodeBounds;
 
@@ -62,6 +64,86 @@
             y: translateY * scale,
             scale: scale,
         };
+    }
+
+    function getAnchorFromString(
+        node: string,
+        port: string
+    ): [Node, Anchor] | null {
+        let nodeObject = $nodes.get(`N-${node}`);
+        if (nodeObject === undefined) return null;
+
+        const anchorObject = nodeObject.anchors
+            .getAll()
+            .find((a: Anchor) => a.inputKey === port);
+
+        return [nodeObject, anchorObject];
+    }
+
+    function createSvelvetSet(
+        srcNode: string,
+        srcPort: string,
+        tgtNode: string,
+        tgtPort: string
+    ) {
+        let src = getAnchorFromString(srcNode, srcPort);
+        let tgt = getAnchorFromString(tgtNode, tgtPort);
+
+        if (src === null || tgt === null) return null;
+
+        return new Set([src[1], tgt[1], src[0], tgt[0]]);
+    }
+
+    function syncGraphs(e: any, g: NofloGraphType) {
+        // UI Edges
+        const uimap = new Map();
+        e.forEach((value: any, key: any) => {
+            if (key === "cursor") return "";
+
+            // I'm sorry...
+            const anchormap = [...key];
+            const id = `${anchormap[2].id.substring(2)}/${
+                anchormap[0].inputKey
+            }-${anchormap[3].id.substring(2)}/${anchormap[1].inputKey}`;
+
+            uimap.set(id, key);
+        });
+
+        // Graph Edges
+        const graphmap = new Map();
+        g.edges.forEach((v: any) => {
+            const key = `${v.from.node}/${v.from.port}-${v.to.node}/${v.to.port}`;
+            graphmap.set(
+                key,
+                createSvelvetSet(v.from.node, v.from.port, v.to.node, v.to.port)
+            );
+        });
+
+        // Work out intersections for update
+        const toAdd = [...graphmap.keys()].filter((x) => !uimap.has(x));
+        const toRemove = [...uimap.keys()].filter((x) => !graphmap.has(x));
+
+        // console.log("To Add:", toAdd);
+        // console.log("To Remove:", toRemove);
+
+        toRemove.forEach((r) => {
+            const handle = uimap.get(r);
+            if (handle !== undefined) edges.delete(handle);
+        });
+
+        toAdd.forEach((a: string) => {
+            const entry = graphmap.get(a);
+
+            if (entry === null || entry === undefined) return;
+
+            const aArray = [...entry];
+            const newEdge = createEdge(
+                { source: aArray[0], target: aArray[1] },
+                aArray[0].edge,
+                {}
+            );
+            edges.add(newEdge, new Set(entry));
+        });
     }
 
     /*----------------------------- Public Methods ---------------------------*/
@@ -159,6 +241,11 @@
         graph.removeEdge(sn, sp, tn, tp);
     }
 
+    // HACK: This can be removed once library support is added
+    export function triggerEdgeSync() {
+        syncGraphs($edges, graph);
+    }
+
     /*------------------------------- Lifecycle ------------------------------*/
 
     selectedNodes.subscribe((s: Set<any>) => {
@@ -178,48 +265,8 @@
         nodeSelected = n;
     });
 
-    // TODO run sync function on initial graph store set?
-
     // This keeps the two graphs in sync (HACK until lib support exists)
-    edges.subscribe((e: any) => {
-        // IDs take form SN/SP-TN/TP
-
-        let uimap = Array.from(e, ([key, value]): string => {
-            if (key === "cursor") return "";
-
-            // I'm sorry...
-            const anchormap = [...key];
-            const id = `${anchormap[2].id.substring(2)}/${
-                anchormap[0].inputKey
-            }-${anchormap[3].id.substring(2)}/${anchormap[1].inputKey}`;
-
-            return id;
-        });
-        uimap = uimap.filter((u) => u !== "");
-
-        const graphmap = graph.edges.map((v: any) => {
-            return `${v.from.node}/${v.from.port}-${v.to.node}/${v.to.port}`;
-        });
-
-        // Work out intersections for update
-        const toAdd = graphmap.filter((x) => !uimap.includes(x));
-        const toRemove = uimap.filter((x) => !graphmap.includes(x));
-
-        console.log("To Add:", toAdd);
-        console.log("To Remove:", toRemove);
-
-        toAdd.forEach(() => {
-            // const newEdge = createEdge({ source, target }, source?.edge || null, edgeConfig);
-            // if (!source.node || !target.node) return false;
-            // edgeStore.add(newEdge, new Set([source, target, source.node, target.node]));
-            // console.log(e);
-            // edges.getAll().forEach((edge) => {
-            //     console.log(edge.source.);
-            // });
-        });
-
-        toRemove.forEach(() => {
-            //
-        });
-    });
+    $: {
+        syncGraphs($edges, graph);
+    }
 </script>

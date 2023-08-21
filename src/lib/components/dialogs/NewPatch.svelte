@@ -50,6 +50,7 @@
 
         // Stop editor, open file, then switch to graph view
         $graphRunning = false;
+
         await patch.open($name);
 
         // If success

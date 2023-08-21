@@ -11,7 +11,6 @@
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
 
-    import { onMount } from "svelte";
     import { fly } from "svelte/transition";
 
     import { IconButton } from "@bojit/svelte-components/form";
@@ -76,13 +75,13 @@
         }
     }
 
-    /*------------------------------- Lifecycle ------------------------------*/
+    export function initialRender() {
+        // This is messy...
+        api.fitGraph();
+        api.triggerEdgeSync(); // HACK: for edge mods
+    }
 
-    onMount(() => {
-        setTimeout(() => {
-            api.fitGraph(); // TODO find neater way of dealing with this!
-        }, 200);
-    });
+    /*------------------------------- Lifecycle ------------------------------*/
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
