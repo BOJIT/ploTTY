@@ -21,6 +21,11 @@ import type { Graph as GraphType } from "$lib/middlewares/fbp-graph/Graph";
 import NofloGraph from "$lib/middlewares/fbp-graph";
 import file from "$lib/utils/file";
 
+// Example patches
+import example1 from "$lib/standard-library/patches/example-patch.plotty";
+import example2 from "$lib/standard-library/patches/serial-filter-logs.plotty";
+import example3 from "$lib/standard-library/patches/dual-serial.plotty";
+
 /*--------------------------------- Types ------------------------------------*/
 
 type PatchLibrary = {
@@ -35,14 +40,14 @@ const DEFAULT: PlottyPatch = {
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
     },
-    graph: new NofloGraph.Graph().toJSON(),
+    graph: example1.graph,
 }
 
 const DEFAULT_LOCALSTORE: PatchLibrary = {
     "_currentPatch": "Example Patch",
-    "Example Patch": DEFAULT,
-    "Example Patch (1)": DEFAULT,
-    "Example Patch (2)": DEFAULT,
+    "Example Patch": example1,
+    "Serial Filter Logs": example2,
+    "Dual Serial": example3,
 };
 
 

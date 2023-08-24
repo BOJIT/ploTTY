@@ -24,7 +24,7 @@
     },
     "type": "module",
     "dependencies": {
-        "@bojit/svelte-components": "^1.6.2",
+        "@bojit/svelte-components": "^1.6.4",
         "@fontsource/gloria-hallelujah": "^4.5.9",
         "@fontsource/jetbrains-mono": "^4.5.12",
         "@fontsource/nunito": "^4.5.12",

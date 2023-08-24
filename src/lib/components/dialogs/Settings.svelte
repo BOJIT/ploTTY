@@ -258,7 +258,18 @@
                 />
             </div>
             {#if Object.keys(permissions).length > 0}
-                <SearchableList items={permissions} maxHeight="12rem" />
+                <SearchableList
+                    items={permissions}
+                    maxHeight="12rem"
+                    on:button={(e) => {
+                        if (e.detail.index == 0) {
+                            // TODO launch rename dialogue
+                            // hardware.renameDevice()
+                        } else if (e.detail.index == 1) {
+                            hardware.removeDevice(e.detail.key);
+                        }
+                    }}
+                />
                 <p>
                     some permissions may need to be cleared in your <a
                         href="https://support.google.com/chrome/answer/114662"

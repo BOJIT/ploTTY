@@ -1,8 +1,8 @@
 {
-    "key": "add-port",
+    "key": "Example Patch",
     "metadata": {
-        "version": "ed0f6e5",
-        "exportDate": "2023-08-04T19:55:17.937Z"
+        "version": "4065a7b",
+        "exportDate": "2023-08-24T18:45:08.956Z"
     },
     "graph": {
         "caseSensitive": false,
@@ -13,21 +13,12 @@
         "outports": {},
         "groups": [],
         "processes": {
-            "console-log": {
-                "component": "core/console log",
-                "metadata": {
-                    "position": {
-                        "x": 128,
-                        "y": 22
-                    }
-                }
-            },
             "serial-in": {
                 "component": "data/serial in",
                 "metadata": {
                     "position": {
-                        "x": -120.33882918355178,
-                        "y": 103.18622073483851
+                        "x": 365.11054099827743,
+                        "y": 342.1262101292176
                     },
                     "portConfig": {
                         "enable": {
@@ -35,12 +26,33 @@
                             "chosenEnumeration": true
                         },
                         "port": {
-                            "mode": "enum",
-                            "chosenEnumeration": "S-PID10-VID11914"
+                            "mode": "input"
                         },
                         "baud": {
                             "mode": "enum",
                             "chosenEnumeration": 115200
+                        }
+                    }
+                }
+            },
+            "terminal": {
+                "component": "widgets/terminal",
+                "metadata": {
+                    "position": {
+                        "x": 686.5552704991387,
+                        "y": 253.29493494281166
+                    },
+                    "portConfig": {
+                        "data": {
+                            "mode": "input"
+                        },
+                        "clear": {
+                            "mode": "enum",
+                            "chosenEnumeration": true
+                        },
+                        "echo": {
+                            "mode": "enum",
+                            "chosenEnumeration": false
                         }
                     }
                 }
@@ -53,8 +65,8 @@
                     "port": "out"
                 },
                 "tgt": {
-                    "process": "console-log",
-                    "port": "in"
+                    "process": "terminal",
+                    "port": "data"
                 }
             }
         ]

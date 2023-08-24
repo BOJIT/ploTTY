@@ -1,0 +1,299 @@
+{
+    "key": "serial-filter-logs",
+    "metadata": {
+        "version": "ed0f6e5",
+        "exportDate": "2023-08-24T18:27:15.896Z"
+    },
+    "graph": {
+        "caseSensitive": false,
+        "properties": {
+            "name": ""
+        },
+        "inports": {},
+        "outports": {},
+        "groups": [],
+        "processes": {
+            "serial-in": {
+                "component": "data/serial in",
+                "metadata": {
+                    "position": {
+                        "x": -670.3388291835518,
+                        "y": 165.1862207348385
+                    },
+                    "portConfig": {
+                        "enable": {
+                            "mode": "enum",
+                            "chosenEnumeration": true
+                        },
+                        "port": {
+                            "mode": "input"
+                        },
+                        "baud": {
+                            "mode": "enum",
+                            "chosenEnumeration": 115200
+                        }
+                    }
+                }
+            },
+            "terminal": {
+                "component": "widgets/terminal",
+                "metadata": {
+                    "position": {
+                        "x": 61.83058540822407,
+                        "y": 155.46144029691743
+                    },
+                    "portConfig": {
+                        "data": {
+                            "mode": "input"
+                        },
+                        "clear": {
+                            "mode": "enum",
+                            "chosenEnumeration": false
+                        },
+                        "echo": {
+                            "mode": "enum",
+                            "chosenEnumeration": false
+                        }
+                    }
+                }
+            },
+            "join": {
+                "component": "core/join",
+                "metadata": {
+                    "position": {
+                        "x": -515.1314579961048,
+                        "y": 165.5442931636634
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "condition": {
+                            "mode": "enum",
+                            "chosenEnumeration": "newline",
+                            "codeString": "return \"tes\";"
+                        },
+                        "datatype": {
+                            "mode": "enum",
+                            "chosenEnumeration": "string"
+                        }
+                    }
+                }
+            },
+            "data": {
+                "component": "core/filter",
+                "metadata": {
+                    "position": {
+                        "x": -264.352658776984,
+                        "y": -24.402940221018184
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "expression": {
+                            "mode": "custom",
+                            "codeString": "return (i) => {\n    return i.includes(\"DATA:\");\n}"
+                        }
+                    },
+                    "label": "data"
+                }
+            },
+            "logs": {
+                "component": "core/filter",
+                "metadata": {
+                    "position": {
+                        "x": -264.352658776984,
+                        "y": 153.59705977898182
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "expression": {
+                            "mode": "custom",
+                            "codeString": "return (i) => {\n    return i.includes(\"LOG:\");\n}"
+                        }
+                    },
+                    "label": "logs"
+                }
+            },
+            "exceptions": {
+                "component": "core/filter",
+                "metadata": {
+                    "position": {
+                        "x": -260.08845636623784,
+                        "y": 316.6605166290046
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "expression": {
+                            "mode": "custom",
+                            "codeString": "return (i) => {\n    return i.includes(\"Error:\");\n}"
+                        }
+                    },
+                    "label": "exceptions"
+                }
+            },
+            "function": {
+                "component": "core/function",
+                "metadata": {
+                    "position": {
+                        "x": -104.71280015351982,
+                        "y": -29.440438687046083
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "function": {
+                            "mode": "custom",
+                            "codeString": "return (input) => {\n    \n    const trimmed = input.replace(/^DATA: /, \"\");\n    return trimmed.split(',').map(Number).slice(0, -1);\n}"
+                        }
+                    }
+                }
+            },
+            "text-colour": {
+                "component": "core/text-colour",
+                "metadata": {
+                    "position": {
+                        "x": -100.84762458336766,
+                        "y": 316.1692636017222
+                    },
+                    "portConfig": {
+                        "in": {
+                            "mode": "input"
+                        },
+                        "colour": {
+                            "mode": "enum",
+                            "chosenEnumeration": "Red"
+                        },
+                        "mode": {
+                            "mode": "enum",
+                            "chosenEnumeration": "foreground"
+                        }
+                    }
+                }
+            },
+            "line-chart": {
+                "component": "widgets/line chart",
+                "metadata": {
+                    "position": {
+                        "x": 61.17451927180733,
+                        "y": -29.06978682324757
+                    },
+                    "portConfig": {
+                        "data": {
+                            "mode": "input"
+                        },
+                        "limits": {
+                            "mode": "custom",
+                            "codeString": "return {\n    x: 200,\n    y: [-1.5, 1.5],\n}"
+                        },
+                        "labels": {
+                            "mode": "custom",
+                            "codeString": "return [\n    \"motor-speed\",\n    \"test-aq\",\n    \"logs\",\n    \"overflow\",\n    \"error\",\n];"
+                        },
+                        "clear": {
+                            "mode": "input"
+                        }
+                    }
+                }
+            }
+        },
+        "connections": [
+            {
+                "src": {
+                    "process": "serial-in",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "join",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "join",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "data",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "join",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "logs",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "join",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "exceptions",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "exceptions",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "text-colour",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "function",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "line-chart",
+                    "port": "data"
+                }
+            },
+            {
+                "src": {
+                    "process": "data",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "function",
+                    "port": "in"
+                }
+            },
+            {
+                "src": {
+                    "process": "logs",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "terminal",
+                    "port": "data"
+                }
+            },
+            {
+                "src": {
+                    "process": "text-colour",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "terminal",
+                    "port": "data"
+                }
+            }
+        ]
+    }
+}

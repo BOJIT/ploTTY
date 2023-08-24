@@ -10,7 +10,7 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 
 import { browser } from "$app/environment";
 
@@ -18,10 +18,12 @@ import localForage from "localforage";
 
 import {
     Bluetooth,
+    CloseCircle,
     Desktop,
     GameController,
     Location,
     MusicalNotes,
+    Pencil,
     Terminal,
 } from "@svicons/ionicons-outline";
 
@@ -79,6 +81,39 @@ async function reset(): Promise<void> {
     store.set({});          // Reset all stores
 }
 
+function infoToKey(info: SerialPortInfo) {
+    if (info.usbProductId !== undefined) {
+        return `Serial-PID:${info.usbProductId}-VID:${info.usbVendorId}`;
+    } else {
+        return `Serial-Unknown`;
+    }
+}
+
+async function removeDevice(key: string) {
+    if (get(store)[key] === undefined)
+        return; // No key to remove
+
+    // Forget Serial device
+    if ("serial" in navigator) {
+        const ports = await navigator.serial.getPorts();
+        const keys = ports.map((p) => {
+            return infoToKey(p.getInfo())
+        });
+
+        const target = keys.findIndex((k) => key === k);
+        if (target !== -1)
+            ports[target].forget();
+        store.update((s) => {
+            delete s[key];
+            return s;
+        })
+    }
+}
+
+async function renameDevice(key: string, name: string) {
+    //
+}
+
 async function addDevice(type: HardwareType): Promise<void> {
     switch (type) {
         case "serial": {
@@ -92,7 +127,7 @@ async function addDevice(type: HardwareType): Promise<void> {
 
             // Note this isn't a unique identifier: it's the best that the API
             // currently offers: https://github.com/WICG/serial/issues/128
-            const key = `S-PID${info.usbProductId}-VID${info.usbVendorId}`
+            const key = infoToKey(info);
 
             store.update((h) => {
                 h[key] = {
@@ -159,9 +194,10 @@ async function enumerateAccess(hardware): Promise<object> {
 
         ports.forEach((p) => {
             let info = p.getInfo();
-            enumeration[`S-PID${info.usbProductId}-VID${info.usbVendorId}`] = {
-                icon: Terminal,
 
+            enumeration[infoToKey(info)] = {
+                icon: Terminal,
+                buttons: [Pencil, CloseCircle],
             };
         })
     }
@@ -205,7 +241,10 @@ export default {
     update: store.update,
     init,
     reset,
+    infoToKey,
     addDevice,
+    removeDevice,
+    renameDevice,
     enumerateAccess,
     registerListeners,
 }

@@ -61,7 +61,7 @@ function launchSerial(state: ComponentState, output: ProcessOutput) {
     let targetPort: SerialPort | undefined = undefined;
     state.portList.forEach((p) => {
         let info = p.getInfo();
-        const key = `S-PID${info.usbProductId}-VID${info.usbVendorId}`;
+        const key = hardware.infoToKey(info);
         const hw_store = get(hardware);
         if (key in hw_store) {
             // TODO eventually get ID via user label
@@ -127,7 +127,7 @@ const c: PlottyComponent = {
                 const ports = await navigator.serial.getPorts();
                 ports.forEach((p) => {
                     let info = p.getInfo();
-                    const key = `S-PID${info.usbProductId}-VID${info.usbVendorId}`;
+                    const key = hardware.infoToKey(info);
                     const hw_store = get(hardware);
                     if (key in hw_store)
                         keys.push(key);
