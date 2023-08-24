@@ -89,6 +89,7 @@ async function launchSerial(state: ComponentState, output: ProcessOutput) {
             await targetPort?.open({ baudRate: state.baud });
         } catch (e) {
             if (e instanceof DOMException) {
+                // Port is already open...
                 // Wait for OS call to finish (or readable will be null)
                 await new Promise(resolve => setTimeout(resolve, 200));
             } else {

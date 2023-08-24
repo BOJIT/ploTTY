@@ -30,6 +30,7 @@ type ComponentState = {
     closeInitiated?: boolean,       // Used to stop multiple async functions firing
     portHandle?: SerialPort,        // Runtime handle pointing to the Serial object
     portWritable?: WritableStreamDefaultWriter<Uint8Array>,
+    encoder?: TextEncoder,
 };
 
 /*-------------------------------- Helpers -----------------------------------*/
@@ -37,6 +38,9 @@ type ComponentState = {
 async function closeSerial(state: ComponentState) {
     if (state.portHandle !== undefined && !(state.closeInitiated)) {
         state.closeInitiated = true;
+
+        state.portWritable?.releaseLock();
+
         try {
             // This ensures that a corresponding readable closes first
             await new Promise(resolve => setTimeout(resolve, 200));
@@ -54,7 +58,7 @@ async function closeSerial(state: ComponentState) {
     }
 }
 
-function launchSerial(state: ComponentState, output: ProcessOutput) {
+async function launchSerial(state: ComponentState, output: ProcessOutput) {
     // Close existing serial connection if it exists
     closeSerial(state);
 
@@ -82,12 +86,22 @@ function launchSerial(state: ComponentState, output: ProcessOutput) {
     // Initiate open() call [messy logic to handle async code]
     if (!(state.openInitiated)) {
         state.openInitiated = true;
-        targetPort?.open({ baudRate: state.baud }).then(async () => {
-            state.openInitiated = false;
-            state.portHandle = targetPort;
-        });
+        try {
+            await targetPort?.open({ baudRate: state.baud });
+        } catch (e) {
+            if (e instanceof DOMException) {
+                // Port is already open...
+                // Wait for OS call to finish (or readable will be null)
+                await new Promise(resolve => setTimeout(resolve, 200));
+            } else {
+                throw e;
+            }
+        }
 
-        // TODO attach writer stream
+        // Initialise writer
+        state.openInitiated = false;
+        state.portHandle = targetPort;
+        state.portWritable = targetPort?.writable?.getWriter();
     }
 }
 
@@ -139,6 +153,32 @@ const c: PlottyComponent = {
     process: (input, output, context) => {
         if (input.hasData('input')) {
             // Write to output writable
+            let data = input.getData('input');
+
+            switch (typeof data) {
+                case 'string':
+                    // Encode strings as UTF-8
+                    data = context.nodeInstance.state.encoder.encode(data);
+                    break;
+
+                case 'number':
+                    // Send as a raw byte (val % 256)
+                    data = new Uint8Array([data % 256]);
+                    break;
+
+                case 'object':
+                    // Convert objects as JSON (not pretty-printed)
+                    data = JSON.stringify(data).concat("\n");
+                    data = context.nodeInstance.state.encoder.encode(data);
+                    break;
+
+                default:
+                    console.warn("Unknown Serial Datatype: ignoring...");
+                    break;
+            }
+
+            // Send data to stream (NOTE we don't await!!!)
+            context.nodeInstance.state.portWritable.write(data);
         }
 
         if (input.hasData('port') || input.hasData('baud')) {
@@ -160,6 +200,7 @@ const c: PlottyComponent = {
         context.state.baud = undefined;
         context.state.portList = await navigator.serial.getPorts();
         context.state.openInitiated = false;
+        context.state.encoder = new TextEncoder();
 
         resolve();
     },
