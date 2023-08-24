@@ -102,6 +102,9 @@ async function launchSerial(state: ComponentState, output: ProcessOutput) {
         state.portHandle = targetPort;
         state.portReadable = targetPort?.readable?.getReader();
 
+        if (!state.portReadable)
+            return; // Port invalid...
+
         try {
             while (true) {
                 const { value, done } = await state.portReadable?.read();

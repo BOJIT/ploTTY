@@ -155,6 +155,10 @@ const c: PlottyComponent = {
             // Write to output writable
             let data = input.getData('input');
 
+
+            if (!context.nodeInstance.state.portWritable)
+                return; // Port invalid...
+
             switch (typeof data) {
                 case 'string':
                     // Encode strings as UTF-8
