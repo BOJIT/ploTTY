@@ -26,7 +26,7 @@ export default {
                             "chosenEnumeration": true
                         },
                         "port": {
-                            "mode": "enum"
+                            "mode": "input"
                         },
                         "baud": {
                             "mode": "enum",
