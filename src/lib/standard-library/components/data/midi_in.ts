@@ -40,7 +40,7 @@ const STATUS_MAP: { [key: string]: MidiStatus } = {
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "midi-in",
+    name: "midi in",
     category: 'data',
     ui: {
         icon: MusicalNotes,

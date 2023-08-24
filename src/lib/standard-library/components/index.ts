@@ -11,6 +11,7 @@ import MidiIn from "./data/midi_in";
 import WebRTC from "./data/web_rtc";
 import Websocket from "./data/websocket";
 import SerialIn from "./data/serial_in";
+import SerialOut from "./data/serial_out";
 import LineChart from "./widgets/LineChart";
 import Terminal from "./widgets/Terminal";
 
@@ -27,6 +28,7 @@ export default [
     WebRTC,
     Websocket,
     SerialIn,
+    SerialOut,
     LineChart,
     Terminal,
 ];

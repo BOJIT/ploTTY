@@ -1,7 +1,7 @@
 /**
- * @file serial_in.ts
+ * @file serial_out.ts
  * @author James Bennion-Pedley
- * @brief Component to get input from a serial port
+ * @brief Component to send output to a serial port
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,7 +11,7 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { LogIn } from "@svicons/ionicons-outline";
+import { LogOut } from "@svicons/ionicons-outline";
 
 import { get } from "svelte/store";
 import hardware from "$lib/stores/hardware";
@@ -29,7 +29,7 @@ type ComponentState = {
     openInitiated?: boolean,        // Used to stop multiple async functions firing
     closeInitiated?: boolean,       // Used to stop multiple async functions firing
     portHandle?: SerialPort,        // Runtime handle pointing to the Serial object
-    portReadable?: ReadableStreamDefaultReader<Uint8Array>,
+    portWritable?: WritableStreamDefaultWriter<Uint8Array>,
 };
 
 /*-------------------------------- Helpers -----------------------------------*/
@@ -37,13 +37,10 @@ type ComponentState = {
 async function closeSerial(state: ComponentState) {
     if (state.portHandle !== undefined && !(state.closeInitiated)) {
         state.closeInitiated = true;
-
-        await state.portReadable?.cancel();
-
         try {
-            if (state.portReadable?.closed) {
-                await state.portHandle.close();
-            }
+            // This ensures that a corresponding readable closes first
+            await new Promise(resolve => setTimeout(resolve, 200));
+            await state.portHandle.close();
         } catch (e) {
             if (e instanceof DOMException) {
                 // Port has already been closed
@@ -53,11 +50,11 @@ async function closeSerial(state: ComponentState) {
         }
         state.closeInitiated = false;
         state.portHandle = undefined;
-        state.portReadable = undefined;
+        state.portWritable = undefined;
     }
 }
 
-async function launchSerial(state: ComponentState, output: ProcessOutput) {
+function launchSerial(state: ComponentState, output: ProcessOutput) {
     // Close existing serial connection if it exists
     closeSerial(state);
 
@@ -82,60 +79,28 @@ async function launchSerial(state: ComponentState, output: ProcessOutput) {
         }
     })
 
-    // Initiate open() call
+    // Initiate open() call [messy logic to handle async code]
     if (!(state.openInitiated)) {
         state.openInitiated = true;
-        try {
-            await targetPort?.open({ baudRate: state.baud });
-        } catch (e) {
-            if (e instanceof DOMException) {
-                // Wait for OS call to finish (or readable will be null)
-                await new Promise(resolve => setTimeout(resolve, 200));
-            } else {
-                throw e;
-            }
-        }
+        targetPort?.open({ baudRate: state.baud }).then(async () => {
+            state.openInitiated = false;
+            state.portHandle = targetPort;
+        });
 
-        // Initialise reader
-        state.openInitiated = false;
-        state.portHandle = targetPort;
-        state.portReadable = targetPort?.readable?.getReader();
-
-        try {
-            while (true) {
-                const { value, done } = await state.portReadable?.read();
-                if (done) {
-                    break;
-                }
-                value.forEach((v: number) => {
-                    output.send({
-                        out: v
-                    });
-                })
-            }
-        } catch (e) {
-            throw new Error(e);
-        }
+        // TODO attach writer stream
     }
 }
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "serial in",
+    name: "serial out",
     category: 'data',
     ui: {
-        icon: LogIn,
+        icon: LogOut,
     },
     inPorts: {
-        enable: {
-            datatype: 'boolean',
-            default: true,
-            enumeration: [
-                true,
-                false
-            ]
-        },
+        input: {},
         port: {
             datatype: 'string',
             default: 'none',
@@ -171,31 +136,26 @@ const c: PlottyComponent = {
             ]
         }
     },
-    outPorts: {
-        out: {
-            datatype: 'string',
-        }
-    },
     process: (input, output, context) => {
-        if (input.hasData('enable')) {
-            context.nodeInstance.state.enable = input.getData('enable');
+        if (input.hasData('input')) {
+            // Write to output writable
         }
 
-        if (input.hasData('port')) {
-            context.nodeInstance.state.port = input.getData('port');
-        }
+        if (input.hasData('port') || input.hasData('baud')) {
+            if (input.hasData('port')) {
+                context.nodeInstance.state.port = input.getData('port');
+            }
+            if (input.hasData('baud')) {
+                context.nodeInstance.state.baud = input.getData('baud');
+            }
 
-        if (input.hasData('baud')) {
-            context.nodeInstance.state.baud = input.getData('baud');
+            launchSerial(context.nodeInstance.state, output);
         }
-
-        launchSerial(context.nodeInstance.state, output);
     },
     init: async (resolve, reject, context) => {
         if (!("serial" in navigator))
             reject("This browser does not support the WebSerial API!");
 
-        context.state.enable = false;
         context.state.port = undefined;
         context.state.baud = undefined;
         context.state.portList = await navigator.serial.getPorts();

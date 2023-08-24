@@ -13,7 +13,7 @@ export default {
         "outports": {},
         "groups": [],
         "processes": {
-            "serial-in": {
+            "example-input": {
                 "component": "data/serial in",
                 "metadata": {
                     "position": {
@@ -35,24 +35,16 @@ export default {
                     }
                 }
             },
-            "terminal": {
-                "component": "widgets/terminal",
+            "example-output": {
+                "component": "core/console log",
                 "metadata": {
                     "position": {
                         "x": 686.5552704991387,
                         "y": 253.29493494281166
                     },
                     "portConfig": {
-                        "data": {
+                        "in": {
                             "mode": "input"
-                        },
-                        "clear": {
-                            "mode": "enum",
-                            "chosenEnumeration": true
-                        },
-                        "echo": {
-                            "mode": "enum",
-                            "chosenEnumeration": false
                         }
                     }
                 }
@@ -61,12 +53,12 @@ export default {
         "connections": [
             {
                 "src": {
-                    "process": "serial-in",
+                    "process": "example-input",
                     "port": "out"
                 },
                 "tgt": {
-                    "process": "terminal",
-                    "port": "data"
+                    "process": "example-output",
+                    "port": "in"
                 }
             }
         ]
