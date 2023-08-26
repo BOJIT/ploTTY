@@ -58,10 +58,10 @@ class Loader extends ComponentLoader {
                 // Expose widget methods to component
                 c.widget = {
                     post: (m: any): void => {
-                        widgetsAPI.post(c.nodeId, m);
+                        widgetsAPI?.postFromGraph(c.nodeId, m);
                     },
-                    get: (): any => {
-                        return widgetsAPI.get(c.nodeId);
+                    bindRecv: (h) => {
+                        widgetsAPI?.bindRecv(c.nodeId, h);
                     }
                 }
 

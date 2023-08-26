@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2023
  *
 -->
+<svelte:options accessors={true} />
 
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
@@ -127,7 +128,14 @@
         drawCanvas();
     }
 
-    export function post(message: any) {
+    /*----------------------------- Graph Methods ----------------------------*/
+
+    // Mandatory recv callback (call this to send to NoFlo)
+    export let postToGraph = (m: any) => {
+        return;
+    };
+
+    export function postFromGraph(message: any) {
         // Pass array to plotter
         if (Array.isArray(message)) update(message);
         // Send control messages as objects

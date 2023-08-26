@@ -15,11 +15,11 @@
 
     import { Tabs } from "@bojit/svelte-components/widgets";
 
-    import { graphRunning } from "$lib/stores/runState";
     import { graph } from "$lib/stores/patch";
     import components from "$lib/stores/components";
     import type { Node } from "svelvet/dist/types/parser";
     import type { SvelteComponent } from "svelte";
+    import type { PlottyWidget } from "$lib/types/plotty";
 
     /*--------------------------------- Props --------------------------------*/
 
@@ -43,7 +43,7 @@
 
     let activeIds: number = 0;
 
-    const widgetHandles: { [key: string]: SvelteComponent } = {};
+    const widgetHandles: { [key: string]: PlottyWidget } = {};
 
     /*-------------------------------- Methods -------------------------------*/
 
@@ -63,14 +63,20 @@
 
     /*---------------------------------- API ---------------------------------*/
 
-    export function post(id: string, message: any) {
-        if (widgetHandles[id] === undefined) return null;
-        widgetHandles[id].post(message);
+    /* This function is CALLED by NoFlo and sent to the Widget */
+    export function postFromGraph(id: string, message: any): void {
+        if (widgetHandles[id] === undefined) return;
+        widgetHandles[id].postFromGraph(message);
     }
 
-    export function get(id: string) {
-        if (widgetHandles[id] === undefined) return null;
-        return widgetHandles[id].get();
+    export function bindRecv(
+        id: string,
+        handler: (message: any) => void
+    ): void {
+        if (widgetHandles[id] === undefined) return;
+
+        // Bind handler function as property (requires accessors)
+        widgetHandles[id].postToGraph = handler;
     }
 
     /*------------------------------- Lifecycle ------------------------------*/

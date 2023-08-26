@@ -65,6 +65,16 @@ const debugSend = debug('noflo:component:send');
 // eslint-disable-next-line max-len
 /** @typedef {{ __resolved?: boolean, __bracketClosingAfter?: BracketContext[], [key: string]: any }} ProcessResult */
 
+/**
+ * @typedef {(message: any) => void} WidgetProcessingFunction
+ */
+
+/**
+ * @typedef WidgetAPI
+ * @property {(message: any) => void} post
+ * @property {(fcn: WidgetProcessingFunction) => void} bindRecv
+ */
+
 // ## NoFlo Component Base class
 //
 // The `noflo.Component` interface provides a way to instantiate
@@ -103,6 +113,7 @@ export class Component extends EventEmitter {
         this.deinitHandler = opts.deinit;
 
         // Widget handle is null by default
+        /** @type {WidgetAPI | null} */
         this.widget = null;
 
         // Error handler is null by default

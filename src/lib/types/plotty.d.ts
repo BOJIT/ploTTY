@@ -10,7 +10,7 @@
 
 /*-------------------------------- Imports -----------------------------------*/
 
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponent, SvelteComponentTyped } from "svelte";
 
 import type { CSSColorString } from "svelvet";
 import type { GraphJson } from "$lib/middlewares/fbp-graph/Graph"
@@ -55,10 +55,10 @@ type PlottyPortConfig = {
 };
 
 // TODO work out how to strongly type this
-interface PlottyWidget extends SvelteComponent {
-    // reset(): Function,
-    // update(): Function,
-    // generate(): Function,
+class PlottyWidget extends SvelteComponentTyped<{
+    postToGraph?: (m: any) => void,
+}> {
+    postFromGraph(m: any): void { }
 }
 
 type PlottyComponent = {
@@ -68,7 +68,7 @@ type PlottyComponent = {
         icon?: typeof SvelteComponent,  // @svicons/*
         colour?: CSSColorString, // If unset, uses default component colours
     },
-    widget?: PlottyWidget,  // Widget for graph outputs
+    widget?: typeof PlottyWidget,  // Widget for graph outputs
     inPorts?: Ports,         // Object containing input 'anchors'
     outPorts?: Ports,        // Object containing output 'anchors'
     process: ProcessingFunction,    // The primary component logic

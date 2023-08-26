@@ -116,8 +116,6 @@
                     ? Object.keys($components[n.component].outPorts)
                     : []}
             />
-        {:else}
-            <h1>RENDERING ERROR</h1>
         {/if}
     {/each}
 </Svelvet>

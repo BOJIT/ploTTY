@@ -51,6 +51,13 @@ const c: PlottyComponent = {
         },
     },
     process: (input, output, context) => {
+        // Bind widget output to port
+        context.nodeInstance.widget?.bindRecv((message: any) => {
+            output.send({
+                data: message,
+            })
+        });
+
         if (input.hasData('data')) {
             let data = input.getData('data');
 
@@ -74,13 +81,14 @@ const c: PlottyComponent = {
                     break;
             }
 
-            context.nodeInstance.widget.post(data);
+            // Widget bindings
+            context.nodeInstance.widget?.post(data);
         }
 
         if (input.hasData('clear')) {
             let data = input.getData('clear');   // Any datatype will trigger a clear
             if (data) {
-                context.nodeInstance.widget.post({
+                context.nodeInstance.widget?.post({
                     "command": "clear",
                 });
             }
@@ -89,7 +97,7 @@ const c: PlottyComponent = {
     init: async (resolve, reject, context) => {
         // Global clear of widgets if set
         if (get(settings).switches.clearWidgetsOnStart) {
-            context.widget.post({
+            context.widget?.post({
                 "command": "clear",
             });
         }

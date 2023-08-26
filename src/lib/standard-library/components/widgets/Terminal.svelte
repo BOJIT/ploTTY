@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2023
  *
 -->
+<svelte:options accessors={true} />
 
 <script lang="ts">
     /*-------------------------------- Imports -------------------------------*/
@@ -59,22 +60,19 @@
         }
     }
 
-    /*-------------------------------- Methods -------------------------------*/
+    /*----------------------------- Graph Methods ----------------------------*/
 
-    export function post(message: any) {
+    // Mandatory recv callback (call this to send to NoFlo)
+    export let postToGraph = (m: any) => {
+        return;
+    };
+
+    export function postFromGraph(message: any) {
         if (typeof message === "string") terminal?.write(message);
         // Send control messages as objects
         else if (typeof message == "object") {
             if (message.command === "clear") terminal.clear();
         }
-    }
-
-    export function get() {
-        return {};
-    }
-
-    function send() {
-        // TODO work out how to notify Graph component
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
@@ -147,7 +145,7 @@
                     bind:value={lineValue}
                     outlined
                     on:change={(e) => {
-                        send(lineValue);
+                        postToGraph(lineValue);
                         lineValue = "";
                         let input = lineComponent.querySelector("input");
                         setTimeout(() => {

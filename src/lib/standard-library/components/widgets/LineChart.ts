@@ -49,12 +49,12 @@ const c: PlottyComponent = {
     process: (input, output, context) => {
         if (input.hasData('data')) {
             let data = input.getData('data');
-            context.nodeInstance.widget.post(data);
+            context.nodeInstance.widget?.post(data);
         }
 
         if (input.hasData('limits')) {
             let data = input.getData('limits');   // Any datatype will trigger a clear
-            context.nodeInstance.widget.post({
+            context.nodeInstance.widget?.post({
                 "command": "limits",
                 "data": data,
             });
@@ -62,7 +62,7 @@ const c: PlottyComponent = {
 
         if (input.hasData('labels')) {
             let data = input.getData('labels');
-            context.nodeInstance.widget.post({
+            context.nodeInstance.widget?.post({
                 "command": "labels",
                 "data": data,
             });
@@ -71,7 +71,7 @@ const c: PlottyComponent = {
         if (input.hasData('clear')) {
             let data = input.getData('clear');   // Any datatype will trigger a clear
             if (data) {
-                context.nodeInstance.widget.post({
+                context.nodeInstance.widget?.post({
                     "command": "clear",
                 });
             }
@@ -80,7 +80,7 @@ const c: PlottyComponent = {
     init: async (resolve, reject, context) => {
         // Global clear of widgets if set
         if (get(settings).switches.clearWidgetsOnStart) {
-            context.widget.post({
+            context.widget?.post({
                 "command": "clear",
             });
         }
