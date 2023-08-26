@@ -106,9 +106,9 @@
     /*------------------------------- Lifecycle ------------------------------*/
 
     $: {
-        // Write changes back to config
-        if (configLoaded && $settings.widgetConfig)
-            $settings.widgetConfig.terminal = terminalConfig;
+        // // Write changes back to config
+        // if (configLoaded && $settings.widgetConfig)
+        //     $settings.widgetConfig.terminal = terminalConfig;
     }
 
     $: {
