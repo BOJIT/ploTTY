@@ -42,6 +42,11 @@
     let lineValue: string = "";
     let lineComponent: HTMLFormElement;
 
+    // User Options
+    let sendNewline = true;
+    let copyMode: "last-line" | "screen" | "buffer" | "n-lines";
+    let copyLines = 10;
+
     /*---------------------------- Helper Functions --------------------------*/
 
     function setTheme(t: ThemeMode) {
@@ -103,6 +108,9 @@
         terminal.loadAddon(fitAddon);
         terminal.loadAddon(webglAddon);
         terminal.open(container);
+        terminal.onData((d: string) => {
+            postToGraph(d);
+        });
 
         // Set initial theme and resize
         setTheme($theme);
@@ -145,7 +153,8 @@
                     bind:value={lineValue}
                     outlined
                     on:change={(e) => {
-                        postToGraph(lineValue);
+                        if (sendNewline) postToGraph(`${lineValue}\r\n`);
+                        else postToGraph(lineValue);
                         lineValue = "";
                         let input = lineComponent.querySelector("input");
                         setTimeout(() => {

@@ -29,7 +29,7 @@ const c: PlottyComponent = {
         colour: '#c0b2d1',
     },
     inPorts: {
-        data: {},
+        data: {},   // TODO rename to 'IN'
         clear: {
             datatype: 'boolean',
             enumeration: [
@@ -46,7 +46,7 @@ const c: PlottyComponent = {
         }
     },
     outPorts: {
-        data: {
+        out: {
             default: {},
         },
     },
@@ -54,7 +54,7 @@ const c: PlottyComponent = {
         // Bind widget output to port
         context.nodeInstance.widget?.bindRecv((message: any) => {
             output.send({
-                data: message,
+                out: message,
             })
         });
 
