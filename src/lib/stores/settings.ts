@@ -23,7 +23,14 @@ type Settings = {
     switches: {
         clearWidgetsOnStart: boolean,
         lowGraphicsMode: boolean,
-    }
+    },
+    widgetConfig?: {
+        terminal?: {
+            lineEntry: boolean,
+            sendCRLF: boolean,
+            copyMode: "line" | "screen" | "buffer" | "n-lines",
+        },
+    },
 };
 
 /*--------------------------------- State ------------------------------------*/

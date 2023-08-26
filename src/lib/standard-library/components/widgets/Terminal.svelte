@@ -18,13 +18,19 @@
     import theme from "@bojit/svelte-components/theme";
     import type { ThemeMode } from "@bojit/svelte-components/theme/theme";
     import { IconButton } from "@bojit/svelte-components/form";
-    import { TextField } from "@bojit/svelte-components/smelte";
+    import {
+        Checkbox,
+        RadioButtonGroup,
+        TextField,
+    } from "@bojit/svelte-components/smelte";
 
     import {
+        Checkmark,
         ChevronDown,
         CloseCircle,
         Copy,
         Enter,
+        EllipsisVertical,
         Exit,
     } from "@svicons/ionicons-outline";
 
@@ -32,20 +38,37 @@
     import type { Terminal } from "xterm";
     import "xterm/css/xterm.css";
 
+    // User-preference settings are not instance-specific, so aren't stored in the Graph
+    import settings from "$lib/stores/settings";
+    import { graphRunning } from "$lib/stores/runState";
+
+    import { clickOutside } from "$lib/utils/clickoutside";
+
     /*--------------------------------- Props --------------------------------*/
 
     let container: HTMLElement;
     let terminal: Terminal;
     let resizeObserver: ResizeObserver | null = null;
 
-    let lineEntry: boolean = false;
     let lineValue: string = "";
     let lineComponent: HTMLFormElement;
 
+    let optionsDialog: boolean = false;
+
     // User Options
-    let sendNewline = true;
-    let copyMode: "last-line" | "screen" | "buffer" | "n-lines";
-    let copyLines = 10;
+    const DEFAULT_CONFIG: {
+        lineEntry: boolean;
+        sendCRLF: boolean;
+        copyMode: "line" | "screen" | "buffer" | "n-lines";
+    } = {
+        lineEntry: false,
+        sendCRLF: true,
+        copyMode: "buffer",
+    };
+
+    let terminalConfig = DEFAULT_CONFIG;
+    let configLoaded: boolean = false;
+    let copyIcon = Copy;
 
     /*---------------------------- Helper Functions --------------------------*/
 
@@ -82,7 +105,27 @@
 
     /*------------------------------- Lifecycle ------------------------------*/
 
+    $: {
+        // Write changes back to config
+        if (configLoaded && $settings.widgetConfig)
+            $settings.widgetConfig.terminal = terminalConfig;
+    }
+
+    $: {
+        // Disable keyboard interactions when line entry is visible
+        if (terminal) terminal.options.disableStdin = terminalConfig.lineEntry;
+    }
+
     onMount(async () => {
+        // Populate settings fields if not present
+        if ($settings.widgetConfig === undefined) $settings.widgetConfig = {};
+
+        if ($settings.widgetConfig.terminal === undefined)
+            $settings.widgetConfig.terminal = DEFAULT_CONFIG;
+
+        terminalConfig = $settings.widgetConfig.terminal;
+        configLoaded = true;
+
         // XTerm cannot be server-side rendered
         const { Terminal } = await import("xterm");
         const { FitAddon } = await import("xterm-addon-fit");
@@ -109,6 +152,7 @@
         terminal.loadAddon(webglAddon);
         terminal.open(container);
         terminal.onData((d: string) => {
+            if (!$graphRunning) return;
             postToGraph(d);
         });
 
@@ -130,21 +174,18 @@
     theme.subscribe((t) => {
         if (terminal !== undefined) setTheme(t);
     });
-
-    // TODO add overlays:
-    // - copy N lines
 </script>
 
 <div class="xterm-container">
     <div
         class="xterm-terminal"
-        class:line-entry={lineEntry}
+        class:line-entry={terminalConfig.lineEntry}
         bind:this={container}
     />
     <div class="control-anchor">
-        {#if lineEntry}
+        {#if terminalConfig.lineEntry}
             <form
-                class="line-overlay"
+                class="line-overlay overlay"
                 autocomplete="off"
                 transition:fly={{ x: -100 }}
                 bind:this={lineComponent}
@@ -153,7 +194,10 @@
                     bind:value={lineValue}
                     outlined
                     on:change={(e) => {
-                        if (sendNewline) postToGraph(`${lineValue}\r\n`);
+                        if (!$graphRunning) return;
+
+                        if (terminalConfig.sendCRLF)
+                            postToGraph(`${lineValue}\r\n`);
                         else postToGraph(lineValue);
                         lineValue = "";
                         let input = lineComponent.querySelector("input");
@@ -164,13 +208,13 @@
                 />
             </form>
         {/if}
-        <div class="control-overlay">
+        <div class="control-overlay overlay">
             <IconButton
                 size="2rem"
-                icon={lineEntry ? Exit : Enter}
+                icon={terminalConfig.lineEntry ? Exit : Enter}
                 color="transparent"
                 on:click={() => {
-                    lineEntry = !lineEntry;
+                    terminalConfig.lineEntry = !terminalConfig.lineEntry;
                 }}
             />
             <IconButton
@@ -189,8 +233,89 @@
                     terminal.clear();
                 }}
             />
-            <IconButton size="2rem" icon={Copy} color="transparent" />
+            <IconButton
+                size="2rem"
+                icon={copyIcon}
+                color="transparent"
+                on:click={() => {
+                    switch (terminalConfig.copyMode) {
+                        case "line": {
+                            let lastline = terminal.buffer.active.cursorY;
+                            terminal.selectLines(lastline, lastline);
+                            if (
+                                terminal
+                                    .getSelection()
+                                    .replace(
+                                        /[\u0000-\u001F\u007F-\u009F]/g,
+                                        ""
+                                    ) === ""
+                            ) {
+                                // last line was empty
+                                terminal.selectLines(lastline - 1, lastline);
+                            }
+                            break;
+                        }
+
+                        case "screen": {
+                            let lastline = terminal.buffer.active.length;
+                            terminal.selectLines(
+                                lastline - terminal.rows,
+                                lastline
+                            );
+                            break;
+                        }
+
+                        case "buffer": {
+                            terminal.selectAll();
+                            break;
+                        }
+                    }
+                    let data = terminal.getSelection();
+                    terminal.clearSelection();
+                    navigator.clipboard.writeText(data);
+                    copyIcon = Checkmark;
+                    setTimeout(() => {
+                        copyIcon = Copy;
+                    }, 3000);
+                }}
+            />
+            <IconButton
+                size="2rem"
+                icon={EllipsisVertical}
+                color="transparent"
+                on:click={() => {
+                    optionsDialog = !optionsDialog;
+                }}
+            />
         </div>
+    </div>
+    <div
+        class="options-anchor"
+        use:clickOutside
+        on:click_outside={() => {
+            optionsDialog = false;
+        }}
+    >
+        {#if optionsDialog}
+            <div class="options-overlay overlay" transition:fly={{ x: 100 }}>
+                <p>Copy Mode</p>
+                <RadioButtonGroup
+                    name="test"
+                    color="secondary"
+                    items={[
+                        { value: "line", label: "line" },
+                        { value: "screen", label: "screen" },
+                        { value: "buffer", label: "buffer" },
+                    ]}
+                    bind:selected={terminalConfig.copyMode}
+                />
+                <Checkbox
+                    label="send CR/LF"
+                    color="secondary"
+                    bind:checked={terminalConfig.sendCRLF}
+                />
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -223,10 +348,19 @@
         justify-content: flex-end;
     }
 
-    .control-overlay {
+    .options-anchor {
+        position: absolute;
+        bottom: 5.2rem;
+        right: 0.4rem;
+        z-index: 9;
+    }
+
+    .overlay {
         background-color: rgba(75, 75, 75, 0.603);
         border-radius: 0.8rem;
+    }
 
+    .control-overlay {
         padding: 0.5rem;
         display: flex;
         gap: 0.25rem;
@@ -234,12 +368,17 @@
     }
 
     .line-overlay {
-        background-color: rgba(75, 75, 75, 0.603);
-        border-radius: 0.8rem;
-
         flex-grow: 1;
         padding: 0.5rem;
         z-index: 10;
+    }
+
+    .options-overlay {
+        padding: 1rem;
+        padding-right: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .line-overlay > :global(div) {
