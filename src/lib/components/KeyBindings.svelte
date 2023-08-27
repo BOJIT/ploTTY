@@ -21,7 +21,6 @@
         addComponentOverlay,
         componenSettingsOverlay,
     } from "$lib/stores/overlays";
-    import { graph } from "$lib/stores/patch";
 
     import { graphRunning, nodeSelected } from "$lib/stores/runState";
 
@@ -30,6 +29,23 @@
     /*-------------------------------- Methods -------------------------------*/
 
     function handleKeydown(event: KeyboardEvent) {
+        // Escape key can break the focused element REGARDLESS of condition
+        if (event.key === "Escape") {
+            if (document.activeElement) {
+                window.focus();
+                (document.activeElement as HTMLElement).blur();
+            }
+        }
+
+        // If we are in a text area, disable any global keyboard events
+        if (
+            document.activeElement &&
+            (document.activeElement.tagName === "TEXTAREA" ||
+                document.activeElement.tagName === "INPUT")
+        ) {
+            return;
+        }
+
         // modifier on its own does nothing
         if (event.key === "Control") return;
         if (event.key === "Meta") return;
