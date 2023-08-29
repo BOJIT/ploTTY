@@ -18,23 +18,32 @@
 
     /* WebGL-Plot */
     import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
+    import { Switch } from "@bojit/svelte-components/smelte";
 
     /*--------------------------------- Props --------------------------------*/
 
+    // Config options
     let resX: number = 100;
     let resY: [number, number] = [-1, 1];
     let numLines: number = 1;
 
+    // Core
     let canvas: HTMLCanvasElement;
     let resizeObserver: ResizeObserver | null = null;
     let wglp: WebglPlot | null = null;
-
     let lines: WebglLine[] = [];
     let colours: string[] = [];
+    let updatePending: boolean = false;
 
-    const fullRange = 0.95;
-
+    // Aesthetics
+    const fullRange = 1;
     let labels: string[] = [];
+
+    // Crosshairs
+    let viewCrosshairs: boolean = false;
+    const crosshairLines = { xAxis: 0, yAxis: 1, crossX: 2, crossY: 3 };
+    let crosshairX = 0;
+    let crosshairY = 0;
 
     /*---------------------------- Helper Functions --------------------------*/
 
@@ -70,6 +79,14 @@
         lines.forEach((l) => {
             wglp?.addLine(l);
         });
+
+        // Add Crosshairs
+        wglp.addAuxLine(new WebglLine(new ColorRGBA(0.1, 0.9, 0.1, 1), 2));
+        wglp.addAuxLine(new WebglLine(new ColorRGBA(0.1, 0.9, 0.1, 1), 2));
+        wglp.linesAux[crosshairLines.crossX].visible = viewCrosshairs;
+        wglp.linesAux[crosshairLines.crossY].visible = viewCrosshairs;
+
+        updatePending = true;
     }
 
     function createLines() {
@@ -97,6 +114,50 @@
         colours.length = numLines;
     }
 
+    function renderCrosshairs(x: number, y: number): void {
+        if (wglp === null) return;
+
+        wglp.linesAux[crosshairLines.crossX].xy = new Float32Array([
+            x,
+            -1,
+            x,
+            1,
+        ]);
+        wglp.linesAux[crosshairLines.crossY].xy = new Float32Array([
+            -1,
+            y,
+            1,
+            y,
+        ]);
+        crosshairX = x;
+        crosshairY = y;
+        updatePending = true;
+    }
+
+    function mouseMove(e: MouseEvent): void {
+        if (wglp === null) return;
+
+        if (!viewCrosshairs) return;
+
+        const boundingBox = canvas.getBoundingClientRect();
+
+        const x =
+            (1 / wglp.gScaleX) *
+            ((2 *
+                ((e.pageX - boundingBox.left) * devicePixelRatio -
+                    canvas.width / 2)) /
+                canvas.width -
+                wglp.gOffsetX);
+        const y =
+            (1 / wglp.gScaleY) *
+            ((2 *
+                (canvas.height / 2 -
+                    (e.pageY - boundingBox.top) * devicePixelRatio)) /
+                canvas.height -
+                wglp.gOffsetY);
+        renderCrosshairs(x, y);
+    }
+
     /*-------------------------------- Methods -------------------------------*/
 
     function update(points: number[]) {
@@ -120,6 +181,8 @@
             fl[0] = points[i] * sf + ofst;
             lines[i].shiftAdd(fl);
         }
+
+        updatePending = true; // Tell frame handler to re-render
     }
 
     function clear() {
@@ -171,10 +234,14 @@
             drawCanvas();
         });
         resizeObserver.observe(canvas);
+        canvas.addEventListener("mousemove", mouseMove);
 
         // Register new frame callback
         function newFrame() {
-            wglp?.update();
+            if (updatePending) {
+                wglp?.update();
+                updatePending = false;
+            }
             requestAnimationFrame(newFrame);
         }
         requestAnimationFrame(newFrame);
@@ -197,6 +264,28 @@
                 </div>
             {/if}
         {/each}
+        <div class="push" />
+        {#if viewCrosshairs}
+            <p class="cursors">
+                X: {crosshairX.toFixed(3)}, Y: {crosshairY.toFixed(3)}
+            </p>
+        {/if}
+        <div class="cursor-toggle">
+            <Switch
+                label="cursors"
+                bind:value={viewCrosshairs}
+                on:change={() => {
+                    if (wglp === null) return;
+
+                    wglp.linesAux[crosshairLines.crossX].visible =
+                        viewCrosshairs;
+                    wglp.linesAux[crosshairLines.crossY].visible =
+                        viewCrosshairs;
+
+                    updatePending = true;
+                }}
+            />
+        </div>
     </div>
 </div>
 
@@ -211,6 +300,8 @@
 
     canvas {
         margin: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
         width: 100%;
         height: 100%;
     }
@@ -227,6 +318,22 @@
         gap: 0.6rem;
         height: 2rem;
         width: 100%;
+    }
+
+    .push {
+        flex-grow: 1;
+    }
+
+    .cursor-toggle {
+        padding-top: 0.2rem;
+        margin-left: 0.4rem;
+        min-width: 8rem;
+    }
+
+    .cursors {
+        flex-shrink: 0;
+        justify-content: flex-end;
+        align-self: center;
     }
 
     .legend-entry {
