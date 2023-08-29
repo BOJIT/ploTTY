@@ -35,6 +35,14 @@ type PatchLibrary = {
 
 /*--------------------------------- State ------------------------------------*/
 
+const EMPTY_PATCH: PlottyPatch = {
+    key: "Example Patch",
+    metadata: {
+        version: import.meta.env.VITE_GIT_HASH,
+    },
+    graph: new NofloGraph.Graph().toJSON(),
+}
+
 const DEFAULT: PlottyPatch = {
     key: "Example Patch",
     metadata: {
@@ -143,7 +151,7 @@ async function open(key: string): Promise<boolean> {
     return true;
 }
 
-async function create(key: string, patch: PlottyPatch = DEFAULT): Promise<boolean> {
+async function create(key: string, patch: PlottyPatch = EMPTY_PATCH): Promise<boolean> {
     if (!validName(key))
         return false;
 

@@ -80,10 +80,15 @@
         wglp.gOffsetX = -0.5 * resX * wglp.gScaleX;
 
         // Add grid lines
-        const AxisX = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
+        let axisCol = new ColorRGBA(255, 255, 255, 1);
+        if ($theme === "light") {
+            axisCol = new ColorRGBA(0, 0, 0, 1);
+        }
+
+        const AxisX = new WebglLine(axisCol, 2);
         AxisX.xy = new Float32Array([0, getXAxisMode(), resX, getXAxisMode()]);
         wglp.addAuxLine(AxisX);
-        const AxisY = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
+        const AxisY = new WebglLine(axisCol, 2);
         AxisY.xy = new Float32Array([0, resY[0], 0, resY[1]]);
         wglp.addAuxLine(AxisY);
 
@@ -144,8 +149,14 @@
         const increment = (overlayCanvas.height * incY) / diffY;
 
         ctx2d.font = "14px Montserrat";
-        ctx2d.fillStyle = "white";
-        ctx2d.strokeStyle = "white";
+        ctx2d.lineWidth = 1;
+        if ($theme === "light") {
+            ctx2d.fillStyle = "black";
+            ctx2d.strokeStyle = "black";
+        } else {
+            ctx2d.fillStyle = "white";
+            ctx2d.strokeStyle = "white";
+        }
         ctx2d.fillText("Sample #", overlayCanvas.width - 80, zeroMark - 10);
 
         // Fill out ticks from the X axis
@@ -268,6 +279,13 @@
     }
 
     /*------------------------------- Lifecycle ------------------------------*/
+
+    theme.subscribe((t) => {
+        if (wglp) {
+            drawCanvas();
+            renderAxisLabels();
+        }
+    });
 
     onMount(() => {
         createLines();
