@@ -36,7 +36,6 @@
     let updatePending: boolean = false;
 
     // Aesthetics
-    const fullRange = 1;
     let labels: string[] = [];
 
     // Crosshairs
@@ -47,35 +46,29 @@
 
     /*---------------------------- Helper Functions --------------------------*/
 
-    function getYAxisPosition() {
-        if (resY[0] < 0 && resY[1] > 0) {
-            let rangeProportion = Math.abs(resY[0]) / (resY[1] - resY[0]);
-            return -fullRange + 2 * fullRange * rangeProportion;
-        } else {
-            return -fullRange;
-        }
-    }
-
     function drawCanvas() {
         const devicePixelRatio = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * devicePixelRatio;
-        canvas.height = canvas.clientHeight * devicePixelRatio;
+        canvas.width = canvas.offsetWidth * devicePixelRatio;
+        canvas.height = canvas.offsetHeight * devicePixelRatio;
         wglp = new WebglPlot(canvas);
 
-        // Add grid lines
-        const AxisX = new WebglLine(new ColorRGBA(255, 255, 255, 255), resX);
-        AxisX.arrangeX();
-        AxisX.constY(getYAxisPosition());
-        wglp.addAuxLine(AxisX);
+        // Set up grid scales
+        const diffY = resY[1] - resY[0];
+        const avgY = (resY[0] + resY[1]) / 2;
+        wglp.gScaleY = 2 / Math.abs(diffY);
+        wglp.gOffsetY = -1 * avgY * wglp.gScaleY;
+        wglp.gScaleX = 2 / resX;
+        wglp.gOffsetX = -0.5 * resX * wglp.gScaleX;
 
-        const AxisY = new WebglLine(new ColorRGBA(255, 255, 255, 255), resX);
-        for (let i = 0; i < resX; i++) {
-            const n = -fullRange + (2 * fullRange * i) / resX;
-            AxisY.setX(i, -1);
-            AxisY.setY(i, n);
-        }
+        // Add grid lines
+        const AxisX = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
+        AxisX.xy = new Float32Array([0, 0, resX, 0]);
+        wglp.addAuxLine(AxisX);
+        const AxisY = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
+        AxisY.xy = new Float32Array([0, resY[0], 0, resY[1]]);
         wglp.addAuxLine(AxisY);
 
+        // Re-render existing lines
         lines.forEach((l) => {
             wglp?.addLine(l);
         });
@@ -105,8 +98,8 @@
                 i
             ] = `rgb(${swatch[p][0]}, ${swatch[p][1]}, ${swatch[p][2]})`;
             lines[i] = new WebglLine(colour, resX);
-            lines[i].arrangeX();
-            lines[i].constY(getYAxisPosition());
+            lines[i].lineSpaceX(0, 1);
+            lines[i].constY(0);
         }
 
         // Truncate arrays if line number is reduced
@@ -119,14 +112,14 @@
 
         wglp.linesAux[crosshairLines.crossX].xy = new Float32Array([
             x,
-            -1,
+            resY[0],
             x,
-            1,
+            resY[1],
         ]);
         wglp.linesAux[crosshairLines.crossY].xy = new Float32Array([
-            -1,
+            0,
             y,
-            1,
+            resX,
             y,
         ]);
         crosshairX = x;
@@ -167,18 +160,9 @@
             clear();
         }
 
-        const sf = (2 * fullRange) / (resY[1] - resY[0]);
-        let rangeProportion = Math.abs(resY[0]) / (resY[1] - resY[0]);
-        let ofst = -fullRange + 2 * fullRange * rangeProportion;
-
-        if (resY[0] < 0 && resY[1] > 0) {
-        } else {
-            ofst = -fullRange - resY[0] * sf;
-        }
-
         for (let i = 0; i < numLines; i++) {
             const fl = new Float32Array(1);
-            fl[0] = points[i] * sf + ofst;
+            fl[0] = points[i];
             lines[i].shiftAdd(fl);
         }
 
@@ -299,11 +283,13 @@
     }
 
     canvas {
-        margin: 0.5rem;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        top: 40px;
+        bottom: 10px;
+        left: 30px;
+        right: 10px;
+        width: calc(100% - 40px);
+        height: calc(100% - 50px);
     }
 
     .labels {
