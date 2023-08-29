@@ -1,10 +1,5 @@
-import * as journal from './Journal';
-import * as graph from './Graph';
+import Graph from './Graph';
 
-export {
-  journal,
-  graph,
-};
+export { Graph }
 
-export { Journal } from './Journal';
-export { Graph } from './Graph';
+export default Graph;

@@ -15,6 +15,7 @@ import { writable, type Writable } from "svelte/store";
 /*--------------------------------- State ------------------------------------*/
 
 const graphRunning: Writable<boolean> = writable(false);
+const nodeSelected: Writable<string[]> = writable([]);
 
 /*------------------------------- Functions ----------------------------------*/
 
@@ -22,4 +23,5 @@ const graphRunning: Writable<boolean> = writable(false);
 
 export {
     graphRunning,
+    nodeSelected,
 }

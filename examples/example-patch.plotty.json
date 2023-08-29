@@ -1,0 +1,74 @@
+{
+    "key": "Example Patch",
+    "metadata": {
+        "version": "4065a7b",
+        "exportDate": "2023-08-24T18:45:08.956Z"
+    },
+    "graph": {
+        "caseSensitive": false,
+        "properties": {
+            "name": ""
+        },
+        "inports": {},
+        "outports": {},
+        "groups": [],
+        "processes": {
+            "serial-in": {
+                "component": "data/serial in",
+                "metadata": {
+                    "position": {
+                        "x": 365.11054099827743,
+                        "y": 342.1262101292176
+                    },
+                    "portConfig": {
+                        "enable": {
+                            "mode": "enum",
+                            "chosenEnumeration": true
+                        },
+                        "port": {
+                            "mode": "input"
+                        },
+                        "baud": {
+                            "mode": "enum",
+                            "chosenEnumeration": 115200
+                        }
+                    }
+                }
+            },
+            "terminal": {
+                "component": "widgets/terminal",
+                "metadata": {
+                    "position": {
+                        "x": 686.5552704991387,
+                        "y": 253.29493494281166
+                    },
+                    "portConfig": {
+                        "data": {
+                            "mode": "input"
+                        },
+                        "clear": {
+                            "mode": "enum",
+                            "chosenEnumeration": true
+                        },
+                        "echo": {
+                            "mode": "enum",
+                            "chosenEnumeration": false
+                        }
+                    }
+                }
+            }
+        },
+        "connections": [
+            {
+                "src": {
+                    "process": "serial-in",
+                    "port": "out"
+                },
+                "tgt": {
+                    "process": "terminal",
+                    "port": "data"
+                }
+            }
+        ]
+    }
+}

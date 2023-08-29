@@ -10,5 +10,8 @@ export default ({ mode }) => {
 
     return defineConfig({
         plugins: [sveltekit()],
+        build: {
+            sourcemap: true,
+        }
     });
 };

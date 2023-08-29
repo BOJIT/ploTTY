@@ -12,75 +12,95 @@
 
 import { get, writable, type Writable } from "svelte/store";
 
+import writableDerived from "svelte-writable-derived";
 import localForage from "localforage";
 
-import { Graph } from "$lib/middlewares/fbp-graph";
-import type { GraphJson } from "$lib/middlewares/fbp-graph/Types";
+import type { PlottyPatch } from "$lib/types/plotty";
+import type { Graph as GraphType } from "$lib/middlewares/fbp-graph/Graph";
 
+import NofloGraph from "$lib/middlewares/fbp-graph";
 import file from "$lib/utils/file";
+
+// Example patches
+import example1 from "$lib/standard-library/patches/example-patch.plotty";
+import example2 from "$lib/standard-library/patches/serial-filter-logs.plotty";
+import example3 from "$lib/standard-library/patches/dual-serial.plotty";
 
 /*--------------------------------- Types ------------------------------------*/
 
-type Metadata = {
-    version: string,
-    exportDate: string,
-}
-
-type Patch = {
-    key: string    // Duplicate of library key (useful for comprehensions)
-    metadata: Metadata
-    graph: GraphJson
-};
-
 type PatchLibrary = {
     "_currentPatch": string,
-    [key:string]: Patch | string,
+    [key: string]: PlottyPatch | string,
 }
 
 /*--------------------------------- State ------------------------------------*/
 
-const DEFAULT: Patch = {
+const EMPTY_PATCH: PlottyPatch = {
     key: "Example Patch",
     metadata: {
         version: import.meta.env.VITE_GIT_HASH,
     },
-    graph: new Graph().toJSON(),
+    graph: new NofloGraph.Graph().toJSON(),
+}
+
+const DEFAULT: PlottyPatch = {
+    key: "Example Patch",
+    metadata: {
+        version: import.meta.env.VITE_GIT_HASH,
+    },
+    graph: example1.graph,
 }
 
 const DEFAULT_LOCALSTORE: PatchLibrary = {
     "_currentPatch": "Example Patch",
-    "Example Patch": DEFAULT,
-    "Example Patch (1)": DEFAULT,
-    "Example Patch (2)": DEFAULT,
+    "Example Patch": example1,
+    "Serial Filter Logs": example2,
+    "Dual Serial": example3,
 };
 
 
-let store: Writable<Patch> = writable(DEFAULT);
+let store: Writable<PlottyPatch> = writable(DEFAULT);
 let patchlist: Writable<string[]> = writable([]);
 const localStore: LocalForage = localForage.createInstance({
     name: "patches"
 });
+let localStoreTransaction: ReturnType<typeof setTimeout> | null = null;
+
+const graph: Writable<GraphType> = writableDerived(store, patchToGraph, graphToPatch);
 
 /*-------------------------------- Helpers -----------------------------------*/
 
 async function updateKeylist() {
     const keys = await localStore.keys();
     let idx = keys.indexOf("_currentPatch");
-    if(idx != -1)
+    if (idx != -1)
         keys.splice(idx, 1);
     patchlist.set(keys);
 }
 
+function patchToGraph(patch: PlottyPatch): GraphType {
+    // TODO deal with deserialisation errors!
+    const g = NofloGraph.loadJSONSync(patch.graph);
+    return g !== null ? g : new NofloGraph.Graph();
+
+    // TODO timeout every 5 seconds to prevent too many writes to disk!
+}
+
+function graphToPatch(graph: GraphType, previous: PlottyPatch): PlottyPatch {
+    previous.graph = graph.toJSON();
+    return previous;
+}
+
 /*------------------------------- Functions ----------------------------------*/
 
-async function init() : Promise<Writable<Patch>> {
+async function init(): Promise<Writable<PlottyPatch>> {
     // Does local store exist?
     const name = await localStore.getItem("_currentPatch") as string;
 
-    if(name !== null) {
+    if (name !== null) {
         // Get current patch and set store
-        const patch = await localStore.getItem(name) as Patch;
-        if(patch !== null) {
+        const patch = await localStore.getItem(name) as PlottyPatch;
+        if (patch !== null) {
             patch.key = name;   // Convenience
             store.set(patch);
         } else {
@@ -100,20 +120,27 @@ async function init() : Promise<Writable<Patch>> {
     // Update key list
     await updateKeylist();
 
-    // Subscribe for store updates
-    store.subscribe(async (val: Patch) => {
-        const name = await localStore.getItem("_currentPatch") as string;
-        await localStore.setItem(name, val);
+    // Subscribe for store updates (run 0.5 seconds behind to cache movements)
+    store.subscribe(async (val: PlottyPatch) => {
+        if (localStoreTransaction !== null) {
+            clearTimeout(localStoreTransaction);
+        }
+
+        localStoreTransaction = setTimeout(async () => {
+            const name = await localStore.getItem("_currentPatch") as string;
+            await localStore.setItem(name, val);
+            localStoreTransaction = null;
+        }, 500);
     });
 
     return store;
 }
 
-async function open(key: string) : Promise<boolean> {
+async function open(key: string): Promise<boolean> {
     // Is the file in the database?
-    const patch = await localStore.getItem(key) as Patch;
+    const patch = await localStore.getItem(key) as PlottyPatch;
 
-    if(patch === null)
+    if (patch === null)
         return false;   // File not found!
 
     // Set current patch key, THEN update store
@@ -124,8 +151,8 @@ async function open(key: string) : Promise<boolean> {
     return true;
 }
 
-async function create(key: string, patch: Patch = DEFAULT) : Promise<boolean> {
-    if(!validName(key))
+async function create(key: string, patch: PlottyPatch = EMPTY_PATCH): Promise<boolean> {
+    if (!validName(key))
         return false;
 
     // Add entry and update keylist
@@ -136,21 +163,21 @@ async function create(key: string, patch: Patch = DEFAULT) : Promise<boolean> {
     return true;
 }
 
-function validName(name: string) : boolean {
-    if(name === "")
+function validName(name: string): boolean {
+    if (name === "")
         return false;
 
     const list = get(patchlist);
-    if(list.includes(name))
+    if (list.includes(name))
         return false;
 
     return true;
 }
 
-async function remove(key: string) : Promise<boolean> {
+async function remove(key: string): Promise<boolean> {
     const name = await localStore.getItem("_currentPatch") as string;
 
-    if(name === key)
+    if (name === key)
         return false;   // Cannot delete the currently open patch
 
     // Remove item and update keylist
@@ -160,7 +187,7 @@ async function remove(key: string) : Promise<boolean> {
     return true;
 }
 
-async function reset() : Promise<void> {
+async function reset(): Promise<void> {
     await localStore.clear();
 
     // Create default storage
@@ -173,20 +200,20 @@ async function reset() : Promise<void> {
     await updateKeylist();
 }
 
-async function upload(files: File[]) : Promise<boolean | null> {
-    if(files.length === 0)
+async function upload(files: File[]): Promise<boolean | null> {
+    if (files.length === 0)
         return true;    // Nothing to be done!
 
     let status: boolean | null = true;
-    for(let i = 0; i < files.length; i++) {
-        let patch = JSON.parse(await file.read(files[i]) as string) as Patch;
+    for (let i = 0; i < files.length; i++) {
+        let patch = JSON.parse(await file.read(files[i]) as string) as PlottyPatch;
 
         // Check if file is corrupt
-        if(patch.key === undefined) {
+        if (patch.key === undefined) {
             status = null; // Something failed
         } else {
             // Will this override an existing patch?
-            if(await localStore.getItem(patch.key) !== null) {
+            if (await localStore.getItem(patch.key) !== null) {
                 patch.key = file.incrementName(patch.key, get(patchlist));
                 status = false;
             }
@@ -200,22 +227,22 @@ async function upload(files: File[]) : Promise<boolean | null> {
     return status;
 }
 
-async function download(key: string) : Promise<Blob | null> {
-    const patch = await localStore.getItem(key) as Patch;
+async function download(key: string): Promise<Blob | null> {
+    const patch = await localStore.getItem(key) as PlottyPatch;
 
-    if(patch === null)
+    if (patch === null)
         return null;
 
     // Add export date
     patch.metadata.exportDate = new Date().toISOString();
 
-    const f = new Blob([ JSON.stringify(patch) ], { type: 'application/json' });
+    const f = new Blob([JSON.stringify(patch)], { type: 'application/json' });
     return f;
 }
 
 /*-------------------------------- Exports -----------------------------------*/
 
-export { patchlist };
+export { patchlist, graph };
 
 export default {
     subscribe: store.subscribe,

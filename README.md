@@ -3,9 +3,11 @@
 
 This app is has no backend, so can be self-hosted or accessed [here](https://plotty.bojit.org/).
 
+The insider channel (unstable) is located [here](https://development.plotty.pages.dev/)
+
 ## Development and Contributing
 
-Built using `Node v16.13.2` and `NPM v8.3.0`.
+Built using `Node v18.13.0` and `NPM v8.19.3`.
 
 ### Run in Development Mode
 `npm run dev`
@@ -19,22 +21,4 @@ Icon index available [here](https://github.com/flowhub/the-graph/blob/master/the
 
 ### Local Development
 
-clone `BOJIT/ploTTY` and `BOJIT/noflo-svelte`.
-
-#### in `BOJIT/noflo-svelte`:
-
-```bash
-npm install
-npm link
-cd node_modules/react
-npm link
-cd ../react-dom
-npm link
-```
-
-#### in `BOJIT/ploTTY`:
-
-```bash
-npm install
-npm link noflo-svelte react react-dom
-```
+The application is built with [SvelteKit](https://kit.svelte.dev)!

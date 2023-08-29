@@ -5,9 +5,12 @@ node_modules
 /package
 .env
 .env.*
-!.env.example
+!.env.development
+!.env.production
+!.env.staging
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 .vscode/svelte.code-snippets
 .vscode/javascript.code-snippets
+.vscode/settings.json
