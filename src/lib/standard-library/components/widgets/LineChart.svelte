@@ -29,11 +29,13 @@
 
     // Core
     let canvas: HTMLCanvasElement;
+    let overlayCanvas: HTMLCanvasElement;
     let resizeObserver: ResizeObserver | null = null;
     let wglp: WebglPlot | null = null;
     let lines: WebglLine[] = [];
     let colours: string[] = [];
     let updatePending: boolean = false;
+    let sampleCount = 0;
 
     // Aesthetics
     let labels: string[] = [];
@@ -46,10 +48,27 @@
 
     /*---------------------------- Helper Functions --------------------------*/
 
+    function sensibleIncrement(inc: number) {
+        if (inc < 0.1) return Math.round(inc * 200) / 200;
+        if (inc < 1) return Math.round(inc * 20) / 20;
+        if (inc < 10) return Math.round(inc);
+        if (inc < 100) return Math.round(inc / 20) * 20;
+        if (inc < 1000) return Math.round(inc / 200) * 200;
+        return 500;
+    }
+
+    function getXAxisMode() {
+        // Draw true X-axis if within range
+        if (resY[0] < 0 && resY[1] > 0) return 0;
+        else return resY[0];
+    }
+
     function drawCanvas() {
         const devicePixelRatio = window.devicePixelRatio || 1;
         canvas.width = canvas.offsetWidth * devicePixelRatio;
         canvas.height = canvas.offsetHeight * devicePixelRatio;
+        overlayCanvas.width = canvas.width;
+        overlayCanvas.height = canvas.height;
         wglp = new WebglPlot(canvas);
 
         // Set up grid scales
@@ -62,7 +81,7 @@
 
         // Add grid lines
         const AxisX = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
-        AxisX.xy = new Float32Array([0, 0, resX, 0]);
+        AxisX.xy = new Float32Array([0, getXAxisMode(), resX, getXAxisMode()]);
         wglp.addAuxLine(AxisX);
         const AxisY = new WebglLine(new ColorRGBA(255, 255, 255, 255), 2);
         AxisY.xy = new Float32Array([0, resY[0], 0, resY[1]]);
@@ -79,7 +98,10 @@
         wglp.linesAux[crosshairLines.crossX].visible = viewCrosshairs;
         wglp.linesAux[crosshairLines.crossY].visible = viewCrosshairs;
 
+        // Add text overlays
         updatePending = true;
+
+        renderAxisLabels();
     }
 
     function createLines() {
@@ -105,6 +127,42 @@
         // Truncate arrays if line number is reduced
         lines.length = numLines;
         colours.length = numLines;
+    }
+
+    function renderAxisLabels() {
+        const ctx2d = overlayCanvas.getContext("2d");
+        if (!ctx2d) return;
+
+        ctx2d.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+        // Get X axis position
+        const diffY = resY[1] - resY[0];
+        const ratio = (getXAxisMode() - resY[0]) / diffY;
+        const zeroMark = (1 - ratio) * overlayCanvas.height;
+
+        const incY = sensibleIncrement(diffY / 8); // Try to fit 8 divisions on the axis
+        const increment = (overlayCanvas.height * incY) / diffY;
+
+        ctx2d.font = "14px Montserrat";
+        ctx2d.fillStyle = "white";
+        ctx2d.strokeStyle = "white";
+        ctx2d.fillText("Sample #", overlayCanvas.width - 80, zeroMark - 10);
+
+        // Fill out ticks from the X axis
+        let startMark = zeroMark;
+        for (let i = zeroMark; i > 0; i -= increment) {
+            startMark = i;
+        }
+
+        ctx2d.font = "12px Montserrat";
+        for (let i = startMark; i < overlayCanvas.height; i += increment) {
+            let proportion = (overlayCanvas.height - i) / overlayCanvas.height;
+            let label = (resY[0] + proportion * diffY).toFixed(2);
+            ctx2d.fillText(label, 0, Math.round(i) - 6);
+            ctx2d.moveTo(19, Math.round(i));
+            ctx2d.lineTo(29, Math.round(i));
+            ctx2d.stroke();
+        }
     }
 
     function renderCrosshairs(x: number, y: number): void {
@@ -166,6 +224,7 @@
             lines[i].shiftAdd(fl);
         }
 
+        sampleCount++;
         updatePending = true; // Tell frame handler to re-render
     }
 
@@ -173,6 +232,7 @@
         wglp?.clear();
         createLines();
         drawCanvas();
+        sampleCount = 0;
     }
 
     /*----------------------------- Graph Methods ----------------------------*/
@@ -238,6 +298,11 @@
 
 <div class="container">
     <canvas bind:this={canvas} />
+    <canvas
+        bind:this={overlayCanvas}
+        style:pointer-events="none"
+        class="overlay"
+    />
     <div class="labels">
         {#each labels as l, idx}
             {#if colours[idx] !== undefined}
@@ -251,7 +316,9 @@
         <div class="push" />
         {#if viewCrosshairs}
             <p class="cursors">
-                X: {crosshairX.toFixed(3)}, Y: {crosshairY.toFixed(3)}
+                X: {Math.round(crosshairX) + sampleCount - resX}, Y: {crosshairY.toFixed(
+                    3
+                )}
             </p>
         {/if}
         <div class="cursor-toggle">
@@ -286,10 +353,15 @@
         position: absolute;
         top: 40px;
         bottom: 10px;
-        left: 30px;
+        left: 40px;
         right: 10px;
-        width: calc(100% - 40px);
+        width: calc(100% - 50px);
         height: calc(100% - 50px);
+    }
+
+    .overlay {
+        left: 10px;
+        width: calc(100% - 10px);
     }
 
     .labels {
