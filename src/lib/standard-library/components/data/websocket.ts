@@ -77,9 +77,20 @@ const c: PlottyComponent = {
         }
 
         if (input.hasData('in')) {
-            const data = input.getData('in');
+            let data = input.getData('in');
 
-            // TODO handle serialisation
+            // If object, serialise to JSON
+            switch (typeof data) {
+                case 'number':
+                    // Send as a string representation
+                    data = data.toString();
+                    break;
+
+                case 'object':
+                    // Convert objects as JSON (not pretty-printed)
+                    data = JSON.stringify(data);
+                    break;
+            }
 
             // Send to websocket
             sendToWebsocket(context.nodeInstance.state, data);
