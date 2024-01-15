@@ -1,7 +1,7 @@
 /**
- * @file random.ts
+ * @file add.ts
  * @author James Bennion-Pedley
- * @brief Component to generate random outputs
+ * @brief Add A to B
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,31 +11,23 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Help } from "@svicons/ionicons-outline";
+import { Add } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "random",
+    name: "add",
     category: 'core',
     ui: {
-        icon: Help,
+        icon: Add,
     },
     inPorts: {
-        trigger: {
-            datatype: "bang",
+        a: {
+            datatype: "number",
         },
-        type: {
-            enumeration: [
-                "number [0 → 1]",
-                "number [-1 → 1]",
-                "boolean",
-                "string",
-            ]
+        b: {
+            datatype: "number",
         },
-        dimension: {
-            datatype: "number"
-        }
     },
     outPorts: {
         out: {},

@@ -1,7 +1,7 @@
 /**
- * @file clock.ts
+ * @file oscillator.ts
  * @author James Bennion-Pedley
- * @brief Component to generate periodic events
+ * @brief Simple block to generate arbitrary waveforms
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -12,7 +12,7 @@
 
 import type { PlottyComponent } from "$lib/types/plotty";
 import type ProcessOutput from "$lib/middlewares/noflo/ProcessOutput";
-import { Alarm } from "@svicons/ionicons-outline";
+import { Pulse } from "@svicons/ionicons-outline";
 
 /*---------------------------------- Types -----------------------------------*/
 
@@ -23,6 +23,7 @@ type ComponentState = {
     count?: number,
     timer?: any,
 };
+
 
 /*-------------------------------- Helpers -----------------------------------*/
 
@@ -67,42 +68,37 @@ function launchCounter(state: ComponentState, output: ProcessOutput) {
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "clock",
-    category: 'core',
+    name: "oscillator",
+    category: 'dsp',
     ui: {
-        icon: Alarm,
+        icon: Pulse,
     },
     inPorts: {
-        period: {
-            default: 1000,
-        },
-        datatype: {
-            datatype: 'string',
+        waveform: {
             enumeration: [
-                "counter",
-                "iso-timestamp",
-                "signal",
-                "timestamp",
-                "unix",
-                "utc",
-            ],
+                "sine",
+                "square",
+                "triangle",
+                "sawtooth",
+            ]
         },
+        samplePeriod: {
+            datatype: "number",
+            codeDefault: "return 1;",
+        },
+        frequency: {
+            datatype: "number",
+            codeDefault: "return 1;",
+        },
+        phase: {
+            datatype: "number",
+        }
     },
     outPorts: {
-        out: {
-            datatype: 'bang'
-        }
+        out: {},
     },
-    process: (input, output, context) => {
-        if (input.hasData('period')) {
-            context.nodeInstance.state.period = input.getData('period');
-        }
-
-        if (input.hasData('datatype')) {
-            context.nodeInstance.state.datatype = input.getData('datatype');
-        }
-
-        launchCounter(context.nodeInstance.state, output);
+    process: (input, output) => {
+        // TODO add implementation
     },
     init: async (resolve, reject, context) => {
         // Reset internal counter
@@ -110,14 +106,6 @@ const c: PlottyComponent = {
         context.state.datatype = 'counter';
         context.state.count = 0;
         context.state.timer = undefined;
-
-        resolve();
-    },
-    deinit: async (resolve, reject, context) => {
-        // Clear and erase timer
-        if (context.state.timer !== undefined) {
-            clearInterval(context.state.timer);
-        }
 
         resolve();
     },

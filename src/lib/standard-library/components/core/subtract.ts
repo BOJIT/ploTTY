@@ -1,7 +1,7 @@
 /**
- * @file random.ts
+ * @file subtract.ts
  * @author James Bennion-Pedley
- * @brief Component to generate random outputs
+ * @brief Subtract B from A
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,31 +11,23 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Help } from "@svicons/ionicons-outline";
+import { Remove } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "random",
+    name: "subtract",
     category: 'core',
     ui: {
-        icon: Help,
+        icon: Remove,
     },
     inPorts: {
-        trigger: {
-            datatype: "bang",
+        a: {
+            datatype: "number",
         },
-        type: {
-            enumeration: [
-                "number [0 → 1]",
-                "number [-1 → 1]",
-                "boolean",
-                "string",
-            ]
+        b: {
+            datatype: "number",
         },
-        dimension: {
-            datatype: "number"
-        }
     },
     outPorts: {
         out: {},
