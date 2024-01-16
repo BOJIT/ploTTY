@@ -18,8 +18,11 @@ import { Pulse } from "@svicons/ionicons-outline";
 
 
 type ComponentState = {
-    period: number,
-    datatype: "counter" | "iso-timestamp" | "signal" | "timestamp" | "unix",
+    waveform: "sine" | "square" | "triangle" | "sawtooth",
+    sample_period: number,
+    frequency: number,
+    phase: number,
+
     count?: number,
     timer?: any,
 };
@@ -38,30 +41,33 @@ function launchCounter(state: ComponentState, output: ProcessOutput) {
     // Create new timer
     if (state.timer === undefined) {
         state.timer = setInterval((s) => {
-            let timeMessage: any = s.count; // Default is 'counter'
-            switch (s.datatype) {
-                case "signal":
-                    timeMessage = true; // TODO see how noflo can send a signal
+            let sample: any = 0; // Default is 'counter'
+
+            let t = state.count! * state.sample_period / 1000;
+
+            switch (s.waveform) {
+                case "sine":
+                    sample = Math.sin(2 * Math.PI * state.frequency * t + state.phase);
                     break;
-                case "iso-timestamp":
-                    timeMessage = new Date().toISOString();
+                case "square":
+                    sample = 1;
                     break;
-                case "timestamp":
-                    timeMessage = new Date().toLocaleString();
+                case "triangle":
+                    sample = 1;
                     break;
-                case "unix":
-                    timeMessage = Date.now() / 1000;
+                case "sawtooth":
+                    sample = 1;
                     break;
             };
 
             output.send({
-                out: timeMessage
+                out: sample
             });
 
             if (s.count === undefined)
                 s.count = 0;
             s.count++;
-        }, state.period, state);
+        }, state.sample_period, state);
     }
 }
 
@@ -82,9 +88,9 @@ const c: PlottyComponent = {
                 "sawtooth",
             ]
         },
-        samplePeriod: {
+        "sample_period": {
             datatype: "number",
-            codeDefault: "return 1;",
+            codeDefault: "return 10;",
         },
         frequency: {
             datatype: "number",
@@ -97,15 +103,46 @@ const c: PlottyComponent = {
     outPorts: {
         out: {},
     },
-    process: (input, output) => {
-        // TODO add implementation
+    process: (input, output, context) => {
+        const state: ComponentState = context.nodeInstance.state;
+
+        if (input.hasData('waveform'))
+            state.waveform = input.getData('waveform');
+
+        if (input.hasData('sample_period'))
+            state.sample_period = input.getData('sample_period');
+
+        if (input.hasData('frequency'))
+            state.frequency = input.getData('frequency');
+
+
+        if (input.hasData('frequency'))
+            state.phase = input.getData('phase');
+
+        // Any input invalidates the state, causing a counter reload
+        launchCounter(state, output);
     },
     init: async (resolve, reject, context) => {
+        const state: ComponentState = context.state;
+
         // Reset internal counter
-        context.state.period = 1000;
-        context.state.datatype = 'counter';
-        context.state.count = 0;
-        context.state.timer = undefined;
+        state.waveform = "sine";
+        state.sample_period = 10;
+        state.frequency = 1;
+        state.phase = 0;
+
+        state.count = 0;
+        state.timer = undefined;
+
+        resolve();
+    },
+    deinit: async (resolve, reject, context) => {
+        const state: ComponentState = context.state;
+
+        // Clear and erase timer
+        if (state.timer !== undefined) {
+            clearInterval(state.timer);
+        }
 
         resolve();
     },
