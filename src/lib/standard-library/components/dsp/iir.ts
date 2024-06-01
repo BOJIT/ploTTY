@@ -1,7 +1,7 @@
 /**
- * @file random.ts
+ * @file iir.ts
  * @author James Bennion-Pedley
- * @brief Component to generate random outputs
+ * @brief IIR Filter (discrete samples)
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,31 +11,26 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Help } from "@svicons/ionicons-outline";
+import { Barcode } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "random",
-    category: 'core',
+    name: "IIR-filter",
+    category: 'dsp',
     ui: {
-        icon: Help,
+        icon: Barcode,
     },
     inPorts: {
-        trigger: {
+        in: {
             datatype: "bang",
         },
-        type: {
-            enumeration: [
-                "number [0 → 1]",
-                "number [-1 → 1]",
-                "boolean",
-                "string",
-            ]
+        ffCoefficients: {
+            datatype: "number",
         },
-        dimension: {
-            datatype: "number"
-        }
+        fbCoefficients: {
+            datatype: "number",
+        },
     },
     outPorts: {
         out: {},
@@ -44,6 +39,8 @@ const c: PlottyComponent = {
         // TODO add implementation
     },
     init: async (resolve, reject, context) => {
+        context.state.buffer = [];
+
         resolve();
     },
 };
