@@ -49,6 +49,10 @@ const c: PlottyComponent = {
     process: (input, output, context) => {
         if (input.hasData('data')) {
             let data = input.getData('data');
+            if (data.length === undefined) {
+                data = [data]; // Implicit array cast for 1D data
+            }
+
             context.nodeInstance.widget?.post(data);
         }
 

@@ -10,38 +10,26 @@
     "short_name": "ploTTY",
     "icons": [
         {
-            "src": "/favicon/icon_x48.png",
-            "sizes": "48x48",
+            "src": "/favicon/icon_x32.png",
+            "sizes": "32x32",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "/favicon/icon_x72.png",
-            "sizes": "72x72",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/favicon/icon_x96.png",
-            "sizes": "96x96",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/favicon/icon_x128.png",
-            "sizes": "128x128",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/favicon/icon_x192.png",
-            "sizes": "192x192",
+            "src": "/favicon/icon_x64.png",
+            "sizes": "64x64",
             "type": "image/png",
             "purpose": "any"
         },
         {
             "src": "/favicon/icon_x512.png",
             "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon/icon_x1024.png",
+            "sizes": "1024x1024",
             "type": "image/png",
             "purpose": "any"
         },

@@ -11,11 +11,11 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
+import type ProcessOutput from "$lib/middlewares/noflo/ProcessOutput";
 import { Alarm } from "@svicons/ionicons-outline";
 
 /*---------------------------------- Types -----------------------------------*/
 
-import type ProcessOutput from "$lib/middlewares/noflo/ProcessOutput";
 
 type ComponentState = {
     period: number,

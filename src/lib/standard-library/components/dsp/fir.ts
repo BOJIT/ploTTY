@@ -1,7 +1,7 @@
 /**
- * @file random.ts
+ * @file fir.ts
  * @author James Bennion-Pedley
- * @brief Component to generate random outputs
+ * @brief FIR Filter (discrete samples)
  * @date 05/06/2023
  *
  * @copyright Copyright (c) 2023
@@ -11,29 +11,21 @@
 /*-------------------------------- Imports -----------------------------------*/
 
 import type { PlottyComponent } from "$lib/types/plotty";
-import { Help } from "@svicons/ionicons-outline";
+import { Barcode } from "@svicons/ionicons-outline";
 
 /*-------------------------------- Component ---------------------------------*/
 
 const c: PlottyComponent = {
-    name: "random",
-    category: 'core',
+    name: "FIR-filter",
+    category: 'dsp',
     ui: {
-        icon: Help,
+        icon: Barcode,
     },
     inPorts: {
-        trigger: {
+        in: {
             datatype: "bang",
         },
-        type: {
-            enumeration: [
-                "number [0 → 1]",
-                "number [-1 → 1]",
-                "boolean",
-                "string",
-            ]
-        },
-        dimension: {
+        coefficients: {
             datatype: "number"
         }
     },
@@ -44,6 +36,8 @@ const c: PlottyComponent = {
         // TODO add implementation
     },
     init: async (resolve, reject, context) => {
+        context.state.buffer = [];
+
         resolve();
     },
 };

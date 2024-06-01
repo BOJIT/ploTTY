@@ -118,12 +118,11 @@
                 swatch[p][0] / 255,
                 swatch[p][1] / 255,
                 swatch[p][2] / 255,
-                1
+                1,
             );
 
-            colours[
-                i
-            ] = `rgb(${swatch[p][0]}, ${swatch[p][1]}, ${swatch[p][2]})`;
+            colours[i] =
+                `rgb(${swatch[p][0]}, ${swatch[p][1]}, ${swatch[p][2]})`;
             lines[i] = new WebglLine(colour, resX);
             lines[i].lineSpaceX(0, 1);
             lines[i].constY(0);
@@ -335,7 +334,7 @@
         {#if viewCrosshairs}
             <p class="cursors">
                 X: {Math.round(crosshairX) + sampleCount - resX}, Y: {crosshairY.toFixed(
-                    3
+                    3,
                 )}
             </p>
         {/if}
